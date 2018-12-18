@@ -84,6 +84,8 @@
         _infoTableView.estimatedRowHeight = 40;
         _infoTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _infoTableView.backgroundColor = [UIColor clearColor];
+        _infoTableView.showsVerticalScrollIndicator = NO;
+        _infoTableView.showsHorizontalScrollIndicator = NO;
     }
     
     return _infoTableView;
@@ -130,7 +132,7 @@
     [self.weatherInfoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.weatherInfoButton.mas_bottom).mas_offset(25);
         make.left.right.mas_equalTo(weakSelf);
-        make.height.mas_offset(90);
+        make.height.mas_offset(100);
     }];
     
     [self addSubview:self.daysSegmentedControl];
@@ -142,7 +144,7 @@
     
     [self addSubview:self.infoTableView];
     [self.infoTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf.daysSegmentedControl.mas_bottom).mas_offset(30);
+        make.top.mas_equalTo(weakSelf.daysSegmentedControl.mas_bottom).mas_offset(15);
         make.bottom.mas_equalTo(weakSelf).mas_offset(-20);
         make.left.right.mas_equalTo(weakSelf);
     }];
@@ -269,6 +271,15 @@
                 [attrStr insertAttributedString:string atIndex:0];
             }
         }
+        
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        // 行间距
+        paragraphStyle.lineSpacing = 9.0f;
+        paragraphStyle.alignment = NSTextAlignmentRight;
+        [attrStr addAttribute:NSParagraphStyleAttributeName
+                        value:paragraphStyle
+                        range:NSMakeRange(0, str.length)];
+
         cell.rightLabel.attributedText = attrStr;
         
     }
@@ -286,6 +297,19 @@
     }
     else{
         cell.leftLabel.text = [NSString stringWithFormat:@"海流速度\n海流流向"];
+        
+        NSString * str = [NSString stringWithFormat:@"0.5/1.0\n20/150"];
+        NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
+        
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        // 行间距
+        paragraphStyle.lineSpacing = 9.0f;
+        paragraphStyle.alignment = NSTextAlignmentRight;
+        [attrStr addAttribute:NSParagraphStyleAttributeName
+                        value:paragraphStyle
+                        range:NSMakeRange(0, str.length)];
+
+        
         cell.rightLabel.text = [NSString stringWithFormat:@"0.5/1.0\n20/150"];
     }
     

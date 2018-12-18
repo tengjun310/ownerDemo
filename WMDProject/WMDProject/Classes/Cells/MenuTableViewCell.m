@@ -58,7 +58,7 @@
 - (UIButton *)msgButton{
     if (!_msgButton) {
         _msgButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _msgButton.backgroundColor = [UIColor blueColor];
+        _msgButton.backgroundColor = kColorAppMain;
         _msgButton.titleLabel.font = [UIFont systemFontOfSize:13];
         [_msgButton setTitle:@"登录" forState:UIControlStateNormal];
         [_msgButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

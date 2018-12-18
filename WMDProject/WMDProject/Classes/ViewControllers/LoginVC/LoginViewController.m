@@ -105,12 +105,12 @@
         _codeButton.backgroundColor = [UIColor whiteColor];
         _codeButton.titleLabel.font = [UIFont systemFontOfSize:12];
         [_codeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
-        [_codeButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        [_codeButton setTitleColor:kColorAppMain forState:UIControlStateNormal];
         [_codeButton setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
         _codeButton.layer.masksToBounds = YES;
         _codeButton.layer.cornerRadius = 4;
         _codeButton.layer.borderWidth = 1.0f;
-        _codeButton.layer.borderColor = [UIColor blueColor].CGColor;
+        _codeButton.layer.borderColor = kColorAppMain.CGColor;
         [_codeButton addTarget:self action:@selector(codeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     
@@ -120,7 +120,7 @@
 - (UIButton *)loginButton{
     if (!_loginButton) {
         _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _loginButton.backgroundColor = [UIColor blueColor];
+        _loginButton.backgroundColor = kColorAppMain;
         _loginButton.titleLabel.font = [UIFont boldSystemFontOfSize:17];
         [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
         [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

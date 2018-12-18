@@ -89,10 +89,10 @@
         _logoutButton.backgroundColor = [UIColor clearColor];
         _logoutButton.titleLabel.font = kFontSize30;
         [_logoutButton setTitle:@"退出登录" forState:UIControlStateNormal];
-        [_logoutButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        [_logoutButton setTitleColor:kColorAppMain forState:UIControlStateNormal];
         _logoutButton.layer.masksToBounds = YES;
         _logoutButton.layer.cornerRadius = 4;
-        _logoutButton.layer.borderColor = [UIColor blueColor].CGColor;
+        _logoutButton.layer.borderColor = kColorAppMain.CGColor;
         _logoutButton.layer.borderWidth = 1.0f;
         [_logoutButton addTarget:self action:@selector(logoutButtonClick) forControlEvents:UIControlEventTouchUpInside];
     }

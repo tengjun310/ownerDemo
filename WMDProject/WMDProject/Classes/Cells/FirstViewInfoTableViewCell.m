@@ -29,8 +29,10 @@
         _rightLabel = [[UILabel alloc]init];
         _rightLabel.backgroundColor = [UIColor clearColor];
         _rightLabel.font = kFontSize26;
-        _rightLabel.textAlignment = NSTextAlignmentCenter;
+        _rightLabel.textAlignment = NSTextAlignmentRight;
         _rightLabel.textColor = [UIColor whiteColor];
+        _rightLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        _rightLabel.numberOfLines = 0;
     }
     
     return _rightLabel;
@@ -39,7 +41,9 @@
 - (UIImageView *)dipImageView{
     if (!_dipImageView) {
         _dipImageView = [[UIImageView alloc]init];
-        _dipImageView.backgroundColor = [UIColor hexChangeFloat:@"000000" alpha:0.5];
+        _dipImageView.backgroundColor = [UIColor hexChangeFloat:@"000000" alpha:.35];
+        _dipImageView.layer.masksToBounds = YES;
+        _dipImageView.layer.cornerRadius = 5;
     }
     
     return _dipImageView;
@@ -71,31 +75,31 @@
     
     [self.contentView addSubview:self.rightLabel];
     [self.rightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf.contentView).mas_offset(20);
-        make.bottom.mas_equalTo(weakSelf.contentView).mas_offset(-10);
-        make.right.mas_equalTo(weakSelf.contentView).mas_offset(-30);
+        make.top.mas_equalTo(weakSelf.contentView).mas_offset(30);
+        make.bottom.mas_equalTo(weakSelf.contentView).mas_offset(-15);
+        make.right.mas_equalTo(weakSelf.contentView).mas_offset(-45);
         make.width.mas_offset(150);
     }];
     
     [self.contentView addSubview:self.dipImageView];
     [self.dipImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.contentView).mas_offset(10);
-        make.right.mas_equalTo(weakSelf.contentView).mas_offset(-10);
-        make.top.mas_equalTo(weakSelf.contentView).mas_offset(10);
+        make.left.mas_equalTo(weakSelf.contentView).mas_offset(25);
+        make.right.mas_equalTo(weakSelf.contentView).mas_offset(-25);
+        make.top.mas_equalTo(weakSelf.contentView).mas_offset(15);
         make.bottom.mas_equalTo(weakSelf.contentView);
     }];
     
     [self.contentView addSubview:self.logoImageView];
     [self.logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.contentView).mas_offset(15);
+        make.left.mas_equalTo(weakSelf.contentView).mas_offset(35);
         make.centerY.mas_equalTo(weakSelf.dipImageView.mas_centerY);
         make.size.mas_equalTo(CGSizeMake(20, 20));
     }];
 
     [self.contentView addSubview:self.leftLabel];
     [self.leftLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.logoImageView.mas_right).mas_offset(15);
-        make.centerY.mas_equalTo(weakSelf.contentView.mas_centerY);
+        make.left.mas_equalTo(weakSelf.logoImageView.mas_right).mas_offset(10);
+        make.centerY.mas_equalTo(weakSelf.dipImageView.mas_centerY);
         make.size.mas_equalTo(CGSizeMake(120, 40));
     }];
     

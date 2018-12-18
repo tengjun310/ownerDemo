@@ -10,7 +10,30 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol SecondInfoViewDelegate <NSObject>
+
+@optional
+
+- (void)secondInfoViewTableviewDidSelectRow:(NSInteger)row;
+
+@end
+
+
 @interface SecondInfoView : UIView
+
+@property (nonatomic,strong) UILabel * titleLabel;
+
+@property (nonatomic,strong) UILabel * weateherInfoLabel;
+
+@property (nonatomic,strong) UILabel * tipInfoLabel;
+
+@property (nonatomic,strong) UILabel * addressInfoLabel;
+
+@property (nonatomic,strong) UITableView * infoTableView;
+
+@property (nonatomic,assign) id <SecondInfoViewDelegate> delegate;
+
+- (void)startSecondInfoViewDataRequest;
 
 @end
 

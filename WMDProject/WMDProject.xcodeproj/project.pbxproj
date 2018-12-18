@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F95792C21C9313D00D74620 /* SecondInfoViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */; };
 		6644852A21C785F200A0D83D /* LineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644852721C785F200A0D83D /* LineViewController.m */; };
 		6644852D21C7860A00A0D83D /* WMDUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644852C21C7860A00A0D83D /* WMDUserManager.m */; };
 		664485EB21C7888900A0D83D /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644853021C7888800A0D83D /* AFHTTPSessionManager.m */; };
@@ -116,6 +117,8 @@
 /* Begin PBXFileReference section */
 		03DC1D539460DC4D23C3B73A /* Pods_WMDProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WMDProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2682666EBE752A51BE064D3C /* Pods-WMDProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WMDProject.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WMDProject/Pods-WMDProject.debug.xcconfig"; sourceTree = "<group>"; };
+		5F95792A21C9313D00D74620 /* SecondInfoViewTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondInfoViewTableViewCell.h; sourceTree = "<group>"; };
+		5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondInfoViewTableViewCell.m; sourceTree = "<group>"; };
 		6644852721C785F200A0D83D /* LineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineViewController.m; sourceTree = "<group>"; };
 		6644852821C785F200A0D83D /* LineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineViewController.h; sourceTree = "<group>"; };
 		6644852B21C7860A00A0D83D /* WMDUserManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMDUserManager.h; sourceTree = "<group>"; };
@@ -382,6 +385,8 @@
 				664D6A9421C88C2F0004A544 /* MenuTableViewCell.m */,
 				664D6AB221C8F9A10004A544 /* FirstViewInfoTableViewCell.h */,
 				664D6AB321C8F9A10004A544 /* FirstViewInfoTableViewCell.m */,
+				5F95792A21C9313D00D74620 /* SecondInfoViewTableViewCell.h */,
+				5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1003,6 +1008,7 @@
 				6644863321C7888900A0D83D /* MJRefreshStateHeader.m in Sources */,
 				6644862B21C7888900A0D83D /* MJRefreshAutoGifFooter.m in Sources */,
 				6644862921C7888900A0D83D /* MJRefreshFooter.m in Sources */,
+				5F95792C21C9313D00D74620 /* SecondInfoViewTableViewCell.m in Sources */,
 				6644860121C7888900A0D83D /* NSArray+MASAdditions.m in Sources */,
 				664D6AA421C8DD020004A544 /* CalendarDataViewController.m in Sources */,
 				6644862721C7888900A0D83D /* MJRefreshBackFooter.m in Sources */,

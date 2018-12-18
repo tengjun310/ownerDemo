@@ -41,10 +41,12 @@
 #define kColorListBackground     [UIColor hexChangeFloat:@"f9f9f9"] //邀请列表背景色
 #define kColorBlack              [UIColor hexChangeFloat:@"333333"] //字体黑
 #define kColorGray               [UIColor hexChangeFloat:@"999999"] //字体灰
-#define kColorRed                [UIColor hexChangeFloat:@"f24b4b"] //字体红
-#define kColorPurple             [UIColor hexChangeFloat:@"605fbc"] //字体紫
+#define kColorRed                [UIColor hexChangeFloat:@"db362f"] //字体红
+#define kColorOrige              [UIColor hexChangeFloat:@"f55e28"] //字体红
+#define kColorYellow             [UIColor hexChangeFloat:@"dfb81a"] //字体红
+#define kColorGreen              [UIColor hexChangeFloat:@"19c672"] //字体紫
 #define kColorLineGray           [UIColor hexChangeFloat:@"dddddd"] //分割线灰
-#define kColorAppMain           [UIColor hexChangeFloat:@"333333"] //APP主色
+#define kColorAppMain            [UIColor hexChangeFloat:@"436a9e"] //APP主色
 
 
 #pragma mark - 常用的字体

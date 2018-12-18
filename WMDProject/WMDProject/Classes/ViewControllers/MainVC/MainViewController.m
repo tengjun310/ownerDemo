@@ -14,7 +14,7 @@
 #import "FuncationView/ThirdInfoView.h"
 #import "FuncationView/MyScrollView.h"
 
-@interface MainViewController ()<FirstInfoViewDelegate,UIScrollViewDelegate>
+@interface MainViewController ()<FirstInfoViewDelegate,SecondInfoViewDelegate,UIScrollViewDelegate>
 
 @property (nonatomic,strong) MyScrollView * infoScrollView;
 
@@ -56,6 +56,7 @@
 - (SecondInfoView *)secondInfoView{
     if (!_secondInfoView) {
         _secondInfoView = [[SecondInfoView alloc] init];
+        _secondInfoView.delegate = self;
     }
     
     return _secondInfoView;
@@ -148,9 +149,13 @@
         make.left.mas_equalTo(weakSelf.firstInfoView.mas_right);
         make.size.mas_equalTo(CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT));
     }];
+    
+    [self.secondInfoView startSecondInfoViewDataRequest];
 }
 
-
+- (void)secondInfoViewTableviewDidSelectRow:(NSInteger)row{
+    
+}
 
 #pragma mark -- third view
 - (void)configureThirdViewUI{
