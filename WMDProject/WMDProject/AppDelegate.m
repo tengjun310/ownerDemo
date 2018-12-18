@@ -7,18 +7,18 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
+#import "MainViewController.h"
 #import "LeftMenuViewController.h"
 #import "LoginViewController.h"
+#import "IQKeyboardManager.h"
 
 NSString * const UserLoginSuccessNotify = @"UserLoginSuccessNotify";
 NSString * const UserLogoutSuccessNotify = @"UserLogoutSuccessNotify";
 
 
 @interface AppDelegate ()
-{
-    LeftMenuViewController * menuVC;
-}
+
+
 @end
 
 @implementation AppDelegate
@@ -26,6 +26,13 @@ NSString * const UserLogoutSuccessNotify = @"UserLogoutSuccessNotify";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+
+    IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
+    manager.shouldResignOnTouchOutside = YES;
+    manager.enable = YES;
+    manager.enableAutoToolbar = NO;
+    
     [self registNotification];
     [self configLoginRootVC];
     
@@ -39,20 +46,19 @@ NSString * const UserLogoutSuccessNotify = @"UserLogoutSuccessNotify";
 }
 
 - (void)configLoginRootVC{
-    self.mainViewController = nil;
     self.window.rootViewController = nil;
-    menuVC = nil;
+    self.mainViewController = nil;
     
-    LoginViewController * loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-    self.window.rootViewController = loginViewController;
+    LoginViewController * vc = [[LoginViewController alloc] init];
+    self.window.rootViewController = vc;
     [self.window makeKeyAndVisible];
 }
 
 - (void)configureMainViewController {
-    ViewController * mainVC = [[ViewController alloc] init];
+    MainViewController * mainVC = [[MainViewController alloc] init];
     self.mainViewController = [[UINavigationController alloc] initWithRootViewController:mainVC];
     
-    menuVC = [[LeftMenuViewController alloc]init];
+    LeftMenuViewController * menuVC = [[LeftMenuViewController alloc]init];
     [[DYLeftSlipManager sharedManager] setLeftViewController:menuVC coverViewController:self.mainViewController];
     
     UINavigationBar *navigationBar = [UINavigationBar appearance];

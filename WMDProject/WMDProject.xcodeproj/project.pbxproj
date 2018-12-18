@@ -93,6 +93,16 @@
 		6644864321C7889200A0D83D /* UIImage+extend.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644864021C7889200A0D83D /* UIImage+extend.m */; };
 		6644864821C788EA00A0D83D /* CommonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644864521C788E900A0D83D /* CommonUtils.m */; };
 		6644864921C788EA00A0D83D /* DYLeftSlipManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644864621C788E900A0D83D /* DYLeftSlipManager.m */; };
+		664D6A9521C88C2F0004A544 /* MenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6A9421C88C2F0004A544 /* MenuTableViewCell.m */; };
+		664D6A9B21C8C1E40004A544 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6A9A21C8C1E40004A544 /* BaseViewController.m */; };
+		664D6A9E21C8C2070004A544 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6A9D21C8C2070004A544 /* MainViewController.m */; };
+		664D6AA121C8DCBC0004A544 /* ChartsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6AA021C8DCBC0004A544 /* ChartsViewController.m */; };
+		664D6AA421C8DD020004A544 /* CalendarDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6AA321C8DD020004A544 /* CalendarDataViewController.m */; };
+		664D6AA821C8E65B0004A544 /* FirstInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6AA721C8E65B0004A544 /* FirstInfoView.m */; };
+		664D6AAB21C8E66A0004A544 /* SecondInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6AAA21C8E66A0004A544 /* SecondInfoView.m */; };
+		664D6AAE21C8E6740004A544 /* ThirdInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6AAD21C8E6740004A544 /* ThirdInfoView.m */; };
+		664D6AB121C8F04E0004A544 /* MyScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6AB021C8F04E0004A544 /* MyScrollView.m */; };
+		664D6AB421C8F9A10004A544 /* FirstViewInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6AB321C8F9A10004A544 /* FirstViewInfoTableViewCell.m */; };
 		667D105421C7974900898812 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 667D105121C7974900898812 /* LoginViewController.m */; };
 		66B5369721C79C92001C846F /* HttpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5369521C79C92001C846F /* HttpClient.m */; };
 		66B5369C21C79DAA001C846F /* LeftMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5369921C79DAA001C846F /* LeftMenuViewController.m */; };
@@ -287,6 +297,26 @@
 		6644864721C788E900A0D83D /* CommonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtils.h; sourceTree = "<group>"; };
 		6644864A21C789D100A0D83D /* WMDProjectPrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMDProjectPrefixHeader.pch; sourceTree = "<group>"; };
 		6644864E21C78BD400A0D83D /* WMDProjectDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMDProjectDefine.h; sourceTree = "<group>"; };
+		664D6A9321C88C2F0004A544 /* MenuTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuTableViewCell.h; sourceTree = "<group>"; };
+		664D6A9421C88C2F0004A544 /* MenuTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuTableViewCell.m; sourceTree = "<group>"; };
+		664D6A9921C8C1E40004A544 /* BaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
+		664D6A9A21C8C1E40004A544 /* BaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
+		664D6A9C21C8C2070004A544 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		664D6A9D21C8C2070004A544 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		664D6A9F21C8DCBC0004A544 /* ChartsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChartsViewController.h; sourceTree = "<group>"; };
+		664D6AA021C8DCBC0004A544 /* ChartsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChartsViewController.m; sourceTree = "<group>"; };
+		664D6AA221C8DD020004A544 /* CalendarDataViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CalendarDataViewController.h; sourceTree = "<group>"; };
+		664D6AA321C8DD020004A544 /* CalendarDataViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CalendarDataViewController.m; sourceTree = "<group>"; };
+		664D6AA621C8E65B0004A544 /* FirstInfoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstInfoView.h; sourceTree = "<group>"; };
+		664D6AA721C8E65B0004A544 /* FirstInfoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstInfoView.m; sourceTree = "<group>"; };
+		664D6AA921C8E66A0004A544 /* SecondInfoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondInfoView.h; sourceTree = "<group>"; };
+		664D6AAA21C8E66A0004A544 /* SecondInfoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondInfoView.m; sourceTree = "<group>"; };
+		664D6AAC21C8E6740004A544 /* ThirdInfoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThirdInfoView.h; sourceTree = "<group>"; };
+		664D6AAD21C8E6740004A544 /* ThirdInfoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThirdInfoView.m; sourceTree = "<group>"; };
+		664D6AAF21C8F04E0004A544 /* MyScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyScrollView.h; sourceTree = "<group>"; };
+		664D6AB021C8F04E0004A544 /* MyScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyScrollView.m; sourceTree = "<group>"; };
+		664D6AB221C8F9A10004A544 /* FirstViewInfoTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewInfoTableViewCell.h; sourceTree = "<group>"; };
+		664D6AB321C8F9A10004A544 /* FirstViewInfoTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewInfoTableViewCell.m; sourceTree = "<group>"; };
 		667D105121C7974900898812 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		667D105321C7974900898812 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		667DF71821C78095003C35FF /* WMDProject-Bridge-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WMDProject-Bridge-Header.h"; sourceTree = "<group>"; };
@@ -348,6 +378,10 @@
 		6644852121C785B100A0D83D /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				664D6A9321C88C2F0004A544 /* MenuTableViewCell.h */,
+				664D6A9421C88C2F0004A544 /* MenuTableViewCell.m */,
+				664D6AB221C8F9A10004A544 /* FirstViewInfoTableViewCell.h */,
+				664D6AB321C8F9A10004A544 /* FirstViewInfoTableViewCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -750,10 +784,19 @@
 		6644865421C7919F00A0D83D /* MainVC */ = {
 			isa = PBXGroup;
 			children = (
+				664D6AA521C8E6280004A544 /* FuncationView */,
 				66B5369821C79DAA001C846F /* LeftMenuViewController.h */,
 				66B5369921C79DAA001C846F /* LeftMenuViewController.m */,
 				66B5369A21C79DAA001C846F /* ViewController.h */,
 				66B5369B21C79DAA001C846F /* ViewController.m */,
+				664D6A9921C8C1E40004A544 /* BaseViewController.h */,
+				664D6A9A21C8C1E40004A544 /* BaseViewController.m */,
+				664D6A9C21C8C2070004A544 /* MainViewController.h */,
+				664D6A9D21C8C2070004A544 /* MainViewController.m */,
+				664D6A9F21C8DCBC0004A544 /* ChartsViewController.h */,
+				664D6AA021C8DCBC0004A544 /* ChartsViewController.m */,
+				664D6AA221C8DD020004A544 /* CalendarDataViewController.h */,
+				664D6AA321C8DD020004A544 /* CalendarDataViewController.m */,
 			);
 			path = MainVC;
 			sourceTree = "<group>";
@@ -765,6 +808,21 @@
 				667D105121C7974900898812 /* LoginViewController.m */,
 			);
 			path = LoginVC;
+			sourceTree = "<group>";
+		};
+		664D6AA521C8E6280004A544 /* FuncationView */ = {
+			isa = PBXGroup;
+			children = (
+				664D6AA621C8E65B0004A544 /* FirstInfoView.h */,
+				664D6AA721C8E65B0004A544 /* FirstInfoView.m */,
+				664D6AA921C8E66A0004A544 /* SecondInfoView.h */,
+				664D6AAA21C8E66A0004A544 /* SecondInfoView.m */,
+				664D6AAC21C8E6740004A544 /* ThirdInfoView.h */,
+				664D6AAD21C8E6740004A544 /* ThirdInfoView.m */,
+				664D6AAF21C8F04E0004A544 /* MyScrollView.h */,
+				664D6AB021C8F04E0004A544 /* MyScrollView.m */,
+			);
+			path = FuncationView;
 			sourceTree = "<group>";
 		};
 		66D4806B21C77CCA004E840A /* WMDProject */ = {
@@ -939,11 +997,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				664D6AAB21C8E66A0004A544 /* SecondInfoView.m in Sources */,
 				6644861D21C7888900A0D83D /* IQKeyboardManager.m in Sources */,
+				664D6A9B21C8C1E40004A544 /* BaseViewController.m in Sources */,
 				6644863321C7888900A0D83D /* MJRefreshStateHeader.m in Sources */,
 				6644862B21C7888900A0D83D /* MJRefreshAutoGifFooter.m in Sources */,
 				6644862921C7888900A0D83D /* MJRefreshFooter.m in Sources */,
 				6644860121C7888900A0D83D /* NSArray+MASAdditions.m in Sources */,
+				664D6AA421C8DD020004A544 /* CalendarDataViewController.m in Sources */,
 				6644862721C7888900A0D83D /* MJRefreshBackFooter.m in Sources */,
 				6644860E21C7888900A0D83D /* SDWebImagePrefetcher.m in Sources */,
 				664485F721C7888900A0D83D /* JSONHTTPClient.m in Sources */,
@@ -951,6 +1012,7 @@
 				6644863821C7888900A0D83D /* UIScrollView+MJRefresh.m in Sources */,
 				6644863921C7888900A0D83D /* UIView+MJExtension.m in Sources */,
 				664485EE21C7888900A0D83D /* AFURLRequestSerialization.m in Sources */,
+				664D6A9E21C8C2070004A544 /* MainViewController.m in Sources */,
 				6644860221C7888900A0D83D /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				664485F821C7888900A0D83D /* JSONModel+networking.m in Sources */,
 				6644863021C7888900A0D83D /* MJRefreshBackStateFooter.m in Sources */,
@@ -964,6 +1026,7 @@
 				6644862E21C7888900A0D83D /* MJRefreshBackGifFooter.m in Sources */,
 				664485FD21C7888900A0D83D /* MASConstraintMaker.m in Sources */,
 				6644861E21C7888900A0D83D /* IQKeyboardReturnKeyHandler.m in Sources */,
+				664D6AA121C8DCBC0004A544 /* ChartsViewController.m in Sources */,
 				6644860321C7888900A0D83D /* View+MASAdditions.m in Sources */,
 				664485F421C7888900A0D83D /* JSONModelError.m in Sources */,
 				6644860721C7888900A0D83D /* NSData+ImageContentType.m in Sources */,
@@ -973,6 +1036,7 @@
 				664485FC21C7888900A0D83D /* MASConstraint.m in Sources */,
 				6644860B21C7888900A0D83D /* SDWebImageDownloader.m in Sources */,
 				6644860921C7888900A0D83D /* SDWebImageCompat.m in Sources */,
+				664D6AAE21C8E6740004A544 /* ThirdInfoView.m in Sources */,
 				6644863721C7888900A0D83D /* UIScrollView+MJExtension.m in Sources */,
 				664485F521C7888900A0D83D /* NSArray+JSONModel.m in Sources */,
 				6644860021C7888900A0D83D /* MASViewConstraint.m in Sources */,
@@ -1001,6 +1065,7 @@
 				664485ED21C7888900A0D83D /* AFSecurityPolicy.m in Sources */,
 				6644864921C788EA00A0D83D /* DYLeftSlipManager.m in Sources */,
 				6644862621C7888900A0D83D /* MJRefreshAutoFooter.m in Sources */,
+				664D6A9521C88C2F0004A544 /* MenuTableViewCell.m in Sources */,
 				6644864821C788EA00A0D83D /* CommonUtils.m in Sources */,
 				6644861321C7888900A0D83D /* UIImageView+WebCache.m in Sources */,
 				6644864221C7889200A0D83D /* UIColor+extend.m in Sources */,
@@ -1012,6 +1077,7 @@
 				6644861F21C7888900A0D83D /* IQSegmentedNextPrevious.m in Sources */,
 				664485FB21C7888900A0D83D /* MASCompositeConstraint.m in Sources */,
 				6644863121C7888900A0D83D /* MJRefreshGifHeader.m in Sources */,
+				664D6AB421C8F9A10004A544 /* FirstViewInfoTableViewCell.m in Sources */,
 				6644860F21C7888900A0D83D /* UIButton+WebCache.m in Sources */,
 				664485EB21C7888900A0D83D /* AFHTTPSessionManager.m in Sources */,
 				6644860521C7888900A0D83D /* Reachability.m in Sources */,
@@ -1021,6 +1087,8 @@
 				6644861B21C7888900A0D83D /* IQUIViewController+Additions.m in Sources */,
 				6644862A21C7888900A0D83D /* MJRefreshHeader.m in Sources */,
 				6644852D21C7860A00A0D83D /* WMDUserManager.m in Sources */,
+				664D6AB121C8F04E0004A544 /* MyScrollView.m in Sources */,
+				664D6AA821C8E65B0004A544 /* FirstInfoView.m in Sources */,
 				6644864321C7889200A0D83D /* UIImage+extend.m in Sources */,
 				66D4807821C77CCA004E840A /* AppDelegate.m in Sources */,
 				664485F221C7888900A0D83D /* JSONModelArray.m in Sources */,
@@ -1154,6 +1222,7 @@
 				DEVELOPMENT_TEAM = 2H9YX8GH2S;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WMDProject/WMDProjectPrefixHeader.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/WMDProject/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1164,7 +1233,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/WMDProject-Bridge-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1178,6 +1247,7 @@
 				DEVELOPMENT_TEAM = "";
 				GCC_PREFIX_HEADER = "$(SRCROOT)/WMDProject/WMDProjectPrefixHeader.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/WMDProject/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1187,7 +1257,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/WMDProject-Bridge-Header.h";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

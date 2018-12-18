@@ -55,6 +55,10 @@
 #define kFontSize24 [UIFont systemFontOfSize:12]
 
 
+#define KTemperatureSymbolSimple  @"°"
+#define KTemperatureSymbol        @"℃"
+
+
 #pragma mark - UserDefault Key
 #define KDefaultLoginNameKey        @"KDefaultLoginNameKey"
 #define KDefaultPasswordKey         @"KDefaultPasswordKey"

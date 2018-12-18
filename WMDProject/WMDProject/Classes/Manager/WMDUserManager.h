@@ -14,6 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (WMDUserManager *)shareInstance;
 
+@property (nonatomic,strong) NSString * tokenId;
+
+
+
+
+
 @end
 
 NS_ASSUME_NONNULL_END

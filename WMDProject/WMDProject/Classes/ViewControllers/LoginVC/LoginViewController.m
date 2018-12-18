@@ -33,7 +33,8 @@
 - (UIImageView *)dipImageView{
     if (!_dipImageView) {
         _dipImageView = [[UIImageView alloc] init];
-        _dipImageView.backgroundColor = [UIColor redColor];
+        _dipImageView.backgroundColor = [UIColor clearColor];
+        _dipImageView.image = [UIImage imageNamed:@"denglu"];
     }
     
     return _dipImageView;
@@ -102,7 +103,7 @@
     if (!_codeButton) {
         _codeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _codeButton.backgroundColor = [UIColor whiteColor];
-        _codeButton.titleLabel.font = [UIFont systemFontOfSize:14];
+        _codeButton.titleLabel.font = [UIFont systemFontOfSize:12];
         [_codeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
         [_codeButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         [_codeButton setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
@@ -151,6 +152,7 @@
         make.centerX.mas_equalTo(weakSelf.view.mas_centerX);
         make.size.mas_equalTo(CGSizeMake(180, 180));
     }];
+    self.logoImageView.hidden = YES;
 
     [self.view addSubview:self.phoneTextFiled];
     [self.phoneTextFiled mas_makeConstraints:^(MASConstraintMaker *make) {

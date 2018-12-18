@@ -71,7 +71,7 @@ CGFloat const DYLeftSlipLeftSlipPanTriggerWidth = 50;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _leftSlipManager = [[self alloc] init];
-        _leftSlipManager.leftViewWidth = [UIScreen mainScreen].bounds.size.width * 0.6;
+        _leftSlipManager.leftViewWidth = [UIScreen mainScreen].bounds.size.width * 0.8;
     });
     return _leftSlipManager;
 }

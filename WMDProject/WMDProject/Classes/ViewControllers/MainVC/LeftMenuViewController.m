@@ -7,69 +7,8 @@
 //
 
 #import "LeftMenuViewController.h"
-
-//菜单cell
-@interface MenuTableViewCell : UITableViewCell
-
-@property (nonatomic,strong) UIImageView * leftImageView;
-
-@property (nonatomic,strong) UILabel * titleLabel;
-
-@end
-
-@implementation MenuTableViewCell
-
-- (UIImageView *)leftImageView{
-    if (!_leftImageView) {
-        _leftImageView = [[UIImageView alloc]init];
-        _leftImageView.backgroundColor = [UIColor clearColor];
-    }
-    
-    return _leftImageView;
-}
-
-- (UILabel *)titleLabel{
-    if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc]init];
-        _titleLabel.backgroundColor = [UIColor clearColor];
-        _titleLabel.font = kFontSize30;
-        _titleLabel.textAlignment = NSTextAlignmentLeft;
-        _titleLabel.textColor = kColorBlack;
-    }
-    
-    return _titleLabel;
-}
-
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.backgroundColor = [UIColor clearColor];
-        
-        [self.contentView addSubview:self.leftImageView];
-        [self.leftImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(self.contentView).mas_offset(30);
-            make.centerY.mas_equalTo(self.contentView.mas_centerY);
-            make.size.mas_equalTo(CGSizeMake(17, 18));
-        }];
-        
-        [self.contentView addSubview:self.titleLabel];
-        [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.mas_equalTo(self.contentView.mas_centerY);
-            make.left.mas_equalTo(self.leftImageView.mas_right).mas_offset(15);
-            make.right.mas_equalTo(self.contentView).mas_offset(-30);
-            make.height.mas_offset(20);
-        }];
-    }
-    
-    return self;
-}
-
-@end
-
-
-
-
+#import "MenuTableViewCell.h"
+#import "ViewController.h"
 
 @interface LeftMenuViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -77,18 +16,13 @@
 
 @property (nonatomic,strong) UIView * headerView;
 
-@property (nonatomic,strong) UIImageView * circleImageView;
-
 @property (nonatomic,strong) UIImageView * headImageView;
 
 @property (nonatomic,strong) UILabel * nameLabel;
 
-
 @property (nonatomic,strong) UIView * footerView;
 
-@property (nonatomic,strong) UIImageView * logoImageView;
-
-@property (nonatomic,strong) UILabel * titleLabel;
+@property (nonatomic,strong) UIButton * logoutButton;
 
 
 @end
@@ -121,31 +55,20 @@
 - (UIImageView *)headImageView{
     if (!_headImageView) {
         _headImageView = [[UIImageView alloc]init];
-        _headImageView.backgroundColor = [UIColor clearColor];
-        _headImageView.image = [UIImage imageNamed:@"morentouxiang"];
+        _headImageView.backgroundColor = [UIColor redColor];
+//        _headImageView.image = [UIImage imageNamed:@"morentouxiang"];
     }
     
     return _headImageView;
-}
-
-- (UIImageView *)circleImageView{
-    if (!_circleImageView) {
-        _circleImageView = [[UIImageView alloc]init];
-        _circleImageView.backgroundColor = [UIColor clearColor];
-    }
-    
-    return _circleImageView;
 }
 
 - (UILabel *)nameLabel{
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc]init];
         _nameLabel.backgroundColor = [UIColor clearColor];
-        _nameLabel.font = kFontSize34;
+        _nameLabel.font = kFontSize30;
         _nameLabel.textAlignment = NSTextAlignmentCenter;
         _nameLabel.textColor = kColorBlack;
-        _nameLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        _nameLabel.numberOfLines = 0;
     }
     
     return _nameLabel;
@@ -160,26 +83,21 @@
     return _footerView;
 }
 
-- (UIImageView *)logoImageView{
-    if (!_logoImageView) {
-        _logoImageView = [[UIImageView alloc]init];
-        _logoImageView.backgroundColor = [UIColor clearColor];
-        _logoImageView.image = [UIImage imageNamed:@"logo_caidan"];
+- (UIButton *)logoutButton{
+    if (!_logoutButton) {
+        _logoutButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _logoutButton.backgroundColor = [UIColor clearColor];
+        _logoutButton.titleLabel.font = kFontSize30;
+        [_logoutButton setTitle:@"退出登录" forState:UIControlStateNormal];
+        [_logoutButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        _logoutButton.layer.masksToBounds = YES;
+        _logoutButton.layer.cornerRadius = 4;
+        _logoutButton.layer.borderColor = [UIColor blueColor].CGColor;
+        _logoutButton.layer.borderWidth = 1.0f;
+        [_logoutButton addTarget:self action:@selector(logoutButtonClick) forControlEvents:UIControlEventTouchUpInside];
     }
     
-    return _logoImageView;
-}
-
-- (UILabel *)titleLabel{
-    if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc]init];
-        _titleLabel.backgroundColor = [UIColor clearColor];
-        _titleLabel.font = kFontSize28;
-        _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.textColor = kColorBlack;
-    }
-    
-    return _titleLabel;
+    return _logoutButton;
 }
 
 
@@ -194,7 +112,7 @@
 }
 
 - (void)configureUI{
-    self.view.backgroundColor = [UIColor hexChangeFloat:@"ffffff"];
+    self.view.backgroundColor = [UIColor hexChangeFloat:@"f9f9f9"];
     
     [self.view addSubview:self.headerView];
     [self.headerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -202,20 +120,9 @@
         make.height.mas_offset(200);
     }];
     
-    [self.headerView addSubview:self.circleImageView];
-    [self.circleImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.headerView).mas_offset(50);
-        make.centerX.mas_equalTo(self.headerView.mas_centerX);
-        make.size.mas_equalTo(CGSizeMake(60, 60));
-    }];
-    self.circleImageView.layer.masksToBounds = YES;
-    self.circleImageView.layer.cornerRadius = 30.0f;
-    self.circleImageView.layer.borderColor = [UIColor hexChangeFloat:@"666666"].CGColor;
-    self.circleImageView.layer.borderWidth = 1.0f;
-
     [self.headerView addSubview:self.headImageView];
     [self.headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.mas_equalTo(self.circleImageView);
+        make.center.mas_equalTo(self.headerView);
         make.size.mas_equalTo(CGSizeMake(58, 58));
     }];
     self.headImageView.layer.masksToBounds = YES;
@@ -224,35 +131,10 @@
     [self.headerView addSubview:self.nameLabel];
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(self.headerView);
-        make.top.mas_equalTo(self.circleImageView.mas_bottom).mas_offset(18);
-        make.height.mas_offset(60);
+        make.top.mas_equalTo(self.headImageView.mas_bottom).mas_offset(18);
+        make.height.mas_offset(20);
     }];
-    
-//    NSString * str1 = [HYSdpClientManager shareInstance].userInfo.strUserName;
-//    NSString * str2 = [NSString stringWithFormat:@"人员ID:%@",[HYSdpClientManager shareInstance].userInfo.strUserID];
-//    NSString * str = [NSString stringWithFormat:@"%@\n%@",str1,str2];
-//    NSRange range2 = [str rangeOfString:str2];
-//
-//    NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
-//
-//    [attrStr setAttributes:@{NSFontAttributeName:kFontSize34,
-//                             NSForegroundColorAttributeName:kColorBlack
-//                             }
-//                     range:NSMakeRange(0, str1.length)];
-//    [attrStr setAttributes:@{NSFontAttributeName:kFontSize28,
-//                             NSForegroundColorAttributeName:kColorGray
-//                             }
-//                     range:range2];
-//
-//    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-//    // 行间距
-//    paragraphStyle.lineSpacing = 10.0f;
-//    paragraphStyle.alignment = NSTextAlignmentCenter;
-//    [attrStr addAttribute:NSParagraphStyleAttributeName
-//                    value:paragraphStyle
-//                    range:NSMakeRange(0, str.length)];
-//    self.nameLabel.attributedText = attrStr;
-//    self.nameLabel.text = [HYSdpClientManager shareInstance].userInfo.strUserName;
+    self.nameLabel.text = @"用户名A";
     
     [self.view addSubview:self.infoTableView];
     [self.infoTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -260,6 +142,7 @@
         make.left.right.mas_equalTo(self.view);
         make.height.mas_offset(SCREEN_HEIGHT-200-100);
     }];
+    self.infoTableView.backgroundColor = [UIColor clearColor];
     
     [self.view addSubview:self.footerView];
     [self.footerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -268,30 +151,28 @@
         make.height.mas_offset(100);
     }];
     
-    [self.footerView addSubview:self.logoImageView];
-    [self.logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.footerView).mas_offset(15);
-        make.centerX.mas_equalTo(self.footerView.mas_centerX);
-        make.size.mas_equalTo(CGSizeMake(35, 35));
+    [self.footerView addSubview:self.logoutButton];
+    [self.logoutButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.footerView.mas_centerY);
+        make.left.mas_equalTo(self.footerView).mas_offset(30);
+        make.right.mas_equalTo(self.footerView).mas_offset(-30);
+        make.height.mas_offset(40);
     }];
-    self.logoImageView.contentMode = UIViewContentModeScaleAspectFit;
+}
 
-    [self.footerView addSubview:self.titleLabel];
-    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.mas_equalTo(self.footerView);
-        make.bottom.mas_equalTo(self.footerView).mas_offset(-30);
-        make.height.mas_offset(15);
-    }];
-    self.titleLabel.text = @"VMS视频监控客户端";
+#pragma mark -- button events
+- (void)logoutButtonClick{
+    [[DYLeftSlipManager sharedManager] dismissLeftView];
+    [[NSNotificationCenter defaultCenter] postNotificationName:UserLogoutSuccessNotify object:nil];
 }
 
 #pragma mark -- tableview delegate & datasource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 6;
+    return 3;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 45;
+    return 50;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -301,72 +182,74 @@
         cell = [[MenuTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
     
-    NSString * imageStr = @"";
-    NSString * titleStr = @"";
-    
-    switch (indexPath.row) {
-        case 0:
-            imageStr = @"ico_shikuangyulan";
-            titleStr = @"实况预览";
-            break;
-        case 1:
-            imageStr = @"ico_yuanchenhuifang";
-            titleStr = @"远程回放";
-            break;
-        case 2:
-            imageStr = @"ico_xiaoxizhongxin";
-            titleStr = @"消息中心";
-            break;
-        case 3:
-            imageStr = @"ico_beidiluxiang";
-            titleStr = @"本地录像";
-            break;
-        case 4:
-            imageStr = @"ico_shezhi";
-            titleStr = @"设置";
-            break;
-        case 5:
-            imageStr = @"ico_guanyu";
-            titleStr = @"关于";
-            break;
+    cell.line.hidden = NO;
+    cell.logoImageView.hidden = YES;
+    cell.backgroundColor = [UIColor clearColor];
 
-        default:
-            break;
+    if (indexPath.row == 0) {
+        cell.backgroundColor = [UIColor hexChangeFloat:@"e1e1e1"];
+        cell.msgButton.hidden = YES;
+        cell.infoLabel.hidden = NO;
+        cell.line.hidden = YES;
+        cell.logoImageView.hidden = NO;
+
+        NSString * infoStr = [NSString stringWithFormat:@"25-30%@",KTemperatureSymbol];
+        cell.infoLabel.text = infoStr;
+
+        NSString * str1 = @"大连瓦房店市";
+        NSString * str2 = @"11月26号 周一";
+        NSString * str = [NSString stringWithFormat:@"%@\n%@",str1,str2];
+        NSRange range2 = [str rangeOfString:str2];
+
+        NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
+
+        [attrStr setAttributes:@{NSFontAttributeName:kFontSize26,
+                                 NSForegroundColorAttributeName:kColorBlack
+                                 }
+                         range:NSMakeRange(0, str1.length)];
+        [attrStr setAttributes:@{NSFontAttributeName:kFontSize24,
+                                 NSForegroundColorAttributeName:kColorGray
+                                 }
+                         range:range2];
+
+//        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+//        // 行间距
+//        paragraphStyle.lineSpacing = 5.0f;
+//        paragraphStyle.alignment = NSTextAlignmentCenter;
+//        [attrStr addAttribute:NSParagraphStyleAttributeName
+//                        value:paragraphStyle
+//                        range:NSMakeRange(0, str.length)];
+        cell.nameLabel.attributedText = attrStr;
+
+    }
+    else if (indexPath.row == 1){
+        cell.msgButton.hidden = NO;
+        cell.infoLabel.hidden = YES;
+
+        cell.nameLabel.text = @"消息设置";
+    }
+    else{
+        cell.msgButton.hidden = YES;
+        cell.infoLabel.hidden = YES;
+
+        cell.nameLabel.text = @"清除缓存";
     }
     
-    cell.leftImageView.image = [UIImage imageNamed:imageStr];
-    cell.titleLabel.text = titleStr;
+    [cell setMessageButtonClick:^(BOOL selected) {
+        
+    }];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [[DYLeftSlipManager sharedManager] dismissLeftView];
-    if (indexPath.row == 0 || indexPath.row == 1 || indexPath.row == 2) {
-        [CommonUtils showPromptViewInWindowWithTitle:@"功能暂未开放" afterDelay:HudShowTime];
-        return;
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if (indexPath.row == 2) {
+        AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        ViewController * vc = [[ViewController alloc] init];
+        [appDelegate.mainViewController pushViewController:vc animated:YES];
     }
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-//        UIViewController * vc;
-        
-//        switch (indexPath.row) {
-//            case 3:
-//                vc = [[LocalVideoPicController alloc] init];
-//                break;
-//            case 4:
-//                vc = [[SettingMainViewController alloc] initWithNibName:@"SettingMainViewController" bundle:nil];
-//                break;
-//            case 5:
-//                vc = [[YDHSAboutViewController alloc] initWithNibName:@"YDHSAboutViewController" bundle:nil];
-//                break;
-//
-//            default:
-//                break;
-//        }
-        
-//        [appDelegate.mainNavController pushViewController:vc animated:YES];
-    });
 }
 
 - (void)didReceiveMemoryWarning {
