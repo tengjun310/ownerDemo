@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define KHttpHost       @"http://47.104.94.101:16888/haiyang/"
+
 @interface HttpClient : NSObject
 
 

@@ -18,6 +18,7 @@
 #import "WMDUserManager.h"
 #import "WMDProjectDefine.h"
 #import "UIColor+extend.h"
+#import "UIImage+extend.h"
 #import "HttpClient.h"
 
 #endif /* WMDProjectPrefixHeader_pch */

@@ -9,7 +9,9 @@
 #import "BaseViewController.h"
 
 @interface BaseViewController ()
-
+{
+    UIBarButtonItem * leftItem;
+}
 @end
 
 @implementation BaseViewController
@@ -33,19 +35,37 @@
     //去掉系统底线，使用自定义底线
     UIImage * clearImage = [[UIImage alloc]init];
     [self.navigationController.navigationBar setBackgroundImage:clearImage forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     
     UIImage * lineClearImage = [[UIImage alloc]init];
     [self.navigationController.navigationBar setShadowImage:lineClearImage];
     
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
+    leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"top_back"] style:UIBarButtonItemStyleDone target:self action:@selector(leftItemClick)];
+    self.navigationItem.leftBarButtonItem = leftItem;
+
     __weak typeof(self) weakSelf = self;
 
     [self.view addSubview:self.dipImageView];
     [self.dipImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(weakSelf.view);
     }];
+    
+    self.hiddenLeftItem = YES;
 }
 
+- (void)setHiddenLeftItem:(BOOL)hiddenLeftItem{
+    _hiddenLeftItem = hiddenLeftItem;
+    if (hiddenLeftItem) {
+        self.navigationItem.leftBarButtonItem = nil;
+    }
+    else{
+        self.navigationItem.leftBarButtonItem = leftItem;
+    }
+}
 
+- (void)leftItemClick{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end

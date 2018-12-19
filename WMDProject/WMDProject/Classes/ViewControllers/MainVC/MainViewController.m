@@ -13,6 +13,7 @@
 #import "FuncationView/SecondInfoView.h"
 #import "FuncationView/ThirdInfoView.h"
 #import "FuncationView/MyScrollView.h"
+#import "WeatherInfoViewController.h"
 
 @interface MainViewController ()<FirstInfoViewDelegate,SecondInfoViewDelegate,UIScrollViewDelegate>
 
@@ -154,7 +155,28 @@
 }
 
 - (void)secondInfoViewTableviewDidSelectRow:(NSInteger)row{
-    
+    WeatherInfoViewController * vc = [[WeatherInfoViewController alloc] init];
+    if (row == 0){
+        vc.type = WeatherInfoType_hailang;
+        vc.titleStr = @"灾害性海浪";
+    }
+    else if (row == 1){
+        vc.type = WeatherInfoType_hailang;
+        vc.titleStr = @"海啸";
+    }
+    else if (row == 2){
+        vc.type = WeatherInfoType_hailang;
+        vc.titleStr = @"风暴物";
+    }
+    else if (row == 3){
+        vc.type = WeatherInfoType_hailang;
+        vc.titleStr = @"海生物";
+    }
+    else{
+        vc.type = WeatherInfoType_hailang;
+        vc.titleStr = @"海冰";
+    }
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark -- third view

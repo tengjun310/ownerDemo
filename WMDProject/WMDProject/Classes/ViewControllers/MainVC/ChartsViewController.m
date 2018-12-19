@@ -18,7 +18,7 @@
     [super viewDidLoad];
 
     self.dipImageView.image = [UIImage imageNamed:@"hailang"];
-
+    self.hiddenLeftItem = NO;
 }
 
 

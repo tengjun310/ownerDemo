@@ -21,7 +21,7 @@
     [super viewDidLoad];
     
     self.dipImageView.image = [UIImage imageNamed:@"haixiao"];
-
+    self.hiddenLeftItem = NO;
 }
 
 

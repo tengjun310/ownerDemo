@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) UIImageView * dipImageView;
 
+@property (nonatomic,assign) BOOL hiddenLeftItem;//默认为yes
+
 @end
 
 NS_ASSUME_NONNULL_END

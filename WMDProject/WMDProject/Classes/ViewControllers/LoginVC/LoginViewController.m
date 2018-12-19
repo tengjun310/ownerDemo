@@ -9,6 +9,10 @@
 #import "LoginViewController.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
+{
+    NSTimer * timer;
+    int timeCount;
+}
 
 @property (strong, nonatomic) UIImageView *dipImageView;
 
@@ -104,9 +108,11 @@
         _codeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _codeButton.backgroundColor = [UIColor whiteColor];
         _codeButton.titleLabel.font = [UIFont systemFontOfSize:12];
-        [_codeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
-        [_codeButton setTitleColor:kColorAppMain forState:UIControlStateNormal];
-        [_codeButton setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+        NSString * title =@"获取验证码";
+        NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:title];
+        [attrStr setAttributes:@{NSForegroundColorAttributeName:kColorAppMain}
+                         range:NSMakeRange(0, title.length)];
+        [_codeButton setAttributedTitle:attrStr forState:UIControlStateNormal];
         _codeButton.layer.masksToBounds = YES;
         _codeButton.layer.cornerRadius = 4;
         _codeButton.layer.borderWidth = 1.0f;
@@ -136,6 +142,14 @@
     [super viewDidLoad];
 
     [self configUI];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    if (timer) {
+        [timer invalidate];
+        timer = nil;
+    }
 }
 
 - (void)configUI{
@@ -204,14 +218,71 @@
 }
 
 - (void)codeButtonClick:(id)sender {
+    if (timer) {
+        return;
+    }
     
+    [self startTimer];
+    [self getCodeRequest];
 }
 
 - (void)loginButtonClick:(id)sender {
+    if (self.phoneTextFiled.text == 0) {
+        [CommonUtils showPromptViewInWindowWithTitle:@"请输入手机号" afterDelay:HudShowTime];
+        return;
+    }
+    else if (self.codeTextFiled.text == 0) {
+        [CommonUtils showPromptViewInWindowWithTitle:@"请输入手机验证码" afterDelay:HudShowTime];
+        return;
+    }
     
+    [self loginRequest];
+}
+
+- (void)startTimer{
+    timeCount = 60;
+    if (timer) {
+        [timer invalidate];
+        timer = nil;
+    }
     
+    timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerAction) userInfo:nil repeats:YES];
+    [timer fire];
+}
+
+- (void)timerAction{
+    timeCount --;
+    if (timeCount == 0) {
+        if (timer) {
+            [timer invalidate];
+            timer = nil;
+        }
+        
+        NSString * title =@"获取验证码";
+        NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:title];
+        [attrStr setAttributes:@{NSForegroundColorAttributeName:kColorAppMain}
+                         range:NSMakeRange(0, title.length)];
+        [self.codeButton setAttributedTitle:attrStr forState:UIControlStateNormal];
+    }
+    else{
+        NSString * title = [NSString stringWithFormat:@"%d S",timeCount];
+        NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:title];
+        [attrStr setAttributes:@{NSForegroundColorAttributeName:kColorRed}
+                         range:NSMakeRange(0, title.length-2)];
+        [attrStr setAttributes:@{NSForegroundColorAttributeName:kColorBlack}
+                         range:NSMakeRange(title.length-2, 1)];
+        [self.codeButton setAttributedTitle:attrStr forState:UIControlStateNormal];
+    }
+}
+
+#pragma mark -- request
+- (void)getCodeRequest{
     
+}
+
+- (void)loginRequest{
     [[NSNotificationCenter defaultCenter] postNotificationName:UserLoginSuccessNotify object:nil];
 }
+
 
 @end
