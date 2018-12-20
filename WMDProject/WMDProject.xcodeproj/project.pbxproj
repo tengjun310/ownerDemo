@@ -26,6 +26,7 @@
 		5F0C825E21CA7C31004EEB5C /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0C825D21CA7C31004EEB5C /* libc++.tbd */; };
 		5F0C826221CA7CF5004EEB5C /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5F0C826121CA7CF4004EEB5C /* mapapi.bundle */; };
 		5F0C826421CA7FC0004EEB5C /* BMKLocationKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0C826321CA7FC0004EEB5C /* BMKLocationKit.framework */; };
+		5F1C5EE021CBD30700A598C7 /* InfoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F1C5EDF21CBD30700A598C7 /* InfoCollectionViewCell.m */; };
 		5F95792C21C9313D00D74620 /* SecondInfoViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */; };
 		6644852A21C785F200A0D83D /* LineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644852721C785F200A0D83D /* LineViewController.m */; };
 		6644852D21C7860A00A0D83D /* WMDUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644852C21C7860A00A0D83D /* WMDUserManager.m */; };
@@ -157,6 +158,8 @@
 		5F0C825D21CA7C31004EEB5C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		5F0C826121CA7CF4004EEB5C /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = mapapi.bundle; path = BaiduMapAPI_Map.framework/mapapi.bundle; sourceTree = "<group>"; };
 		5F0C826321CA7FC0004EEB5C /* BMKLocationKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BMKLocationKit.framework; sourceTree = "<group>"; };
+		5F1C5EDE21CBD30700A598C7 /* InfoCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InfoCollectionViewCell.h; sourceTree = "<group>"; };
+		5F1C5EDF21CBD30700A598C7 /* InfoCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InfoCollectionViewCell.m; sourceTree = "<group>"; };
 		5F95792A21C9313D00D74620 /* SecondInfoViewTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondInfoViewTableViewCell.h; sourceTree = "<group>"; };
 		5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondInfoViewTableViewCell.m; sourceTree = "<group>"; };
 		6644852721C785F200A0D83D /* LineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineViewController.m; sourceTree = "<group>"; };
@@ -468,6 +471,8 @@
 				5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */,
 				5F0C823C21CA715E004EEB5C /* WeatherInfoTableViewCell.h */,
 				5F0C823D21CA715E004EEB5C /* WeatherInfoTableViewCell.m */,
+				5F1C5EDE21CBD30700A598C7 /* InfoCollectionViewCell.h */,
+				5F1C5EDF21CBD30700A598C7 /* InfoCollectionViewCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1192,6 +1197,7 @@
 				664485F121C7888900A0D83D /* JSONModel.m in Sources */,
 				6644860821C7888900A0D83D /* SDImageCache.m in Sources */,
 				6644861B21C7888900A0D83D /* IQUIViewController+Additions.m in Sources */,
+				5F1C5EE021CBD30700A598C7 /* InfoCollectionViewCell.m in Sources */,
 				6644862A21C7888900A0D83D /* MJRefreshHeader.m in Sources */,
 				6644852D21C7860A00A0D83D /* WMDUserManager.m in Sources */,
 				664D6AB121C8F04E0004A544 /* MyScrollView.m in Sources */,

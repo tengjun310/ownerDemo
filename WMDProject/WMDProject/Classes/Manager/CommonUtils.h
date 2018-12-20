@@ -90,5 +90,5 @@
 //注：len为截取的字符长度
 + (NSString*)subTextString:(NSString*)str len:(NSInteger)len;
 
-
++ (NSString*)weekdayStringFromDate:(NSDate*)inputDate;
 @end
