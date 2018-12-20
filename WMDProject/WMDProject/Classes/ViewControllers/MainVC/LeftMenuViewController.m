@@ -164,6 +164,23 @@
 - (void)logoutButtonClick{
     [[DYLeftSlipManager sharedManager] dismissLeftView];
     [[NSNotificationCenter defaultCenter] postNotificationName:UserLogoutSuccessNotify object:nil];
+    return;
+    
+    MBProgressHUD * hud = [CommonUtils showLoadingViewInWindowWithTitle:@""];
+    
+    NSString * str = [NSString stringWithFormat:@"user/logout?username=%@&token=%@",[WMDUserManager shareInstance].userName,[WMDUserManager shareInstance].tokenId];
+    [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+        if (succ) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:UserLogoutSuccessNotify object:nil];
+        }
+        else{
+            hud.labelText = @"登出失败";
+        }
+        [hud hide:YES afterDelay:HudShowTime];
+    } FailBlock:^(NSError *error) {
+        hud.labelText = @"登出超时";
+        [hud hide:YES afterDelay:HudShowTime];
+    }];
 }
 
 #pragma mark -- tableview delegate & datasource

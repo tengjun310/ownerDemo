@@ -108,11 +108,7 @@
         _codeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _codeButton.backgroundColor = [UIColor whiteColor];
         _codeButton.titleLabel.font = [UIFont systemFontOfSize:12];
-        NSString * title =@"获取验证码";
-        NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:title];
-        [attrStr setAttributes:@{NSForegroundColorAttributeName:kColorAppMain}
-                         range:NSMakeRange(0, title.length)];
-        [_codeButton setAttributedTitle:attrStr forState:UIControlStateNormal];
+        [self configureCodeButtolNormalUI];
         _codeButton.layer.masksToBounds = YES;
         _codeButton.layer.cornerRadius = 4;
         _codeButton.layer.borderWidth = 1.0f;
@@ -215,6 +211,21 @@
         make.height.mas_offset(40);
     }];
 
+    self.phoneTextFiled.text = @"13115025605";
+    self.codeTextFiled.text = @"111111";
+}
+
+- (void)configureCodeButtolNormalUI{
+    if (timer) {
+        [timer invalidate];
+        timer = nil;
+    }
+
+    NSString * title =@"获取验证码";
+    NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:title];
+    [attrStr setAttributes:@{NSForegroundColorAttributeName:kColorAppMain}
+                     range:NSMakeRange(0, title.length)];
+    [self.codeButton setAttributedTitle:attrStr forState:UIControlStateNormal];
 }
 
 - (void)codeButtonClick:(id)sender {
@@ -227,11 +238,11 @@
 }
 
 - (void)loginButtonClick:(id)sender {
-    if (self.phoneTextFiled.text == 0) {
+    if (self.phoneTextFiled.text.length == 0) {
         [CommonUtils showPromptViewInWindowWithTitle:@"请输入手机号" afterDelay:HudShowTime];
         return;
     }
-    else if (self.codeTextFiled.text == 0) {
+    else if (self.codeTextFiled.text.length == 0) {
         [CommonUtils showPromptViewInWindowWithTitle:@"请输入手机验证码" afterDelay:HudShowTime];
         return;
     }
@@ -257,12 +268,7 @@
             [timer invalidate];
             timer = nil;
         }
-        
-        NSString * title =@"获取验证码";
-        NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:title];
-        [attrStr setAttributes:@{NSForegroundColorAttributeName:kColorAppMain}
-                         range:NSMakeRange(0, title.length)];
-        [self.codeButton setAttributedTitle:attrStr forState:UIControlStateNormal];
+        [self configureCodeButtolNormalUI];
     }
     else{
         NSString * title = [NSString stringWithFormat:@"%d S",timeCount];
@@ -277,11 +283,52 @@
 
 #pragma mark -- request
 - (void)getCodeRequest{
+    NSString * str = [NSString stringWithFormat:@"sms/phoneCodeTest?phoneNumber=%@",self.phoneTextFiled.text];
     
+    [HttpClient asyncSendPostRequest:str
+                              Parmas:nil
+                        SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+                            if (!succ) {
+                                [CommonUtils showPromptViewInWindowWithTitle:@"获取验证码错误" afterDelay:HudShowTime];
+                                [self configureCodeButtolNormalUI];
+                            }
+                        }
+                           FailBlock:^(NSError *error) {
+                               [CommonUtils showPromptViewInWindowWithTitle:@"获取验证码超时" afterDelay:HudShowTime];
+                               [self configureCodeButtolNormalUI];
+                        }];
 }
 
 - (void)loginRequest{
     [[NSNotificationCenter defaultCenter] postNotificationName:UserLoginSuccessNotify object:nil];
+    return;
+    
+    
+    MBProgressHUD * hud = [CommonUtils showLoadingViewInWindowWithTitle:@""];
+    
+    NSString * str = [NSString stringWithFormat:@"user/phLogin?phNumber=%@&code=%@",self.phoneTextFiled.text,self.codeTextFiled.text];
+    [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+        if (succ) {
+            hud.labelText = @"登录成功";
+            
+            NSDictionary * dic = (NSDictionary *)rspData;
+            NSDictionary * contentDic = [dic objectForKey:@"content"];
+            if (!IsNilNull(contentDic)) {
+                [WMDUserManager shareInstance].tokenId = [contentDic objectForKey:@"token"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:UserLoginSuccessNotify object:nil];
+            }
+            else{
+                hud.labelText = @"登录失败";
+            }
+        }
+        else{
+            hud.labelText = @"登录失败";
+        }
+        [hud hide:YES afterDelay:HudShowTime];
+    } FailBlock:^(NSError *error) {
+        hud.labelText = @"登录超时";
+        [hud hide:YES afterDelay:HudShowTime];
+    }];
 }
 
 

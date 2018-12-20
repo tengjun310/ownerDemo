@@ -39,7 +39,7 @@
     UIImage * lineClearImage = [[UIImage alloc]init];
     [self.navigationController.navigationBar setShadowImage:lineClearImage];
     
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
     
     leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"top_back"] style:UIBarButtonItemStyleDone target:self action:@selector(leftItemClick)];
     self.navigationItem.leftBarButtonItem = leftItem;

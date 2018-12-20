@@ -1342,7 +1342,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/WMDProject/Classes/3rdParts/BMKSDK/thirdlibs",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marine.weather;
+				PRODUCT_BUNDLE_IDENTIFIER = com.huaiye.weather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = HYProductor_dev;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/WMDProject-Bridge-Header.h";
@@ -1375,7 +1375,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/WMDProject/Classes/3rdParts/BMKSDK/thirdlibs",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.marine.weather;
+				PRODUCT_BUNDLE_IDENTIFIER = com.huaiye.weather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/WMDProject-Bridge-Header.h";

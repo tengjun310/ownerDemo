@@ -84,7 +84,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     self.navigationController.navigationBar.hidden = NO;
 }
 
@@ -103,6 +103,17 @@
     [self configureFirstViewUI];
     [self configureSecondViewUI];
     [self configureThirdViewUI];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.x >= SCREEN_WIDTH && scrollView.contentOffset.x < SCREEN_WIDTH*2) {
+        self.dipImageView.image = [UIImage imageNamed:@"bg_xingkong"];
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    }
+    else{
+        self.dipImageView.image = [UIImage imageNamed:@"haishengwu"];
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+    }
 }
 
 #pragma mark -- first view

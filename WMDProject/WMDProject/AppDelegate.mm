@@ -17,7 +17,9 @@
 NSString * const UserLoginSuccessNotify = @"UserLoginSuccessNotify";
 NSString * const UserLogoutSuccessNotify = @"UserLogoutSuccessNotify";
 
-#define KBMKSDKKEY  @""
+//com.marine.weather
+
+#define KBMKSDKKEY  @"oYGLpjH1ea3hkKomXaxhAKuiiuT1k3Xa"
 
 @interface AppDelegate ()
 

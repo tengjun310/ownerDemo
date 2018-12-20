@@ -9,7 +9,7 @@
 #import "WMDUserManager.h"
 
 
-@interface WMDUserManager ()<NSCopying,NSMutableCopying>
+@interface WMDUserManager ()
 
 @end
 
@@ -17,25 +17,13 @@
 
 #pragma mark -- 完整的单例实现
 + (WMDUserManager *)shareInstance{
-    static WMDUserManager * userManager = nil;
+    static WMDUserManager * userManager;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        userManager = [[WMDUserManager alloc] init];
+        userManager = [[self alloc] init];
     });
     
     return userManager;
-}
-
-+ (instancetype)allocWithZone:(struct _NSZone *)zone{
-    return [self shareInstance];
-}
-
-- (id)copyWithZone:(NSZone *)zone{
-    return self;
-}
-
-- (id)mutableCopyWithZone:(NSZone *)zone{
-    return self;
 }
 
 #pragma mark --

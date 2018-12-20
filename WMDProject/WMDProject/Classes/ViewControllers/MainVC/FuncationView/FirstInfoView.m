@@ -10,7 +10,12 @@
 #import "FirstViewInfoTableViewCell.h"
 
 @interface FirstInfoView ()<UITableViewDelegate,UITableViewDataSource>
-
+{
+    NSDate * nextDate1;
+    NSDate * nextDate2;
+    NSDate * nextDate3;
+    NSMutableDictionary * weatherInfoDic;
+}
 @end
 
 @implementation FirstInfoView
@@ -139,7 +144,7 @@
     [self.daysSegmentedControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.weatherInfoLabel.mas_bottom).mas_offset(10);
         make.centerX.mas_equalTo(weakSelf.mas_centerX);
-        make.size.mas_equalTo(CGSizeMake(240, 30));
+        make.size.mas_equalTo(CGSizeMake(260, 30));
     }];
     
     [self addSubview:self.infoTableView];
@@ -151,7 +156,23 @@
 }
 
 - (void)startWeatherInfoRequest{
-#warning TESTCODE
+    weatherInfoDic = [NSMutableDictionary  dictionary];
+
+    nextDate1 = [NSDate dateWithTimeIntervalSinceNow:24*60*60];
+    NSString * nextDateStr1 = [CommonUtils formatTime:nextDate1 FormatStyle:@"MM月dd日"];
+    nextDate2 = [NSDate dateWithTimeIntervalSinceNow:2*24*60*60];
+    NSString * nextDateStr2 = [CommonUtils formatTime:nextDate2 FormatStyle:@"MM月dd日"];
+    nextDate3 = [NSDate dateWithTimeIntervalSinceNow:3*24*60*60];
+    NSString * nextDateStr3 = [CommonUtils formatTime:nextDate3 FormatStyle:@"MM月dd日"];
+    
+    [self.daysSegmentedControl insertSegmentWithTitle:@"今天" atIndex:0 animated:NO];
+    [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr1 atIndex:1 animated:NO];
+    [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr2 atIndex:2 animated:NO];
+    [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr3 atIndex:3 animated:NO];
+    self.daysSegmentedControl.selectedSegmentIndex = 0;
+
+    [self getWeatherInfo:[NSDate date]];
+
     NSString * str1 = @"大连瓦房店市";
     NSString * str2 = @"11月25号 周三";
     NSString * str3 = @"瓦房店市潮汐";
@@ -202,12 +223,6 @@
                          value:paragraphStyle
                          range:NSMakeRange(0, str7.length)];
     self.weatherInfoLabel.attributedText = labelAttrStr;
-    
-    [self.daysSegmentedControl insertSegmentWithTitle:@"今天" atIndex:0 animated:NO];
-    [self.daysSegmentedControl insertSegmentWithTitle:@"11月3日" atIndex:1 animated:NO];
-    [self.daysSegmentedControl insertSegmentWithTitle:@"11月4日" atIndex:2 animated:NO];
-    [self.daysSegmentedControl insertSegmentWithTitle:@"11月5日" atIndex:3 animated:NO];
-    self.daysSegmentedControl.selectedSegmentIndex = 0;
 }
 
 #pragma mark -- button events
@@ -224,6 +239,18 @@
     }
 }
 
+#pragma mark -- request
+- (void)getWeatherInfo:(NSDate *)date{
+    NSString * str = [NSString stringWithFormat:@"marine/getWeather?fstarttime=%@",[CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd"]];
+    
+    [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+        if (succ) {
+            
+        }
+    } FailBlock:^(NSError *error) {
+        
+    }];
+}
 
 #pragma mark -- tableView delegate & datasource
 

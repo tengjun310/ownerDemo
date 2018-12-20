@@ -35,19 +35,8 @@ static AFHTTPSessionManager *manager ;
 @implementation HttpClient
 
 + (void)asyncSendPostRequest:(NSString *)url Parmas:(id)data SuccessBlock:(void (^)(BOOL ,NSString *, id))successblock FailBlock:(void (^)(NSError *))failblock{
-    //检测网络连接  无网络直接返回
-    if (![AFNetworkReachabilityManager sharedManager].reachable) {
-        NSError * error = [NSError errorWithDomain:@"无网络连接" code:-1 userInfo:nil];
-        failblock(error);
-        return;
-    }
     
-//    NSString * ip = [[NSUserDefaults standardUserDefaults] objectForKey:KDefaultServiceIpKey];
-//    int port = [[[NSUserDefaults standardUserDefaults] objectForKey:KDefaultServicePortKey] intValue];
-//    NSString * contextStr = [[NSUserDefaults standardUserDefaults] objectForKey:KDefaultServiceContextKey];
-//    NSString * serverHost = [NSString stringWithFormat:@"http://%@:%d/%@/",ip,port,contextStr];
-    
-    NSString * strUrl = [@"" stringByAppendingString:url];
+    NSString * strUrl = [KHttpHost stringByAppendingString:url];
     
     AFHTTPSessionManager * manager = [HYHTTPSessionManager sharedHTTPSession];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -66,12 +55,12 @@ static AFHTTPSessionManager *manager ;
         }
         
         NSDictionary * rspDic = (NSDictionary *)responseObject;
-        id value = [rspDic objectForKey:@"result"];
-        if ([[rspDic objectForKey:@"code"] intValue] != 0) {
-            successblock(NO,[rspDic objectForKey:@"desc"],value);
+        id value = [rspDic objectForKey:@"code"];
+        if ([value intValue] != 0) {
+            successblock(NO,[rspDic objectForKey:@"msg"],rspDic);
             return;
         }
-        successblock(YES,@"",value);
+        successblock(YES,@"",rspDic);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         failblock(error);
     }];

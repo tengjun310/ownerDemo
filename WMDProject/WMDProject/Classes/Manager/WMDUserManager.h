@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) NSString * tokenId;
 
+@property (nonatomic,strong) NSString * userName;
 
 
 
