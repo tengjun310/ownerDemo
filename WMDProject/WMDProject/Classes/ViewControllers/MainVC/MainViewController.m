@@ -165,21 +165,22 @@
     [self.secondInfoView startSecondInfoViewDataRequest];
 }
 
-- (void)secondInfoViewTableviewDidSelectRow:(NSInteger)row{
+- (void)secondInfoViewTableviewDidSelect:(SeaWranInfoModel *)infoModel{
     WeatherInfoViewController * vc = [[WeatherInfoViewController alloc] init];
-    if (row == 0){
+    vc.typeStr = infoModel.type;
+    if ([infoModel.type isEqualToString:@"hl"]){
         vc.type = WeatherInfoType_hailang;
         vc.titleStr = @"灾害性海浪";
     }
-    else if (row == 1){
+    else if ([infoModel.type isEqualToString:@"hx"]){
         vc.type = WeatherInfoType_hailang;
         vc.titleStr = @"海啸";
     }
-    else if (row == 2){
+    else if ([infoModel.type isEqualToString:@"fb"]){
         vc.type = WeatherInfoType_hailang;
         vc.titleStr = @"风暴物";
     }
-    else if (row == 3){
+    else if ([infoModel.type isEqualToString:@"hxw"]){
         vc.type = WeatherInfoType_hailang;
         vc.titleStr = @"海生物";
     }

@@ -91,4 +91,7 @@
 + (NSString*)subTextString:(NSString*)str len:(NSInteger)len;
 
 + (NSString*)weekdayStringFromDate:(NSDate*)inputDate;
+
++ (NSString*)weekdayCompletedStringFromDate:(NSDate*)inputDate;
+
 @end

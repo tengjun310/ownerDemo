@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WeatherInfoModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,12 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (WMDUserManager *)shareInstance;
 
-@property (nonatomic,strong) NSString * tokenId;
+@property (nonatomic,copy) NSString * tokenId;
 
-@property (nonatomic,strong) NSString * userName;
+@property (nonatomic,copy) NSString * userName;
 
-
-
+@property (nonatomic,strong) WeatherInfoModel * currentWeaInfoModel;
 
 @end
 

@@ -125,6 +125,9 @@
 		664D6AB121C8F04E0004A544 /* MyScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6AB021C8F04E0004A544 /* MyScrollView.m */; };
 		664D6AB421C8F9A10004A544 /* FirstViewInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 664D6AB321C8F9A10004A544 /* FirstViewInfoTableViewCell.m */; };
 		667D105421C7974900898812 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 667D105121C7974900898812 /* LoginViewController.m */; };
+		66AD416421CC8314002816FE /* WeatherInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AD416321CC8314002816FE /* WeatherInfoModel.m */; };
+		66AD416721CCC6A3002816FE /* SeaWranInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AD416621CCC6A3002816FE /* SeaWranInfoModel.m */; };
+		66AD416A21CCD211002816FE /* SeaWarnDetailInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AD416921CCD211002816FE /* SeaWarnDetailInfoModel.m */; };
 		66B5369721C79C92001C846F /* HttpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5369521C79C92001C846F /* HttpClient.m */; };
 		66B5369C21C79DAA001C846F /* LeftMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5369921C79DAA001C846F /* LeftMenuViewController.m */; };
 		66B5369D21C79DAA001C846F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5369B21C79DAA001C846F /* ViewController.m */; };
@@ -366,6 +369,12 @@
 		667D105121C7974900898812 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		667D105321C7974900898812 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		667DF71821C78095003C35FF /* WMDProject-Bridge-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WMDProject-Bridge-Header.h"; sourceTree = "<group>"; };
+		66AD416221CC8314002816FE /* WeatherInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeatherInfoModel.h; sourceTree = "<group>"; };
+		66AD416321CC8314002816FE /* WeatherInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherInfoModel.m; sourceTree = "<group>"; };
+		66AD416521CCC6A3002816FE /* SeaWranInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SeaWranInfoModel.h; sourceTree = "<group>"; };
+		66AD416621CCC6A3002816FE /* SeaWranInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SeaWranInfoModel.m; sourceTree = "<group>"; };
+		66AD416821CCD211002816FE /* SeaWarnDetailInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SeaWarnDetailInfoModel.h; sourceTree = "<group>"; };
+		66AD416921CCD211002816FE /* SeaWarnDetailInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SeaWarnDetailInfoModel.m; sourceTree = "<group>"; };
 		66B5369521C79C92001C846F /* HttpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpClient.m; sourceTree = "<group>"; };
 		66B5369621C79C92001C846F /* HttpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpClient.h; sourceTree = "<group>"; };
 		66B5369821C79DAA001C846F /* LeftMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftMenuViewController.h; sourceTree = "<group>"; };
@@ -495,6 +504,12 @@
 		6644852321C785B100A0D83D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				66AD416221CC8314002816FE /* WeatherInfoModel.h */,
+				66AD416321CC8314002816FE /* WeatherInfoModel.m */,
+				66AD416521CCC6A3002816FE /* SeaWranInfoModel.h */,
+				66AD416621CCC6A3002816FE /* SeaWranInfoModel.m */,
+				66AD416821CCD211002816FE /* SeaWarnDetailInfoModel.h */,
+				66AD416921CCD211002816FE /* SeaWarnDetailInfoModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1118,6 +1133,7 @@
 				6644862721C7888900A0D83D /* MJRefreshBackFooter.m in Sources */,
 				5F0C823B21CA6C8A004EEB5C /* WeatherInfoViewController.m in Sources */,
 				6644860E21C7888900A0D83D /* SDWebImagePrefetcher.m in Sources */,
+				66AD416A21CCD211002816FE /* SeaWarnDetailInfoModel.m in Sources */,
 				664485F721C7888900A0D83D /* JSONHTTPClient.m in Sources */,
 				66B5369C21C79DAA001C846F /* LeftMenuViewController.m in Sources */,
 				6644863821C7888900A0D83D /* UIScrollView+MJRefresh.m in Sources */,
@@ -1152,6 +1168,7 @@
 				664485F521C7888900A0D83D /* NSArray+JSONModel.m in Sources */,
 				6644860021C7888900A0D83D /* MASViewConstraint.m in Sources */,
 				6644852A21C785F200A0D83D /* LineViewController.m in Sources */,
+				66AD416421CC8314002816FE /* WeatherInfoModel.m in Sources */,
 				6644860A21C7888900A0D83D /* SDWebImageDecoder.m in Sources */,
 				6644860D21C7888900A0D83D /* SDWebImageManager.m in Sources */,
 				6644861821C7888900A0D83D /* IQNSArray+Sort.m in Sources */,
@@ -1198,6 +1215,7 @@
 				6644860821C7888900A0D83D /* SDImageCache.m in Sources */,
 				6644861B21C7888900A0D83D /* IQUIViewController+Additions.m in Sources */,
 				5F1C5EE021CBD30700A598C7 /* InfoCollectionViewCell.m in Sources */,
+				66AD416721CCC6A3002816FE /* SeaWranInfoModel.m in Sources */,
 				6644862A21C7888900A0D83D /* MJRefreshHeader.m in Sources */,
 				6644852D21C7860A00A0D83D /* WMDUserManager.m in Sources */,
 				664D6AB121C8F04E0004A544 /* MyScrollView.m in Sources */,

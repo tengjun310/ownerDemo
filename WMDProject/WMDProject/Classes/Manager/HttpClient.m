@@ -25,6 +25,11 @@ static AFHTTPSessionManager *manager ;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [AFHTTPSessionManager manager];
+        manager.requestSerializer = [AFJSONRequestSerializer serializer];
+        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html",@"text/plain", nil];
+        [manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
+        manager.requestSerializer.timeoutInterval = 30.f;
+        [manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
     });
     return manager;
 }
@@ -37,12 +42,15 @@ static AFHTTPSessionManager *manager ;
 + (void)asyncSendPostRequest:(NSString *)url Parmas:(id)data SuccessBlock:(void (^)(BOOL ,NSString *, id))successblock FailBlock:(void (^)(NSError *))failblock{
     
     NSString * strUrl = [KHttpHost stringByAppendingString:url];
+    strUrl = [strUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
     AFHTTPSessionManager * manager = [HYHTTPSessionManager sharedHTTPSession];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    [manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
-    manager.requestSerializer.timeoutInterval = 30.f;
-    [manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
+    
+    if (![url containsString:@"sms/phoneCodeTest"] && ![url containsString:@"user/phLogin"]) {
+        //header里设置token
+        NSString * str = [NSString stringWithFormat:@"Bearer%@",[WMDUserManager shareInstance].tokenId];
+        [manager.requestSerializer setValue:str forHTTPHeaderField:@"Authorization"];
+    }
     
     [manager POST:strUrl parameters:data progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (IsNilNull(responseObject)) {

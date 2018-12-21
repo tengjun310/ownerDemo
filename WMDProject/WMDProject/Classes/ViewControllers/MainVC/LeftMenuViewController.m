@@ -105,6 +105,13 @@
     [super viewDidLoad];
 
     [self configureUI];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshShowWeather) name:@"refreshShowWeatherNotify" object:nil];
+}
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL)prefersStatusBarHidden{
@@ -134,7 +141,7 @@
         make.top.mas_equalTo(self.headImageView.mas_bottom).mas_offset(18);
         make.height.mas_offset(20);
     }];
-    self.nameLabel.text = @"用户名A";
+    self.nameLabel.text = [WMDUserManager shareInstance].userName;
     
     [self.view addSubview:self.infoTableView];
     [self.infoTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -160,15 +167,16 @@
     }];
 }
 
+- (void)refreshShowWeather{
+    NSIndexPath * path = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+}
+
 #pragma mark -- button events
-- (void)logoutButtonClick{
-    [[DYLeftSlipManager sharedManager] dismissLeftView];
-    [[NSNotificationCenter defaultCenter] postNotificationName:UserLogoutSuccessNotify object:nil];
-    return;
-    
+- (void)logoutButtonClick{    
     MBProgressHUD * hud = [CommonUtils showLoadingViewInWindowWithTitle:@""];
     
-    NSString * str = [NSString stringWithFormat:@"user/logout?username=%@&token=%@",[WMDUserManager shareInstance].userName,[WMDUserManager shareInstance].tokenId];
+    NSString * str = [NSString stringWithFormat:@"user/logout?phNumber=%@",[WMDUserManager shareInstance].userName];
     [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
         if (succ) {
             [[NSNotificationCenter defaultCenter] postNotificationName:UserLogoutSuccessNotify object:nil];
@@ -210,11 +218,13 @@
         cell.line.hidden = YES;
         cell.logoImageView.hidden = NO;
 
-        NSString * infoStr = [NSString stringWithFormat:@"25-30%@",KTemperatureSymbol];
-        cell.infoLabel.text = infoStr;
+        cell.infoLabel.text = [WMDUserManager shareInstance].currentWeaInfoModel.daytmp;
 
         NSString * str1 = @"大连瓦房店市";
-        NSString * str2 = @"11月26号 周一";
+        
+        NSString * dateStr = [CommonUtils formatTime:[NSDate date] FormatStyle:@"MM月dd号"];
+        NSString * weekStr = [CommonUtils weekdayCompletedStringFromDate:[NSDate date]];
+        NSString * str2 = [NSString stringWithFormat:@"%@ %@",dateStr,weekStr];
         NSString * str = [NSString stringWithFormat:@"%@\n%@",str1,str2];
         NSRange range2 = [str rangeOfString:str2];
 
@@ -229,13 +239,6 @@
                                  }
                          range:range2];
 
-//        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-//        // 行间距
-//        paragraphStyle.lineSpacing = 5.0f;
-//        paragraphStyle.alignment = NSTextAlignmentCenter;
-//        [attrStr addAttribute:NSParagraphStyleAttributeName
-//                        value:paragraphStyle
-//                        range:NSMakeRange(0, str.length)];
         cell.nameLabel.attributedText = attrStr;
 
     }

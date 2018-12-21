@@ -8,9 +8,11 @@
 
 #import "FirstInfoView.h"
 #import "FirstViewInfoTableViewCell.h"
+#import "WeatherInfoModel.h"
 
 @interface FirstInfoView ()<UITableViewDelegate,UITableViewDataSource>
 {
+    NSDate * nowDate;
     NSDate * nextDate1;
     NSDate * nextDate2;
     NSDate * nextDate3;
@@ -75,7 +77,7 @@
         _daysSegmentedControl = [[UISegmentedControl alloc] init];
         _daysSegmentedControl.backgroundColor = [UIColor clearColor];
         _daysSegmentedControl.tintColor = [UIColor whiteColor];
-        [_daysSegmentedControl addTarget:self action:@selector(segmentedControlClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_daysSegmentedControl addTarget:self action:@selector(segmentedControlClick:) forControlEvents:UIControlEventValueChanged];
     }
     
     return _daysSegmentedControl;
@@ -158,6 +160,7 @@
 - (void)startWeatherInfoRequest{
     weatherInfoDic = [NSMutableDictionary  dictionary];
 
+    nowDate = [NSDate date];
     nextDate1 = [NSDate dateWithTimeIntervalSinceNow:24*60*60];
     NSString * nextDateStr1 = [CommonUtils formatTime:nextDate1 FormatStyle:@"MM月dd日"];
     nextDate2 = [NSDate dateWithTimeIntervalSinceNow:2*24*60*60];
@@ -171,10 +174,16 @@
     [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr3 atIndex:3 animated:NO];
     self.daysSegmentedControl.selectedSegmentIndex = 0;
 
-    [self getWeatherInfo:[NSDate date]];
+    [self getWeatherInfo:nowDate];
+    [self refreshWeatherButtonInfoUI];
+}
 
+- (void)refreshWeatherButtonInfoUI{
     NSString * str1 = @"大连瓦房店市";
-    NSString * str2 = @"11月25号 周三";
+    
+    NSString * dateStr = [CommonUtils formatTime:[NSDate date] FormatStyle:@"MM月dd号"];
+    NSString * weekStr = [CommonUtils weekdayCompletedStringFromDate:[NSDate date]];
+    NSString * str2 = [NSString stringWithFormat:@"%@ %@",dateStr,weekStr];
     NSString * str3 = @"瓦房店市潮汐";
     NSString * str4 = [NSString stringWithFormat:@"%@\n%@\n%@",str1,str2,str3];
     
@@ -196,10 +205,20 @@
                              }
                      range:range3];
     [self.weatherInfoButton setAttributedTitle:attrStr forState:UIControlStateNormal];
+}
+
+- (void)refreshWeatherInfoUI:(NSDate *)date{
+    WeatherInfoModel * model = [weatherInfoDic objectForKey:date];
     
-    
-    NSString * str5 = [NSString stringWithFormat:@"15%@",KTemperatureSymbolSimple];
-    NSString * str6 = [NSString stringWithFormat:@"25-30%@ %@",KTemperatureSymbol,@"晴到多云"];
+    NSString * str5 = [NSString stringWithFormat:@"%@",model.nowtmp];
+    if ([str5 containsString:KTemperatureSymbol]) {
+        str5 = [str5 substringToIndex:str5.length-1];
+        str5 = [str5 stringByAppendingString:KTemperatureSymbolSimple];
+    }
+    else if (![str5 containsString:KTemperatureSymbolSimple]){
+        str5 = [str5 stringByAppendingString:KTemperatureSymbolSimple];
+    }
+    NSString * str6 = [NSString stringWithFormat:@"%@ %@ %@ %@",model.daytmp,model.status,model.wind,model.windGrade];
     NSString * str7 = [NSString stringWithFormat:@"%@\n%@",str5,str6];
     
     NSRange range4 = [str7 rangeOfString:str6];
@@ -237,19 +256,65 @@
     if ([self.delegate respondsToSelector:@selector(firstViewSegmentedControlClick:)]) {
         [self.delegate firstViewSegmentedControlClick:sender];
     }
+    
+    //判断天气数据是否已经请求到
+    NSDate * date;
+    if (sender.selectedSegmentIndex == 0) {
+        date = nowDate;
+    }
+    else if (sender.selectedSegmentIndex == 1){
+        date = nextDate1;
+    }
+    else if (sender.selectedSegmentIndex == 2){
+        date = nextDate2;
+    }
+    else{
+        date = nextDate3;
+    }
+    
+    WeatherInfoModel * model = [weatherInfoDic objectForKey:date];
+    if (!model) {
+        [self getWeatherInfo:date];
+    }
+    else{
+        [self refreshWeatherInfoUI:date];
+    }
 }
 
 #pragma mark -- request
 - (void)getWeatherInfo:(NSDate *)date{
-    NSString * str = [NSString stringWithFormat:@"marine/getWeather?fstarttime=%@",[CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd"]];
-    
-    [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+    NSString * str = [NSString stringWithFormat:@"marine/getWeather?fstarttime=%@",[CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd HH:mm:ss"]];
+
+    [HttpClient asyncSendPostRequest:str Parmas:@{} SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
         if (succ) {
-            
+            NSDictionary * dic = (NSDictionary *)rspData;
+            NSDictionary * contentDic = [dic objectForKey:@"content"];
+            WeatherInfoModel * infoModel = [[WeatherInfoModel alloc] initWithDictionary:contentDic error:nil];
+            [self->weatherInfoDic setObject:infoModel forKey:date];
+            [self refreshWeatherInfoUI:date];
+            if (date == self->nowDate) {
+                //发通知 更新做菜单栏显示天气数据
+                [WMDUserManager shareInstance].currentWeaInfoModel = infoModel;
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshShowWeatherNotify" object:nil];
+            }
         }
     } FailBlock:^(NSError *error) {
         
     }];
+}
+
+//海流数据
+- (void)getSeaStremSpeedData{
+    NSString * str = [NSString stringWithFormat:@"marine/getSeaStream?"];
+}
+
+//波高、海温、海风数据
+- (void)getSeaData{
+    
+}
+
+- (void)getSeaWaterLevel{
+    
 }
 
 #pragma mark -- tableView delegate & datasource

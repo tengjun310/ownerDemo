@@ -55,13 +55,13 @@
     return _infoLabel;
 }
 
-- (UIButton *)msgButton{
+- (UISwitch *)msgButton{
     if (!_msgButton) {
-        _msgButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _msgButton.backgroundColor = kColorAppMain;
-        _msgButton.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_msgButton setTitle:@"登录" forState:UIControlStateNormal];
-        [_msgButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _msgButton = [[UISwitch alloc] init];
+        _msgButton.backgroundColor = [UIColor clearColor];
+        _msgButton.onTintColor = kColorAppMain;
+        _msgButton.tintColor = [UIColor hexChangeFloat:@"dddddd"];
+        _msgButton.on = NO;
         [_msgButton addTarget:self action:@selector(msgButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     

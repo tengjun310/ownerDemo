@@ -92,7 +92,7 @@
 }
 
 - (void)drawRect:(CGRect)rect{
-    self.backgroundColor = [UIColor whiteColor];
+    self.contentView.backgroundColor = [UIColor whiteColor];
     [self configureCellUI];
 }
 
@@ -106,14 +106,14 @@
     
     [self.contentView addSubview:self.horImageView];
     [self.horImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(weakSelf.contentView).mas_offset(-1);
+        make.right.mas_equalTo(weakSelf.contentView);
         make.top.bottom.mas_equalTo(weakSelf.contentView);
         make.width.mas_offset(1);
     }];
 
     [self.contentView addSubview:self.verImageView];
     [self.verImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(weakSelf.contentView).mas_offset(-1);
+        make.bottom.mas_equalTo(weakSelf.contentView);
         make.left.right.mas_equalTo(weakSelf.contentView);
         make.height.mas_offset(1);
     }];

@@ -10,7 +10,10 @@
 #import "InfoCollectionViewCell.h"
 
 @interface CalendarDataViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
-
+{
+    NSDate * currentDate;
+    NSMutableDictionary * dataDic;
+}
 @property (nonatomic,strong) UICollectionView * infoCollectionView;
 
 @end
@@ -102,11 +105,35 @@
 
     [self.infoCollectionView registerClass:[InfoCollectionViewCell class] forCellWithReuseIdentifier:@"InfoCollectionViewCell"];
     
-    self.title = @"2018年12月";
+    dataDic = [NSMutableDictionary dictionary];
+    
+    currentDate = [NSDate date];
+    self.title = [CommonUtils formatTime:currentDate FormatStyle:@"yyyy年MM月"];
+
+    self.infoCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getDataWithDate)];
+    [self.infoCollectionView.mj_header beginRefreshing];
 }
 
 - (void)rightItemClick{
+    currentDate = [NSDate date];
+    self.title = [CommonUtils formatTime:currentDate FormatStyle:@"yyyy年MM月"];
+
+}
+
+#pragma mark -- request
+- (void)getDataWithDate{
+    NSString * str = [NSString stringWithFormat:@"marine/getTideByMonth?tideMonth=%@",[CommonUtils formatTime:currentDate FormatStyle:@"yyyy-MM"]];
     
+    [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+        if (succ) {
+            NSDictionary * dic = (NSDictionary *)rspData;
+            NSArray * arr = [dic objectForKey:@"content"];
+            
+        }
+        [self.infoCollectionView.mj_header endRefreshing];
+    } FailBlock:^(NSError *error) {
+        [self.infoCollectionView.mj_header endRefreshing];
+    }];
 }
 
 #pragma mark -- collectionView
@@ -118,7 +145,6 @@
     InfoCollectionViewCell *cell = (InfoCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"InfoCollectionViewCell" forIndexPath:indexPath];
     
     cell.dateLabel.text = @"24\n廿一";
-    
     
     NSString * str1 = @"潮时";
     NSString * str2 = @"1145";
@@ -169,21 +195,17 @@
 }
 
 #pragma mark ---- UICollectionViewDelegateFlowLayout
-
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     return CGSizeMake(SCREEN_WIDTH/7, 135);
 }
-
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     return UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
-
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
     return 0.f;
 }
-
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
     return 0.f;

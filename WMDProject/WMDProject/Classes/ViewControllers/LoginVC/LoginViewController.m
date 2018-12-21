@@ -300,10 +300,6 @@
 }
 
 - (void)loginRequest{
-    [[NSNotificationCenter defaultCenter] postNotificationName:UserLoginSuccessNotify object:nil];
-    return;
-    
-    
     MBProgressHUD * hud = [CommonUtils showLoadingViewInWindowWithTitle:@""];
     
     NSString * str = [NSString stringWithFormat:@"user/phLogin?phNumber=%@&code=%@",self.phoneTextFiled.text,self.codeTextFiled.text];
@@ -315,6 +311,7 @@
             NSDictionary * contentDic = [dic objectForKey:@"content"];
             if (!IsNilNull(contentDic)) {
                 [WMDUserManager shareInstance].tokenId = [contentDic objectForKey:@"token"];
+                [WMDUserManager shareInstance].userName = self.phoneTextFiled.text;
                 [[NSNotificationCenter defaultCenter] postNotificationName:UserLoginSuccessNotify object:nil];
             }
             else{

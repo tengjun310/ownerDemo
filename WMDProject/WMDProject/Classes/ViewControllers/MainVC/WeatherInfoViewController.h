@@ -23,6 +23,8 @@ typedef enum {
 
 @property (nonatomic,assign) WeatherInfoType type;
 
+@property (nonatomic,copy) NSString * typeStr;
+
 @property (nonatomic,copy) NSString * titleStr;
 
 @end

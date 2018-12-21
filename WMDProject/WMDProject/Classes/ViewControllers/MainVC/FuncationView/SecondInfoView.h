@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SeaWranInfoModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
-- (void)secondInfoViewTableviewDidSelectRow:(NSInteger)row;
+- (void)secondInfoViewTableviewDidSelect:(SeaWranInfoModel *)infoModel;
 
 @end
 
