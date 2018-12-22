@@ -22,7 +22,7 @@ typedef void(^MessageButtonClick)(BOOL selected);
 
 @property (nonatomic,strong) UILabel * infoLabel;
 
-@property (nonatomic,strong) UISwitch * msgButton;
+@property (nonatomic,strong) UIButton * msgButton;
 
 @property (nonatomic,copy) MessageButtonClick messageButtonClick;
 

@@ -37,7 +37,7 @@
 - (UIImageView *)logoImageView{
     if (!_logoImageView) {
         _logoImageView = [[UIImageView alloc]init];
-        _logoImageView.backgroundColor = [UIColor redColor];
+        _logoImageView.backgroundColor = [UIColor clearColor];
     }
     
     return _logoImageView;

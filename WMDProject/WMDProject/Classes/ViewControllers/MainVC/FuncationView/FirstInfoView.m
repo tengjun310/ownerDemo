@@ -9,6 +9,9 @@
 #import "FirstInfoView.h"
 #import "FirstViewInfoTableViewCell.h"
 #import "WeatherInfoModel.h"
+#import "SeaStreamInfoModel.h"
+#import "SeaWaterLevelInfoModel.h"
+
 
 @interface FirstInfoView ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -17,6 +20,9 @@
     NSDate * nextDate2;
     NSDate * nextDate3;
     NSMutableDictionary * weatherInfoDic;
+    NSMutableDictionary * seaStreamInfoDic;
+    NSMutableDictionary * seaInfoDic;
+    NSMutableDictionary * seaWaterLevelInfoDic;
 }
 @end
 
@@ -25,8 +31,8 @@
 - (UIButton *)userButton{
     if (!_userButton) {
         _userButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _userButton.backgroundColor = [UIColor greenColor];
-        [_userButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        _userButton.backgroundColor = [UIColor clearColor];
+        [_userButton setImage:[UIImage imageNamed:@"ico_user"] forState:UIControlStateNormal];
         [_userButton addTarget:self action:@selector(buttonClickEvents:) forControlEvents:UIControlEventTouchUpInside];
     }
     
@@ -54,7 +60,7 @@
         [_chartButton setTitle:@"图表展示" forState:UIControlStateNormal];
         [_chartButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _chartButton.titleLabel.font = [UIFont systemFontOfSize:13];
-        //        [_chartButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        [_chartButton setImage:[UIImage imageNamed:@"icon_small_tubiao"] forState:UIControlStateNormal];
         [_chartButton addTarget:self action:@selector(buttonClickEvents:) forControlEvents:UIControlEventTouchUpInside];
     }
     
@@ -70,6 +76,19 @@
     }
     
     return _weatherInfoLabel;
+}
+
+- (UILabel *)symbolLabel{
+    if (!_symbolLabel) {
+        _symbolLabel = [[UILabel alloc] init];
+        _symbolLabel.backgroundColor = [UIColor clearColor];
+        _symbolLabel.font = [UIFont systemFontOfSize:40];
+        _symbolLabel.textColor = [UIColor whiteColor];
+        _symbolLabel.textAlignment = NSTextAlignmentLeft;
+        _symbolLabel.text = KTemperatureSymbol;
+    }
+    
+    return _symbolLabel;
 }
 
 - (UISegmentedControl *)daysSegmentedControl{
@@ -135,11 +154,21 @@
         make.size.mas_equalTo(CGSizeMake(80, 30));
     }];
     
+    self.chartButton.imageEdgeInsets = UIEdgeInsetsMake(5, 55, 5, 5);
+    self.chartButton.titleEdgeInsets = UIEdgeInsetsMake(8, -70, 5, 0);
+    
     [self addSubview:self.weatherInfoLabel];
     [self.weatherInfoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.weatherInfoButton.mas_bottom).mas_offset(25);
         make.left.right.mas_equalTo(weakSelf);
         make.height.mas_offset(100);
+    }];
+    
+    [self addSubview:self.symbolLabel];
+    [self.symbolLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(weakSelf.weatherInfoLabel.mas_top);
+        make.left.mas_equalTo(weakSelf.weatherInfoLabel.mas_centerX).mas_offset(30);
+        make.size.mas_equalTo(CGSizeMake(60, 45));
     }];
     
     [self addSubview:self.daysSegmentedControl];
@@ -159,6 +188,9 @@
 
 - (void)startWeatherInfoRequest{
     weatherInfoDic = [NSMutableDictionary  dictionary];
+    seaStreamInfoDic = [NSMutableDictionary  dictionary];
+    seaInfoDic = [NSMutableDictionary  dictionary];
+    seaWaterLevelInfoDic = [NSMutableDictionary  dictionary];
 
     nowDate = [NSDate date];
     nextDate1 = [NSDate dateWithTimeIntervalSinceNow:24*60*60];
@@ -175,6 +207,9 @@
     self.daysSegmentedControl.selectedSegmentIndex = 0;
 
     [self getWeatherInfo:nowDate];
+    [self getSeaStremSpeedData:nowDate];
+    [self getSeaData:nowDate];
+    [self getSeaWaterLevel:nowDate];
     [self refreshWeatherButtonInfoUI];
 }
 
@@ -213,10 +248,6 @@
     NSString * str5 = [NSString stringWithFormat:@"%@",model.nowtmp];
     if ([str5 containsString:KTemperatureSymbol]) {
         str5 = [str5 substringToIndex:str5.length-1];
-        str5 = [str5 stringByAppendingString:KTemperatureSymbolSimple];
-    }
-    else if (![str5 containsString:KTemperatureSymbolSimple]){
-        str5 = [str5 stringByAppendingString:KTemperatureSymbolSimple];
     }
     NSString * str6 = [NSString stringWithFormat:@"%@ %@ %@ %@",model.daytmp,model.status,model.wind,model.windGrade];
     NSString * str7 = [NSString stringWithFormat:@"%@\n%@",str5,str6];
@@ -272,12 +303,35 @@
         date = nextDate3;
     }
     
+    //天气数据
     WeatherInfoModel * model = [weatherInfoDic objectForKey:date];
     if (!model) {
         [self getWeatherInfo:date];
     }
     else{
         [self refreshWeatherInfoUI:date];
+    }
+    
+    //海流数据
+    SeaStreamInfoModel * streamModel = [seaStreamInfoDic objectForKey:date];
+    if (!streamModel) {
+        [self getSeaStremSpeedData:date];
+    }
+    else{
+        NSIndexPath * path = [NSIndexPath indexPathForRow:4 inSection:0];
+        [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+    }
+
+    //海波、海温、海风数据
+    
+    //水位数据
+    NSArray * arr = [seaStreamInfoDic objectForKey:date];
+    if (IsNilNull(arr) || arr.count == 0) {
+        [self getSeaWaterLevel:date];
+    }
+    else{
+        NSIndexPath * path = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
@@ -304,17 +358,87 @@
 }
 
 //海流数据
-- (void)getSeaStremSpeedData{
-    NSString * str = [NSString stringWithFormat:@"marine/getSeaStream?"];
+- (void)getSeaStremSpeedData:(NSDate *)date{
+    NSString * str = @"";
+    if (date == nowDate) {
+        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
+        str = [NSString stringWithFormat:@"marine/getSeaStream?fstarttime=%@&fendtime=%@",dateStr,dateStr];
+    }
+    else{
+        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd 00:00:00"];
+        str = [NSString stringWithFormat:@"marine/getSeaStream?fstarttime=%@&fendtime=%@",dateStr,dateStr];
+    }
+    
+    [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+        if (succ) {
+            NSDictionary * dic = (NSDictionary *)rspData;
+            NSArray * contentArr = [dic objectForKey:@"content"];
+            NSDictionary * info = [contentArr lastObject];
+            SeaStreamInfoModel * infoModel = [[SeaStreamInfoModel alloc] initWithDictionary:info error:nil];
+            [self->seaStreamInfoDic setObject:infoModel forKey:date];
+            NSIndexPath * path = [NSIndexPath indexPathForRow:4 inSection:0];
+            [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    } FailBlock:^(NSError *error) {
+        
+    }];
 }
 
 //波高、海温、海风数据
-- (void)getSeaData{
+- (void)getSeaData:(NSDate *)date{
+    NSString * str = @"";
+//    if (date == nowDate) {
+//        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
+//        str = [NSString stringWithFormat:@"marine/getMarineData?fstarttime=%@&fendtime=%@",dateStr,dateStr];
+//    }
+//    else{
+        NSString * dateStr = [CommonUtils formatTime:nextDate3 FormatStyle:@"yyyy-MM-dd 00:00:00"];
+        str = [NSString stringWithFormat:@"marine/getMarineData?fstarttime=%@&fendtime=%@",dateStr,dateStr];
+//    }
     
+    [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+        if (succ) {
+//            NSDictionary * dic = (NSDictionary *)rspData;
+//            NSArray * contentArr = [dic objectForKey:@"content"];
+//            NSDictionary * info = [contentArr lastObject];
+//            SeaStreamInfoModel * infoModel = [[SeaStreamInfoModel alloc] initWithDictionary:info error:nil];
+//            [self->seaInfoDic setObject:infoModel forKey:date];
+//            NSIndexPath * path = [NSIndexPath indexPathForRow:4 inSection:0];
+//            [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    } FailBlock:^(NSError *error) {
+        
+    }];
 }
 
-- (void)getSeaWaterLevel{
+//水位
+- (void)getSeaWaterLevel:(NSDate *)date{
+    NSString * str = @"";
+    if (date == nowDate) {
+        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
+        str = [NSString stringWithFormat:@"marine/getTide?fstarttime=%@&fendtime=%@",dateStr,dateStr];
+    }
+    else{
+        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd 00:00:00"];
+        str = [NSString stringWithFormat:@"marine/getTide?fstarttime=%@&fendtime=%@",dateStr,dateStr];
+    }
     
+    [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+        if (succ) {
+            NSDictionary * dic = (NSDictionary *)rspData;
+            NSArray * contentArr = [dic objectForKey:@"content"];
+            NSMutableArray * arr = [NSMutableArray array];
+            for (NSDictionary * data in contentArr) {
+                SeaWaterLevelInfoModel * model = [[SeaWaterLevelInfoModel alloc] initWithDictionary:data error:nil];
+                [arr addObject:model];
+            }
+            [self->seaWaterLevelInfoDic setObject:arr forKey:date];
+            NSIndexPath * path = [NSIndexPath indexPathForRow:0 inSection:0];
+            [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    } FailBlock:^(NSError *error) {
+        
+    }];
 }
 
 #pragma mark -- tableView delegate & datasource
@@ -330,79 +454,220 @@
         cell = [[FirstViewInfoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     
+    NSDate * date;
+    if (self.daysSegmentedControl.selectedSegmentIndex == 0) {
+        date = nowDate;
+    }
+    else if (self.daysSegmentedControl.selectedSegmentIndex == 1){
+        date = nextDate1;
+    }
+    else if (self.daysSegmentedControl.selectedSegmentIndex == 2){
+        date = nextDate2;
+    }
+    else {
+        date = nextDate3;
+    }
+    
     if (indexPath.row == 0) {
+        cell.logoImageView.image = [UIImage imageNamed:@"icon_small_shuiwei"];
         cell.leftLabel.text = @"水位";
         
-        NSString * str1 = @"03:28 0.85米";
-        NSString * str2 = @"08:28 0.83米";
-        NSString * str3 = @"16:28 0.86米";
-        NSString * str4 = @"22:28 0.88米";
-        NSString * str = [NSString stringWithFormat:@"%@\n%@\n%@\n%@",str1,str2,str3,str4];
-        NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
-        
-        NSRange range4 = [str rangeOfString:str4];
-        NSRange range3 = [str rangeOfString:str3];
-        NSRange range2 = [str rangeOfString:str2];
-
-        for (int i=0; i<4; i++) {
-            NSTextAttachment *attch = [[NSTextAttachment alloc] init];
-            attch.image = [UIImage imageNamed:@"top_back"];
-            attch.bounds = CGRectMake(0, 0, 10, 10);
-            NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
-            //从后往前插  避免下标在插入图片之后错乱
-            if (i == 0) {
-                [attrStr insertAttributedString:string atIndex:range4.location];
-            }
-            else if (i == 1){
-                [attrStr insertAttributedString:string atIndex:range3.location];
-            }
-            else if (i == 2){
-                [attrStr insertAttributedString:string atIndex:range2.location];
-            }
-            else{
-                [attrStr insertAttributedString:string atIndex:0];
-            }
+        NSArray * arr = [seaWaterLevelInfoDic objectForKey:date];
+        if (arr.count == 0) {
+            return cell;
         }
         
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        // 行间距
-        paragraphStyle.lineSpacing = 9.0f;
-        paragraphStyle.alignment = NSTextAlignmentRight;
-        [attrStr addAttribute:NSParagraphStyleAttributeName
-                        value:paragraphStyle
-                        range:NSMakeRange(0, str.length)];
-
-        cell.rightLabel.attributedText = attrStr;
+        NSString * str1 = @"";
+        NSString * str2 = @"";
+        NSString * str3 = @"";
+        NSString * str4 = @"";
         
+        if (arr.count == 1) {
+            SeaWaterLevelInfoModel * model = [arr lastObject];
+            str1 = [NSString stringWithFormat:@"%@ %@米",model.tidetime,model.tideheight];
+            NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str1];
+            NSTextAttachment *attch = [[NSTextAttachment alloc] init];
+            attch.image = [UIImage imageNamed:[model.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
+            attch.bounds = CGRectMake(0, 0, 10, 10);
+            NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
+            [attrStr insertAttributedString:string atIndex:0];            
+            cell.rightLabel.attributedText = attrStr;
+        }
+        else if (arr.count == 2){
+            SeaWaterLevelInfoModel * model1 = [arr lastObject];
+            SeaWaterLevelInfoModel * model2 = [arr firstObject];
+            str1 = [NSString stringWithFormat:@"%@ %@米",model1.tidetime,model1.tideheight];
+            str2 = [NSString stringWithFormat:@"%@ %@米",model2.tidetime,model2.tideheight];
+            NSString * str = [NSString stringWithFormat:@"%@\n%@",str1,str2];
+
+            NSRange range2 = [str rangeOfString:str2];
+
+            NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
+            
+            for (int i=0; i<2; i++) {
+                NSTextAttachment *attch = [[NSTextAttachment alloc] init];
+                attch.bounds = CGRectMake(0, 0, 10, 10);
+
+                if (i == 0) {
+                    attch.image = [UIImage imageNamed:[model2.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
+                }
+                else{
+                    attch.image = [UIImage imageNamed:[model1.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
+                }
+                
+                NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
+
+                //从后往前插  避免下标在插入图片之后错乱
+                if (i == 0) {
+                    [attrStr insertAttributedString:string atIndex:range2.location];
+                }
+                else{
+                    [attrStr insertAttributedString:string atIndex:0];
+                }
+            }
+            
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            // 行间距
+            paragraphStyle.lineSpacing = 9.0f;
+            paragraphStyle.alignment = NSTextAlignmentRight;
+            [attrStr addAttribute:NSParagraphStyleAttributeName
+                            value:paragraphStyle
+                            range:NSMakeRange(0, str.length)];
+            
+            cell.rightLabel.attributedText = attrStr;
+        }
+        else if (arr.count == 3){
+            SeaWaterLevelInfoModel * model1 = [arr lastObject];
+            SeaWaterLevelInfoModel * model2 = [arr objectAtIndex:arr.count-2];
+            SeaWaterLevelInfoModel * model3 = [arr firstObject];
+
+            str1 = [NSString stringWithFormat:@"%@ %@米",model1.tidetime,model1.tideheight];
+            str2 = [NSString stringWithFormat:@"%@ %@米",model2.tidetime,model2.tideheight];
+            str3 = [NSString stringWithFormat:@"%@ %@米",model3.tidetime,model3.tideheight];
+
+            NSString * str = [NSString stringWithFormat:@"%@\n%@\n%@",str1,str2,str3];
+            NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
+            
+            NSRange range3 = [str rangeOfString:str3];
+            NSRange range2 = [str rangeOfString:str2];
+            
+            for (int i=0; i<3; i++) {
+                NSTextAttachment *attch = [[NSTextAttachment alloc] init];
+                attch.bounds = CGRectMake(0, 0, 10, 10);
+
+                if (i == 0) {
+                    attch.image = [UIImage imageNamed:[model3.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
+                }
+                else if (i == 1){
+                    attch.image = [UIImage imageNamed:[model2.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
+                }
+                else{
+                    attch.image = [UIImage imageNamed:[model1.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
+                }
+                NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
+                //从后往前插  避免下标在插入图片之后错乱
+                if (i == 0) {
+                    [attrStr insertAttributedString:string atIndex:range3.location];
+                }
+                else if (i == 1){
+                    [attrStr insertAttributedString:string atIndex:range2.location];
+                }
+                else{
+                    [attrStr insertAttributedString:string atIndex:0];
+                }
+            }
+            
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            // 行间距
+            paragraphStyle.lineSpacing = 9.0f;
+            paragraphStyle.alignment = NSTextAlignmentRight;
+            [attrStr addAttribute:NSParagraphStyleAttributeName
+                            value:paragraphStyle
+                            range:NSMakeRange(0, str.length)];
+            
+            cell.rightLabel.attributedText = attrStr;
+        }
+        else{
+            SeaWaterLevelInfoModel * model1 = [arr lastObject];
+            SeaWaterLevelInfoModel * model2 = [arr objectAtIndex:arr.count-2];
+            SeaWaterLevelInfoModel * model3 = [arr objectAtIndex:arr.count-3];
+            SeaWaterLevelInfoModel * model4 = [arr objectAtIndex:arr.count-4];
+            str1 = [NSString stringWithFormat:@"%@ %@米",model1.tidetime,model1.tideheight];
+            str2 = [NSString stringWithFormat:@"%@ %@米",model2.tidetime,model2.tideheight];
+            str3 = [NSString stringWithFormat:@"%@ %@米",model3.tidetime,model3.tideheight];
+            str4 = [NSString stringWithFormat:@"%@ %@米",model4.tidetime,model4.tideheight];
+
+            NSString * str = [NSString stringWithFormat:@"%@\n%@\n%@\n%@",str1,str2,str3,str4];
+            NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
+            
+            NSRange range4 = [str rangeOfString:str4];
+            NSRange range3 = [str rangeOfString:str3];
+            NSRange range2 = [str rangeOfString:str2];
+            
+            for (int i=0; i<4; i++) {
+                NSTextAttachment *attch = [[NSTextAttachment alloc] init];
+                if (i == 0) {
+                    attch.image = [UIImage imageNamed:[model4.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
+                }
+                else if (i == 1){
+                    attch.image = [UIImage imageNamed:[model3.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
+                }
+                else if (i == 2){
+                    attch.image = [UIImage imageNamed:[model2.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
+                }
+                else{
+                    attch.image = [UIImage imageNamed:[model1.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
+                }
+                attch.bounds = CGRectMake(0, 0, 10, 10);
+                NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
+                //从后往前插  避免下标在插入图片之后错乱
+                if (i == 0) {
+                    [attrStr insertAttributedString:string atIndex:range4.location];
+                }
+                else if (i == 1){
+                    [attrStr insertAttributedString:string atIndex:range3.location];
+                }
+                else if (i == 2){
+                    [attrStr insertAttributedString:string atIndex:range2.location];
+                }
+                else{
+                    [attrStr insertAttributedString:string atIndex:0];
+                }
+            }
+            
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            // 行间距
+            paragraphStyle.lineSpacing = 9.0f;
+            paragraphStyle.alignment = NSTextAlignmentRight;
+            [attrStr addAttribute:NSParagraphStyleAttributeName
+                            value:paragraphStyle
+                            range:NSMakeRange(0, str.length)];
+            
+            cell.rightLabel.attributedText = attrStr;
+        }
     }
     else if (indexPath.row == 1){
+        cell.logoImageView.image = [UIImage imageNamed:@"icon_small_bogao"];
         cell.leftLabel.text = @"波高";
         cell.rightLabel.text = @"1.0米";
     }
     else if (indexPath.row == 2){
+        cell.logoImageView.image = [UIImage imageNamed:@"icon_small_haiwen"];
         cell.leftLabel.text = @"海温";
         cell.rightLabel.text = [NSString stringWithFormat:@"1.2%@",KTemperatureSymbol];
     }
     else if (indexPath.row == 3){
+        cell.logoImageView.image = [UIImage imageNamed:@"icon_small_haifeng"];
         cell.leftLabel.text = @"海风";
         cell.rightLabel.text = @"南风2级";
     }
     else{
-        cell.leftLabel.text = [NSString stringWithFormat:@"海流速度\n海流流向"];
+        cell.logoImageView.image = [UIImage imageNamed:@"icon_small_liusuliuxiang"];
+        cell.leftLabel.text = [NSString stringWithFormat:@"海流"];
         
-        NSString * str = [NSString stringWithFormat:@"0.5/1.0\n20/150"];
-        NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
-        
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        // 行间距
-        paragraphStyle.lineSpacing = 9.0f;
-        paragraphStyle.alignment = NSTextAlignmentRight;
-        [attrStr addAttribute:NSParagraphStyleAttributeName
-                        value:paragraphStyle
-                        range:NSMakeRange(0, str.length)];
-
-        
-        cell.rightLabel.text = [NSString stringWithFormat:@"0.5/1.0\n20/150"];
+        SeaStreamInfoModel * infoModel = [seaStreamInfoDic objectForKey:date];
+        NSString * str = [NSString stringWithFormat:@"%@m/s %@%@",infoModel.wavespeed,infoModel.wavedfrom,KTemperatureSymbolSimple];
+        cell.rightLabel.text = str;
     }
     
     return cell;

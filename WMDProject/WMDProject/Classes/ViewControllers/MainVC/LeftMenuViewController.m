@@ -55,8 +55,8 @@
 - (UIImageView *)headImageView{
     if (!_headImageView) {
         _headImageView = [[UIImageView alloc]init];
-        _headImageView.backgroundColor = [UIColor redColor];
-//        _headImageView.image = [UIImage imageNamed:@"morentouxiang"];
+        _headImageView.backgroundColor = kColorAppMain;
+        _headImageView.image = [UIImage imageNamed:@"ico_user"];
     }
     
     return _headImageView;

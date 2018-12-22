@@ -9,6 +9,7 @@
 #import "WeatherInfoViewController.h"
 #import "WeatherInfoTableViewCell.h"
 #import "SeaWarnDetailInfoModel.h"
+#import "WebViewViewController.h"
 
 @interface WeatherInfoViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -121,6 +122,22 @@
     
     SeaWarnDetailInfoModel * infoModel = [dataArray objectAtIndex:indexPath.row];
     cell.leftLabel.text = infoModel.title;
+    if ([infoModel.tag isEqualToString:@"红色"]) {
+        cell.logoImageView.image = [UIImage imageNamed:@"icon_small_hongse"];
+    }
+    else if ([infoModel.tag isEqualToString:@"蓝色"]){
+        cell.logoImageView.image = [UIImage imageNamed:@"icon_small_lanse"];
+    }
+    else if ([infoModel.tag isEqualToString:@"橙色"]){
+        cell.logoImageView.image = [UIImage imageNamed:@"icon_small_lanse"];
+    }
+    else if ([infoModel.tag isEqualToString:@"黄色"]){
+        cell.logoImageView.image = [UIImage imageNamed:@"icon_small_cs"];
+    }
+    else {
+        cell.logoImageView.image = [UIImage imageNamed:@"icon_small_jeichu"];
+    }
+    
     NSDate * date = [CommonUtils getFormatTime:infoModel.publishTime FormatStyle:@"yyyy-MM-dd HH:mm"];
     NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy年MM月dd日HH时"];
     cell.rightLabel.text = dateStr;
@@ -129,8 +146,11 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    SeaWarnDetailInfoModel * infoModel = [dataArray objectAtIndex:indexPath.row];
 
+    WebViewViewController * vc = [[WebViewViewController alloc] init];
+    vc.urlStr = infoModel.url;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

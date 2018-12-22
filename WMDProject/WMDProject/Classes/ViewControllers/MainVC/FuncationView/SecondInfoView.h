@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) UILabel * weateherInfoLabel;
 
+@property (nonatomic,strong) UILabel * symbolLabel;
+
 @property (nonatomic,strong) UILabel * tipInfoLabel;
 
 @property (nonatomic,strong) UILabel * addressInfoLabel;

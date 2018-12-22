@@ -30,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) UIButton * weatherInfoButton;
 
+@property (nonatomic,strong) UILabel * symbolLabel;
+
 @property (nonatomic,strong) UIButton * chartButton;
 
 @property (nonatomic,strong) UILabel * weatherInfoLabel;

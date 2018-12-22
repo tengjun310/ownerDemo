@@ -13,8 +13,8 @@
 - (UIImageView *)logoImageView{
     if (!_logoImageView) {
         _logoImageView = [[UIImageView alloc]init];
-        _logoImageView.backgroundColor = [UIColor redColor];
-        //        _headImageView.image = [UIImage imageNamed:@"morentouxiang"];
+        _logoImageView.backgroundColor = [UIColor clearColor];
+        _logoImageView.image = [UIImage imageNamed:@"icon_small_dingwei"];
     }
     
     return _logoImageView;
@@ -55,13 +55,12 @@
     return _infoLabel;
 }
 
-- (UISwitch *)msgButton{
+- (UIButton *)msgButton{
     if (!_msgButton) {
-        _msgButton = [[UISwitch alloc] init];
+        _msgButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _msgButton.backgroundColor = [UIColor clearColor];
-        _msgButton.onTintColor = kColorAppMain;
-        _msgButton.tintColor = [UIColor hexChangeFloat:@"dddddd"];
-        _msgButton.on = NO;
+        [_msgButton setImage:[UIImage imageNamed:@"slideoff"] forState:UIControlStateNormal];
+        [_msgButton setImage:[UIImage imageNamed:@"slideon"] forState:UIControlStateSelected];
         [_msgButton addTarget:self action:@selector(msgButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     
@@ -86,7 +85,7 @@
     [self.logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(weakSelf.contentView).mas_offset(10);
         make.centerY.mas_equalTo(weakSelf.contentView.mas_centerY);
-        make.size.mas_equalTo(CGSizeMake(12, 12));
+        make.size.mas_equalTo(CGSizeMake(18, 18));
     }];
     
     [self.contentView addSubview:self.nameLabel];

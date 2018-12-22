@@ -44,6 +44,19 @@
     return _weateherInfoLabel;
 }
 
+- (UILabel *)symbolLabel{
+    if (!_symbolLabel) {
+        _symbolLabel = [[UILabel alloc] init];
+        _symbolLabel.backgroundColor = [UIColor clearColor];
+        _symbolLabel.font = [UIFont systemFontOfSize:40];
+        _symbolLabel.textColor = [UIColor whiteColor];
+        _symbolLabel.textAlignment = NSTextAlignmentLeft;
+        _symbolLabel.text = KTemperatureSymbol;
+    }
+    
+    return _symbolLabel;
+}
+
 - (UILabel *)tipInfoLabel{
     if (!_tipInfoLabel) {
         _tipInfoLabel = [[UILabel alloc] init];
@@ -115,6 +128,13 @@
         make.size.mas_equalTo(CGSizeMake(130, 140));
     }];
     
+    [self addSubview:self.symbolLabel];
+    [self.symbolLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(weakSelf.weateherInfoLabel.mas_top).mas_offset(15);
+        make.left.mas_equalTo(weakSelf.weateherInfoLabel.mas_centerX).mas_offset(30);
+        make.size.mas_equalTo(CGSizeMake(60, 45));
+    }];
+    
     [self addSubview:self.tipInfoLabel];
     [self.tipInfoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(weakSelf.weateherInfoLabel.mas_bottom).mas_offset(-15);
@@ -164,10 +184,6 @@
     NSString * str5 = [NSString stringWithFormat:@"%@",[WMDUserManager shareInstance].currentWeaInfoModel.nowtmp];
     if ([str5 containsString:KTemperatureSymbol]) {
         str5 = [str5 substringToIndex:str5.length-1];
-        str5 = [str5 stringByAppendingString:KTemperatureSymbolSimple];
-    }
-    else if (![str5 containsString:KTemperatureSymbolSimple]){
-        str5 = [str5 stringByAppendingString:KTemperatureSymbolSimple];
     }
     NSString * str6 = [NSString stringWithFormat:@"%@ %@ %@ %@",[WMDUserManager shareInstance].currentWeaInfoModel.daytmp,[WMDUserManager shareInstance].currentWeaInfoModel.status,[WMDUserManager shareInstance].currentWeaInfoModel.wind,[WMDUserManager shareInstance].currentWeaInfoModel.windGrade];
     NSString * str7 = [NSString stringWithFormat:@"%@\n%@",str5,str6];
