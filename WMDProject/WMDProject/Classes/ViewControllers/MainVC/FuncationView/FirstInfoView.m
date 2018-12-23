@@ -11,7 +11,7 @@
 #import "WeatherInfoModel.h"
 #import "SeaStreamInfoModel.h"
 #import "SeaWaterLevelInfoModel.h"
-
+#import "SeaDataInfoModel.h"
 
 @interface FirstInfoView ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -323,6 +323,16 @@
     }
 
     //海波、海温、海风数据
+    SeaDataInfoModel * seaModel = [seaInfoDic objectForKey:date];
+    if (!seaModel) {
+        [self getSeaData:date];
+    }
+    else{
+        NSIndexPath * path1 = [NSIndexPath indexPathForRow:1 inSection:0];
+        NSIndexPath * path2 = [NSIndexPath indexPathForRow:2 inSection:0];
+        NSIndexPath * path3 = [NSIndexPath indexPathForRow:3 inSection:0];
+        [self.infoTableView reloadRowsAtIndexPaths:@[path1,path2,path3] withRowAnimation:UITableViewRowAnimationNone];
+    }
     
     //水位数据
     NSArray * arr = [seaStreamInfoDic objectForKey:date];
@@ -398,13 +408,15 @@
     
     [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
         if (succ) {
-//            NSDictionary * dic = (NSDictionary *)rspData;
-//            NSArray * contentArr = [dic objectForKey:@"content"];
-//            NSDictionary * info = [contentArr lastObject];
-//            SeaStreamInfoModel * infoModel = [[SeaStreamInfoModel alloc] initWithDictionary:info error:nil];
-//            [self->seaInfoDic setObject:infoModel forKey:date];
-//            NSIndexPath * path = [NSIndexPath indexPathForRow:4 inSection:0];
-//            [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+            NSDictionary * dic = (NSDictionary *)rspData;
+            NSArray * contentArr = [dic objectForKey:@"content"];
+            NSDictionary * info = [contentArr lastObject];
+            SeaDataInfoModel * infoModel = [[SeaDataInfoModel alloc] initWithDictionary:info error:nil];
+            [self->seaInfoDic setObject:infoModel forKey:date];
+            NSIndexPath * path1 = [NSIndexPath indexPathForRow:1 inSection:0];
+            NSIndexPath * path2 = [NSIndexPath indexPathForRow:2 inSection:0];
+            NSIndexPath * path3 = [NSIndexPath indexPathForRow:3 inSection:0];
+            [self.infoTableView reloadRowsAtIndexPaths:@[path1,path2,path3] withRowAnimation:UITableViewRowAnimationNone];
         }
     } FailBlock:^(NSError *error) {
         
@@ -647,19 +659,22 @@
         }
     }
     else if (indexPath.row == 1){
+        SeaDataInfoModel * infoModel = [seaInfoDic objectForKey:date];
         cell.logoImageView.image = [UIImage imageNamed:@"icon_small_bogao"];
         cell.leftLabel.text = @"波高";
-        cell.rightLabel.text = @"1.0米";
+        cell.rightLabel.text = [NSString stringWithFormat:@"%@米",infoModel.waveheight];
     }
     else if (indexPath.row == 2){
+        SeaDataInfoModel * infoModel = [seaInfoDic objectForKey:date];
         cell.logoImageView.image = [UIImage imageNamed:@"icon_small_haiwen"];
         cell.leftLabel.text = @"海温";
-        cell.rightLabel.text = [NSString stringWithFormat:@"1.2%@",KTemperatureSymbol];
+        cell.rightLabel.text = [NSString stringWithFormat:@"%@%@",infoModel.sstdata,KTemperatureSymbol];
     }
     else if (indexPath.row == 3){
+        SeaDataInfoModel * infoModel = [seaInfoDic objectForKey:date];
         cell.logoImageView.image = [UIImage imageNamed:@"icon_small_haifeng"];
         cell.leftLabel.text = @"海风";
-        cell.rightLabel.text = @"南风2级";
+        cell.rightLabel.text = [NSString stringWithFormat:@"%@m/s %@",infoModel.swspeed,infoModel.wavedfrom];
     }
     else{
         cell.logoImageView.image = [UIImage imageNamed:@"icon_small_liusuliuxiang"];

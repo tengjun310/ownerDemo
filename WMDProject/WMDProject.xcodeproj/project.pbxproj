@@ -31,6 +31,7 @@
 		5F621C1621CE82C800E800FF /* SeaStreamInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F621C1521CE82C800E800FF /* SeaStreamInfoModel.m */; };
 		5F621C1921CE903000E800FF /* SeaWaterLevelInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F621C1821CE903000E800FF /* SeaWaterLevelInfoModel.m */; };
 		5F95792C21C9313D00D74620 /* SecondInfoViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */; };
+		5FE3EDC321CF62FF0032C07E /* SeaDataInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */; };
 		6644852A21C785F200A0D83D /* LineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644852721C785F200A0D83D /* LineViewController.m */; };
 		6644852D21C7860A00A0D83D /* WMDUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644852C21C7860A00A0D83D /* WMDUserManager.m */; };
 		664485EB21C7888900A0D83D /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644853021C7888800A0D83D /* AFHTTPSessionManager.m */; };
@@ -174,6 +175,8 @@
 		5F621C1821CE903000E800FF /* SeaWaterLevelInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SeaWaterLevelInfoModel.m; sourceTree = "<group>"; };
 		5F95792A21C9313D00D74620 /* SecondInfoViewTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondInfoViewTableViewCell.h; sourceTree = "<group>"; };
 		5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondInfoViewTableViewCell.m; sourceTree = "<group>"; };
+		5FE3EDC121CF62FF0032C07E /* SeaDataInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SeaDataInfoModel.h; sourceTree = "<group>"; };
+		5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SeaDataInfoModel.m; sourceTree = "<group>"; };
 		6644852721C785F200A0D83D /* LineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineViewController.m; sourceTree = "<group>"; };
 		6644852821C785F200A0D83D /* LineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineViewController.h; sourceTree = "<group>"; };
 		6644852B21C7860A00A0D83D /* WMDUserManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMDUserManager.h; sourceTree = "<group>"; };
@@ -523,6 +526,8 @@
 				5F621C1521CE82C800E800FF /* SeaStreamInfoModel.m */,
 				5F621C1721CE903000E800FF /* SeaWaterLevelInfoModel.h */,
 				5F621C1821CE903000E800FF /* SeaWaterLevelInfoModel.m */,
+				5FE3EDC121CF62FF0032C07E /* SeaDataInfoModel.h */,
+				5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1237,6 +1242,7 @@
 				6644852D21C7860A00A0D83D /* WMDUserManager.m in Sources */,
 				664D6AB121C8F04E0004A544 /* MyScrollView.m in Sources */,
 				5F621C1621CE82C800E800FF /* SeaStreamInfoModel.m in Sources */,
+				5FE3EDC321CF62FF0032C07E /* SeaDataInfoModel.m in Sources */,
 				664D6AA821C8E65B0004A544 /* FirstInfoView.m in Sources */,
 				6644864321C7889200A0D83D /* UIImage+extend.m in Sources */,
 				66D4807821C77CCA004E840A /* AppDelegate.mm in Sources */,
