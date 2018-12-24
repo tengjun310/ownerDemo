@@ -32,6 +32,8 @@
 		5F621C1921CE903000E800FF /* SeaWaterLevelInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F621C1821CE903000E800FF /* SeaWaterLevelInfoModel.m */; };
 		5F95792C21C9313D00D74620 /* SecondInfoViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */; };
 		5FE3EDC321CF62FF0032C07E /* SeaDataInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */; };
+		5FF8C0B421D1055A000F9840 /* ListInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF8C0B321D1055A000F9840 /* ListInfoViewController.m */; };
+		5FF8C0BA21D10800000F9840 /* ListInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF8C0B921D10800000F9840 /* ListInfoTableViewCell.m */; };
 		6644852A21C785F200A0D83D /* LineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644852721C785F200A0D83D /* LineViewController.m */; };
 		6644852D21C7860A00A0D83D /* WMDUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644852C21C7860A00A0D83D /* WMDUserManager.m */; };
 		664485EB21C7888900A0D83D /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644853021C7888800A0D83D /* AFHTTPSessionManager.m */; };
@@ -177,6 +179,10 @@
 		5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondInfoViewTableViewCell.m; sourceTree = "<group>"; };
 		5FE3EDC121CF62FF0032C07E /* SeaDataInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SeaDataInfoModel.h; sourceTree = "<group>"; };
 		5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SeaDataInfoModel.m; sourceTree = "<group>"; };
+		5FF8C0B221D1055A000F9840 /* ListInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListInfoViewController.h; sourceTree = "<group>"; };
+		5FF8C0B321D1055A000F9840 /* ListInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListInfoViewController.m; sourceTree = "<group>"; };
+		5FF8C0B821D10800000F9840 /* ListInfoTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListInfoTableViewCell.h; sourceTree = "<group>"; };
+		5FF8C0B921D10800000F9840 /* ListInfoTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListInfoTableViewCell.m; sourceTree = "<group>"; };
 		6644852721C785F200A0D83D /* LineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineViewController.m; sourceTree = "<group>"; };
 		6644852821C785F200A0D83D /* LineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineViewController.h; sourceTree = "<group>"; };
 		6644852B21C7860A00A0D83D /* WMDUserManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMDUserManager.h; sourceTree = "<group>"; };
@@ -494,6 +500,8 @@
 				5F0C823D21CA715E004EEB5C /* WeatherInfoTableViewCell.m */,
 				5F1C5EDE21CBD30700A598C7 /* InfoCollectionViewCell.h */,
 				5F1C5EDF21CBD30700A598C7 /* InfoCollectionViewCell.m */,
+				5FF8C0B821D10800000F9840 /* ListInfoTableViewCell.h */,
+				5FF8C0B921D10800000F9840 /* ListInfoTableViewCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -925,6 +933,8 @@
 				5F0C823A21CA6C8A004EEB5C /* WeatherInfoViewController.m */,
 				5F621C1121CE7A6B00E800FF /* WebViewViewController.h */,
 				5F621C1221CE7A6B00E800FF /* WebViewViewController.m */,
+				5FF8C0B221D1055A000F9840 /* ListInfoViewController.h */,
+				5FF8C0B321D1055A000F9840 /* ListInfoViewController.m */,
 			);
 			path = MainVC;
 			sourceTree = "<group>";
@@ -1146,6 +1156,7 @@
 				664D6A9B21C8C1E40004A544 /* BaseViewController.m in Sources */,
 				6644863321C7888900A0D83D /* MJRefreshStateHeader.m in Sources */,
 				6644862B21C7888900A0D83D /* MJRefreshAutoGifFooter.m in Sources */,
+				5FF8C0B421D1055A000F9840 /* ListInfoViewController.m in Sources */,
 				6644862921C7888900A0D83D /* MJRefreshFooter.m in Sources */,
 				5F95792C21C9313D00D74620 /* SecondInfoViewTableViewCell.m in Sources */,
 				6644860121C7888900A0D83D /* NSArray+MASAdditions.m in Sources */,
@@ -1191,6 +1202,7 @@
 				6644852A21C785F200A0D83D /* LineViewController.m in Sources */,
 				66AD416421CC8314002816FE /* WeatherInfoModel.m in Sources */,
 				6644860A21C7888900A0D83D /* SDWebImageDecoder.m in Sources */,
+				5FF8C0BA21D10800000F9840 /* ListInfoTableViewCell.m in Sources */,
 				6644860D21C7888900A0D83D /* SDWebImageManager.m in Sources */,
 				6644861821C7888900A0D83D /* IQNSArray+Sort.m in Sources */,
 				664485F621C7888900A0D83D /* JSONAPI.m in Sources */,

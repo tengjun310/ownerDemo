@@ -141,6 +141,7 @@
         ChartsViewController * vc = [[ChartsViewController alloc] init];
         vc.today = NO;
         vc.date = date;
+        vc.type = 1;
         if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
             vc.today = YES;
         }
@@ -152,8 +153,27 @@
     
 }
 
-- (void)tableviewDidSelectRow:(NSInteger)row{
-    
+- (void)tableviewDidSelectRow:(NSInteger)row Date:(nonnull NSDate *)date{
+    if (row == 0) {
+        ChartsViewController * vc = [[ChartsViewController alloc] init];
+        vc.today = NO;
+        vc.date = date;
+        vc.type = 1;
+        if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
+            vc.today = YES;
+        }
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else if (row == 4){
+        ChartsViewController * vc = [[ChartsViewController alloc] init];
+        vc.today = NO;
+        vc.date = date;
+        vc.type = 2;
+        if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
+            vc.today = YES;
+        }
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 #pragma mark -- second view

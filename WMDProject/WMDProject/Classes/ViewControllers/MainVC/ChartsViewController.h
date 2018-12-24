@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,assign) BOOL today;
 
+@property (nonatomic,assign) int type;//1 水位  2 海流
+
 @end
 
 NS_ASSUME_NONNULL_END

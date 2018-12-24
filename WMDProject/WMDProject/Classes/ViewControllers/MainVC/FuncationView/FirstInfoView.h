@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)firstViewSegmentedControlClick:(UISegmentedControl *)sender;
 
-- (void)tableviewDidSelectRow:(NSInteger)row;
+- (void)tableviewDidSelectRow:(NSInteger)row Date:(NSDate *)date;
 
 @end
 

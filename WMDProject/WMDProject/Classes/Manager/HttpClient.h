@@ -18,4 +18,8 @@
                 SuccessBlock:(void(^)(BOOL succ,NSString * msg, id rspData))successblock
                    FailBlock:(void(^)(NSError * error))failblock;
 
+
++ (void)asyncSendGetRequest:(NSString *)url
+                SuccessBlock:(void(^)(BOOL succ,NSString * msg, id rspData))successblock
+                   FailBlock:(void(^)(NSError * error))failblock;
 @end

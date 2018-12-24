@@ -211,8 +211,6 @@
 }
 
 - (void)startSecondInfoViewDataRequest{
-    self.tipInfoLabel.text = @"中潮";
-    
     dataArray = [NSMutableArray array];
     
     [self getYujingListInfo];
@@ -234,6 +232,21 @@
         [self.infoTableView.mj_header endRefreshing];
     } FailBlock:^(NSError *error) {
         [self.infoTableView.mj_header endRefreshing];
+    }];
+    
+    [self getStreamStatusInfo];
+}
+
+- (void)getStreamStatusInfo{
+    NSString * str = [NSString stringWithFormat:@"marine/getStreamStratus"];
+    [HttpClient asyncSendGetRequest:str SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+        if (succ) {
+            NSDictionary * dic = (NSDictionary *)rspData;
+            NSString * statusStr = [[dic objectForKey:@"content"] objectForKey:@"status"];
+            self.tipInfoLabel.text = statusStr;
+        }
+    } FailBlock:^(NSError *error) {
+        self.tipInfoLabel.text = @"";
     }];
 }
 

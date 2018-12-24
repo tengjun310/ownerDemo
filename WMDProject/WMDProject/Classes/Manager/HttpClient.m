@@ -74,4 +74,40 @@ static AFHTTPSessionManager *manager ;
     }];
 }
 
++ (void)asyncSendGetRequest:(NSString *)url
+               SuccessBlock:(void(^)(BOOL succ,NSString * msg, id rspData))successblock
+                  FailBlock:(void(^)(NSError * error))failblock{
+    NSString * strUrl = [KHttpHost stringByAppendingString:url];
+    strUrl = [strUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    AFHTTPSessionManager * manager = [HYHTTPSessionManager sharedHTTPSession];
+    
+    if (![url containsString:@"sms/phoneCodeTest"] && ![url containsString:@"user/phLogin"]) {
+        //header里设置token
+        NSString * str = [NSString stringWithFormat:@"Bearer%@",[WMDUserManager shareInstance].tokenId];
+        [manager.requestSerializer setValue:str forHTTPHeaderField:@"Authorization"];
+    }
+    
+    [manager GET:strUrl parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (IsNilNull(responseObject)) {
+            successblock(NO,@"返回空数据",nil);
+            return;
+        }
+        if (![responseObject isKindOfClass:[NSDictionary class]]) {
+            successblock(NO,@"数据格式错误",nil);
+            return;
+        }
+        
+        NSDictionary * rspDic = (NSDictionary *)responseObject;
+        id value = [rspDic objectForKey:@"code"];
+        if ([value intValue] != 0) {
+            successblock(NO,[rspDic objectForKey:@"msg"],rspDic);
+            return;
+        }
+        successblock(YES,@"",rspDic);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        failblock(error);
+    }];
+}
+
 @end

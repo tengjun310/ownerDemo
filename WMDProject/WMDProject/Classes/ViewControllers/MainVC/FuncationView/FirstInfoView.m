@@ -702,8 +702,21 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if ([self.delegate respondsToSelector:@selector(tableviewDidSelectRow:)]) {
-        [self.delegate tableviewDidSelectRow:indexPath.row];
+    if ([self.delegate respondsToSelector:@selector(tableviewDidSelectRow:Date:)]) {
+        NSDate * date;
+        if (self.daysSegmentedControl.selectedSegmentIndex == 0) {
+            date = nowDate;
+        }
+        else if (self.daysSegmentedControl.selectedSegmentIndex == 1){
+            date = nextDate1;
+        }
+        else if (self.daysSegmentedControl.selectedSegmentIndex == 2){
+            date = nextDate2;
+        }
+        else{
+            date = nextDate3;
+        }
+        [self.delegate tableviewDidSelectRow:indexPath.row Date:date];
     }
 }
 
