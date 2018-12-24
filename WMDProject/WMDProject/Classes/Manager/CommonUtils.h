@@ -81,6 +81,9 @@
 
 + (NSDate *)getFormatTime:(NSString *)dateStr FormatStyle:(NSString *)style;
 
+//获取农历年月日
++ (NSString *)getChineseDate:(NSDate *)date;
+
 + (NSString *)getMacAddress;
 
 //获取字符串字节长度

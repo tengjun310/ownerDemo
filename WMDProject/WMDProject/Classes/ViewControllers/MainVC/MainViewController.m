@@ -129,7 +129,7 @@
     [self.firstInfoView startWeatherInfoRequest];
 }
 
-- (void)firstViewButtonClick:(UIButton *)sender{
+- (void)firstViewButtonClick:(UIButton *)sender Date:(nonnull NSDate *)date{
     if (sender == self.firstInfoView.userButton) {
         [[DYLeftSlipManager sharedManager] showLeftView];
     }
@@ -139,6 +139,11 @@
     }
     else if (sender == self.firstInfoView.chartButton){
         ChartsViewController * vc = [[ChartsViewController alloc] init];
+        vc.today = NO;
+        vc.date = date;
+        if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
+            vc.today = YES;
+        }
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

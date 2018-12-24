@@ -12,6 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ChartsViewController : BaseViewController
 
+@property (nonatomic,strong) NSDate * date;
+
+@property (nonatomic,assign) BOOL today;
+
 @end
 
 NS_ASSUME_NONNULL_END

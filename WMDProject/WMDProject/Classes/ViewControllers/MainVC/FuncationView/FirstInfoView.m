@@ -278,8 +278,21 @@
 #pragma mark -- button events
 
 - (void)buttonClickEvents:(UIButton *)sender{
-    if ([self.delegate respondsToSelector:@selector(firstViewButtonClick:)]) {
-        [self.delegate firstViewButtonClick:sender];
+    if ([self.delegate respondsToSelector:@selector(firstViewButtonClick:Date:)]) {
+        NSDate * date;
+        if (self.daysSegmentedControl.selectedSegmentIndex == 0) {
+            date = nowDate;
+        }
+        else if (self.daysSegmentedControl.selectedSegmentIndex == 1){
+            date = nextDate1;
+        }
+        else if (self.daysSegmentedControl.selectedSegmentIndex == 2){
+            date = nextDate2;
+        }
+        else{
+            date = nextDate3;
+        }
+        [self.delegate firstViewButtonClick:sender Date:date];
     }
 }
 

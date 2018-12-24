@@ -57,7 +57,7 @@
     if (!_leftDataLabel) {
         _leftDataLabel = [[UILabel alloc] init];
         _leftDataLabel.backgroundColor = [UIColor clearColor];
-        _leftDataLabel.font = [UIFont systemFontOfSize:9];
+        _leftDataLabel.font = [UIFont systemFontOfSize:8];
         _leftDataLabel.textColor = kColorBlack;
         _leftDataLabel.textAlignment = NSTextAlignmentLeft;
         _leftDataLabel.numberOfLines = 5;
@@ -71,7 +71,7 @@
     if (!_rightDataLabel) {
         _rightDataLabel = [[UILabel alloc] init];
         _rightDataLabel.backgroundColor = [UIColor clearColor];
-        _rightDataLabel.font = [UIFont systemFontOfSize:9];
+        _rightDataLabel.font = [UIFont systemFontOfSize:8];
         _rightDataLabel.textColor = kColorBlack;
         _rightDataLabel.textAlignment = NSTextAlignmentRight;
         _rightDataLabel.numberOfLines = 5;

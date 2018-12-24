@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
-- (void)firstViewButtonClick:(UIButton *)sender;
+- (void)firstViewButtonClick:(UIButton *)sender Date:(NSDate *)date;
 
 - (void)firstViewSegmentedControlClick:(UISegmentedControl *)sender;
 
