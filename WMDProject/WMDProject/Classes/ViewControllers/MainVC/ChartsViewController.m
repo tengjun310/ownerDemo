@@ -144,6 +144,7 @@
         leftAxis.inverted = NO;
         leftAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
         leftAxis.axisLineColor = [UIColor whiteColor];
+        leftAxis.gridColor = [UIColor whiteColor];
         leftAxis.labelPosition = YAxisLabelPositionOutsideChart;
         leftAxis.labelTextColor = kColorBlack;
         leftAxis.labelFont = [UIFont systemFontOfSize:10.0f];
@@ -272,6 +273,7 @@
         }
         leftAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
         leftAxis.axisLineColor = [UIColor whiteColor];
+        leftAxis.gridColor = [UIColor whiteColor];
         leftAxis.labelPosition = YAxisLabelPositionOutsideChart;
         leftAxis.labelTextColor = kColorBlack;
         leftAxis.labelFont = [UIFont systemFontOfSize:10.0f];
