@@ -118,9 +118,9 @@
 - (UIButton *)chartButton{
     if (!_chartButton) {
         _chartButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _chartButton.backgroundColor = [UIColor redColor];
+        _chartButton.backgroundColor = [UIColor clearColor];
         [_chartButton addTarget:self action:@selector(chartButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [_chartButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        [_chartButton setImage:[UIImage imageNamed:@"chart_icon"] forState:UIControlStateNormal];
     }
     
     return _chartButton;
@@ -235,9 +235,9 @@
 - (UIButton *)chartButton2{
     if (!_chartButton2) {
         _chartButton2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        _chartButton2.backgroundColor = [UIColor redColor];
+        _chartButton2.backgroundColor = [UIColor clearColor];
         [_chartButton2 addTarget:self action:@selector(chartButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [_chartButton2 setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        [_chartButton2 setImage:[UIImage imageNamed:@"chart_icon"] forState:UIControlStateNormal];
     }
     
     return _chartButton2;
@@ -252,7 +252,7 @@
         xAxis.labelPosition = XAxisLabelPositionBottom;
         xAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
         xAxis.axisLineColor = [UIColor whiteColor];
-        xAxis.drawAxisLineEnabled = NO;
+        xAxis.drawLabelsEnabled = NO;
         xAxis.granularityEnabled = NO;
         xAxis.labelTextColor = kColorBlack;
         xAxis.drawGridLinesEnabled = NO;
@@ -260,6 +260,7 @@
         _lineChartView2.rightAxis.enabled = NO;
         ChartYAxis *leftAxis =_lineChartView2.leftAxis;
         leftAxis.inverted = NO;
+        leftAxis.drawGridLinesEnabled = NO;
         leftAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
         leftAxis.axisLineColor = [UIColor whiteColor];
         leftAxis.labelPosition = YAxisLabelPositionOutsideChart;
@@ -455,10 +456,10 @@
             CGFloat t = minStr.doubleValue/60;
             ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:hourStr.doubleValue+t y:model.tideheight.doubleValue data:model];
             if ([model.tag isEqualToString:@"高潮"]) {
-                data.icon = [UIImage imageNamed:@"ico_shuiwei_shang"];
+                data.icon = [UIImage imageNamed:@"hlogo"];
             }
             else if ([model.tag isEqualToString:@"低潮"]){
-                data.icon = [UIImage imageNamed:@"ico_shuiwei_xia"];
+                data.icon = [UIImage imageNamed:@"llogo"];
             }
             [dataValues addObject:data];
         }
@@ -488,7 +489,7 @@
         set1.formLineWidth = 1.1;//折线宽度
         set1.formSize = 15.0;
         set1.drawValuesEnabled = YES;//是否在拐点处显示数据
-        set1.valueColors= @[[UIColor whiteColor]];//折线拐点处显示数据的颜色
+        [set1 setCircleColor:kColorAppMain];
         [set1 setColor:kColorAppMain];//折线颜色
         set1.drawCirclesEnabled = YES;//是否绘制拐点
         set1.circleRadius = 3;
@@ -499,7 +500,7 @@
         //创建 LineChartData 对象, 此对象就是lineChartView需要最终数据对象
         LineChartData * data= [[LineChartData alloc] initWithDataSets:dataSets];
         [data setValueFont:[UIFont systemFontOfSize:6.f]];//文字字体
-        [data setValueTextColor:[UIColor blackColor]];//文字颜色
+        [data setValueTextColor:kColorBlack];//文字颜色
         self.lineChartView1.data = data;
     }
 }
@@ -509,11 +510,7 @@
     for (int i=0; i<dataArray2.count; i++) {
         if (self.type == 1) {
             SeaDataInfoModel * model = [dataArray2 objectAtIndex:i];
-            NSDate * date = [CommonUtils getFormatTime:model.forecasttime FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
-            NSString * hourStr = [CommonUtils formatTime:date FormatStyle:@"HH"];
-            NSString * minStr = [CommonUtils formatTime:date FormatStyle:@"mm"];
-            CGFloat t = minStr.doubleValue/60;
-            ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:hourStr.doubleValue+t y:model.sstdata.doubleValue data:model];
+            ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:i y:model.sstdata.doubleValue data:model];
             [dataValues addObject:data];
         }
         else{
@@ -545,13 +542,11 @@
         [set1 setColor:kColorAppMain];//折线颜色
         set1.drawCirclesEnabled = NO;//是否绘制拐点
         set1.highlightEnabled = NO;//选中拐点,是否开启高亮效果(显示十字线)
-        NSMutableArray * dataSets = [NSMutableArray array];
-        [dataSets addObject:set1];
         
         //创建 LineChartData 对象, 此对象就是lineChartView需要最终数据对象
-        LineChartData * data= [[LineChartData alloc] initWithDataSets:dataSets];
+        LineChartData * data= [[LineChartData alloc] initWithDataSets:@[set1]];
         [data setValueFont:[UIFont systemFontOfSize:6.f]];//文字字体
-        [data setValueTextColor:[UIColor blackColor]];//文字颜色
+        [data setValueTextColor:kColorBlack];//文字颜色
         self.lineChartView2.data = data;
     }
 }
