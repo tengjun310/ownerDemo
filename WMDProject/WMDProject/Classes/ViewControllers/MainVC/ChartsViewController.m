@@ -155,7 +155,6 @@
         _lineChartView1.doubleTapToZoomEnabled = NO;
         _lineChartView1.noDataText = @"暂无数据";
         _lineChartView1.noDataFont = kFontSize34;
-        _lineChartView1.legend.textColor = [UIColor whiteColor];//折线名称字体颜色
         [_lineChartView1 setScaleEnabled:YES];
         _lineChartView1.pinchZoomEnabled = YES;
     }
@@ -252,7 +251,12 @@
         xAxis.labelPosition = XAxisLabelPositionBottom;
         xAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
         xAxis.axisLineColor = [UIColor whiteColor];
-        xAxis.drawLabelsEnabled = NO;
+        if (self.type == 1) {
+            xAxis.drawLabelsEnabled = NO;
+        }
+        else{
+            xAxis.drawLabelsEnabled = YES;
+        }
         xAxis.granularityEnabled = NO;
         xAxis.labelTextColor = kColorBlack;
         xAxis.drawGridLinesEnabled = NO;
@@ -260,7 +264,12 @@
         _lineChartView2.rightAxis.enabled = NO;
         ChartYAxis *leftAxis =_lineChartView2.leftAxis;
         leftAxis.inverted = NO;
-        leftAxis.drawGridLinesEnabled = NO;
+        if (self.type == 1) {
+            leftAxis.drawGridLinesEnabled = NO;
+        }
+        else{
+            leftAxis.drawGridLinesEnabled = YES;
+        }
         leftAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
         leftAxis.axisLineColor = [UIColor whiteColor];
         leftAxis.labelPosition = YAxisLabelPositionOutsideChart;
@@ -274,7 +283,6 @@
         _lineChartView2.doubleTapToZoomEnabled = NO;
         _lineChartView2.noDataText = @"暂无数据";
         _lineChartView2.noDataFont = kFontSize34;
-        _lineChartView2.legend.textColor = [UIColor whiteColor];//折线名称字体颜色
         [_lineChartView2 setScaleEnabled:YES];
         _lineChartView2.pinchZoomEnabled = YES;
     }
@@ -461,10 +469,19 @@
             else if ([model.tag isEqualToString:@"低潮"]){
                 data.icon = [UIImage imageNamed:@"llogo"];
             }
+            else{
+                data.icon = [UIImage imageNamed:@"point"];
+            }
             [dataValues addObject:data];
         }
         else{
-            
+            SeaStreamInfoModel * model = [dataArray objectAtIndex:i];
+            NSDate * date = [CommonUtils getFormatTime:model.time FormatStyle:@"HH:mm"];
+            NSString * hourStr = [CommonUtils formatTime:date FormatStyle:@"HH"];
+            NSString * minStr = [CommonUtils formatTime:date FormatStyle:@"mm"];
+            CGFloat t = minStr.doubleValue/60;
+            ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:hourStr.doubleValue+t y:model.wavespeed.doubleValue data:model];
+            [dataValues addObject:data];
         }
     }
     
@@ -485,13 +502,19 @@
         set1 = [[LineChartDataSet alloc] initWithValues:dataValues];
         //自定义set的各种属性
         //设置折线的样式
-        set1.drawIconsEnabled = YES;
         set1.formLineWidth = 1.1;//折线宽度
         set1.formSize = 15.0;
-        set1.drawValuesEnabled = YES;//是否在拐点处显示数据
+        if (self.type == 1) {
+            set1.drawValuesEnabled = YES;//是否在拐点处显示数据
+            set1.drawIconsEnabled = YES;
+        }
+        else{
+            set1.drawValuesEnabled = NO;//是否在拐点处显示数据
+            set1.drawIconsEnabled = NO;
+        }
         [set1 setCircleColor:kColorAppMain];
         [set1 setColor:kColorAppMain];//折线颜色
-        set1.drawCirclesEnabled = YES;//是否绘制拐点
+        set1.drawCirclesEnabled = NO;//是否绘制拐点
         set1.circleRadius = 3;
         set1.highlightEnabled = NO;//选中拐点,是否开启高亮效果(显示十字线)
         NSMutableArray * dataSets = [NSMutableArray array];
@@ -514,7 +537,13 @@
             [dataValues addObject:data];
         }
         else{
-            
+            SeaStreamInfoModel * model = [dataArray objectAtIndex:i];
+            NSDate * date = [CommonUtils getFormatTime:model.time FormatStyle:@"HH:mm"];
+            NSString * hourStr = [CommonUtils formatTime:date FormatStyle:@"HH"];
+            NSString * minStr = [CommonUtils formatTime:date FormatStyle:@"mm"];
+            CGFloat t = minStr.doubleValue/60;
+            ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:hourStr.doubleValue+t y:model.wavedfrom.doubleValue data:model];
+            [dataValues addObject:data];
         }
     }
 
@@ -618,10 +647,14 @@
             NSDictionary * dic = (NSDictionary *)rspData;
             NSArray * contentArr = [dic objectForKey:@"content"];
             [self->dataArray removeAllObjects];
+            [self->dataArray2 removeAllObjects];
             for (NSDictionary * data in contentArr) {
                 SeaStreamInfoModel * infoModel = [[SeaStreamInfoModel alloc] initWithDictionary:data error:nil];
                 [self->dataArray addObject:infoModel];
+                [self->dataArray2 addObject:infoModel];
             }
+            [self updateFirstLineChartViewData];
+            [self updateSecondLineChartViewData];
         }
     } FailBlock:^(NSError *error) {
         
