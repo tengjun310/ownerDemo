@@ -79,6 +79,8 @@
 - (BMKMapView *)mapView{
     if (!_mapView) {
         _mapView = [[BMKMapView alloc] init];
+        _mapView.centerCoordinate = CLLocationCoordinate2DMake(39.483075, 121.282658);
+        _mapView.zoomLevel = 15;
     }
     
     return _mapView;

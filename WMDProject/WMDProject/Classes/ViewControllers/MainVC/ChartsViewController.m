@@ -13,26 +13,42 @@
 #import "SeaStreamInfoModel.h"
 
 
-@interface ChartsViewController ()<ChartViewDelegate>
+@interface ChartsViewController ()<ChartViewDelegate,IChartAxisValueFormatter>
 {
     NSMutableArray * dataArray;
 }
 
 @property (nonatomic,strong) UIView * dipView1;
 
-@property (nonatomic,strong) UIView * dipView2;
-
 @property (nonatomic,strong) UILabel * titleLabel1;
 
-@property (nonatomic,strong) UILabel * titleLabel2;
+@property (nonatomic,strong) UILabel * tipLabel1;
 
 @property (nonatomic,strong) UIButton * chartButton;
 
-@property (nonatomic,strong) UIButton * chartButton2;
-
 @property (nonatomic,strong) LineChartView * lineChartView1;
 
+@property (nonatomic,strong) UILabel * leftTimeLabel1;
+
+@property (nonatomic,strong) UILabel * rightTimeLabel1;
+
+
+
+@property (nonatomic,strong) UIView * dipView2;
+
+@property (nonatomic,strong) UIImageView * logoImageView;
+
+@property (nonatomic,strong) UILabel * titleLabel2;
+
+@property (nonatomic,strong) UILabel * tipLabel2;
+
+@property (nonatomic,strong) UIButton * chartButton2;
+
 @property (nonatomic,strong) LineChartView * lineChartView2;
+
+@property (nonatomic,strong) UILabel * leftTimeLabel2;
+
+@property (nonatomic,strong) UILabel * rightTimeLabel2;
 
 @end
 
@@ -49,17 +65,6 @@
     return _dipView1;
 }
 
-- (UIView *)dipView2{
-    if (!_dipView2) {
-        _dipView2 = [[UIView alloc] init];
-        _dipView2.backgroundColor = [UIColor hexChangeFloat:@"ffffff" alpha:0.7];
-        _dipView2.layer.masksToBounds = YES;
-        _dipView2.layer.cornerRadius = 5;
-    }
-    
-    return _dipView2;
-}
-
 - (UILabel *)titleLabel1{
     if (!_titleLabel1) {
         _titleLabel1 = [[UILabel alloc]init];
@@ -67,23 +72,45 @@
         _titleLabel1.font = kFontSize28;
         _titleLabel1.textAlignment = NSTextAlignmentCenter;
         _titleLabel1.textColor = kColorAppMain;
-        _titleLabel1.text = @"水位走势图";
     }
     
     return _titleLabel1;
 }
 
-- (UILabel *)titleLabel2{
-    if (!_titleLabel2) {
-        _titleLabel2 = [[UILabel alloc]init];
-        _titleLabel2.backgroundColor = [UIColor clearColor];
-        _titleLabel2.font = kFontSize28;
-        _titleLabel2.textAlignment = NSTextAlignmentCenter;
-        _titleLabel2.textColor = kColorAppMain;
-        _titleLabel2.text = @"30天海温走势图";
+- (UILabel *)tipLabel1{
+    if (!_tipLabel1) {
+        _tipLabel1 = [[UILabel alloc]init];
+        _tipLabel1.backgroundColor = [UIColor clearColor];
+        _tipLabel1.font = [UIFont systemFontOfSize:10];
+        _tipLabel1.textAlignment = NSTextAlignmentLeft;
+        _tipLabel1.textColor = kColorGray;
     }
     
-    return _titleLabel2;
+    return _tipLabel1;
+}
+
+- (UILabel *)leftTimeLabel1{
+    if (!_leftTimeLabel1) {
+        _leftTimeLabel1 = [[UILabel alloc]init];
+        _leftTimeLabel1.backgroundColor = [UIColor clearColor];
+        _leftTimeLabel1.font = kFontSize24;
+        _leftTimeLabel1.textAlignment = NSTextAlignmentLeft;
+        _leftTimeLabel1.textColor = kColorGray;
+    }
+    
+    return _leftTimeLabel1;
+}
+
+- (UILabel *)rightTimeLabel1{
+    if (!_rightTimeLabel1) {
+        _rightTimeLabel1 = [[UILabel alloc]init];
+        _rightTimeLabel1.backgroundColor = [UIColor clearColor];
+        _rightTimeLabel1.font = kFontSize24;
+        _rightTimeLabel1.textAlignment = NSTextAlignmentRight;
+        _rightTimeLabel1.textColor = kColorGray;
+    }
+    
+    return _rightTimeLabel1;
 }
 
 - (UIButton *)chartButton{
@@ -97,6 +124,112 @@
     return _chartButton;
 }
 
+- (LineChartView *)lineChartView1{
+    if (!_lineChartView1) {
+        _lineChartView1 = [[LineChartView alloc] init];
+        _lineChartView1.dragDecelerationEnabled = YES;
+        _lineChartView1.dragDecelerationFrictionCoef = 0.9;
+        ChartXAxis *xAxis =_lineChartView1.xAxis;
+        xAxis.labelPosition = XAxisLabelPositionBottom;
+        xAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
+        xAxis.axisLineColor = [UIColor whiteColor];
+        xAxis.granularityEnabled = NO;
+        xAxis.labelTextColor = kColorBlack;
+        xAxis.drawGridLinesEnabled = NO;
+        
+        _lineChartView1.rightAxis.enabled = NO;
+        ChartYAxis *leftAxis =_lineChartView1.leftAxis;
+        leftAxis.inverted = NO;
+        leftAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
+        leftAxis.axisLineColor = [UIColor whiteColor];
+        leftAxis.labelPosition = YAxisLabelPositionOutsideChart;
+        leftAxis.labelTextColor = kColorBlack;
+        leftAxis.labelFont = [UIFont systemFontOfSize:10.0f];
+        leftAxis.forceLabelsEnabled = NO;
+        _lineChartView1.chartDescription.enabled = NO;
+        _lineChartView1.legend.enabled = NO;
+        [_lineChartView1 animateWithXAxisDuration:1.0f];
+        
+        _lineChartView1.doubleTapToZoomEnabled = NO;
+        _lineChartView1.noDataText = @"暂无数据";
+        _lineChartView1.noDataFont = kFontSize34;
+        _lineChartView1.legend.textColor = [UIColor whiteColor];//折线名称字体颜色
+        [_lineChartView1 setScaleEnabled:YES];
+        _lineChartView1.pinchZoomEnabled = YES;
+    }
+    
+    return _lineChartView1;
+}
+
+- (UIView *)dipView2{
+    if (!_dipView2) {
+        _dipView2 = [[UIView alloc] init];
+        _dipView2.backgroundColor = [UIColor hexChangeFloat:@"ffffff" alpha:0.7];
+        _dipView2.layer.masksToBounds = YES;
+        _dipView2.layer.cornerRadius = 5;
+    }
+    
+    return _dipView2;
+}
+
+- (UILabel *)titleLabel2{
+    if (!_titleLabel2) {
+        _titleLabel2 = [[UILabel alloc]init];
+        _titleLabel2.backgroundColor = [UIColor clearColor];
+        _titleLabel2.font = kFontSize28;
+        _titleLabel2.textAlignment = NSTextAlignmentCenter;
+        _titleLabel2.textColor = kColorAppMain;
+    }
+    
+    return _titleLabel2;
+}
+
+- (UILabel *)tipLabel2{
+    if (!_tipLabel2) {
+        _tipLabel2 = [[UILabel alloc]init];
+        _tipLabel2.backgroundColor = [UIColor clearColor];
+        _tipLabel2.font = [UIFont systemFontOfSize:10];
+        _tipLabel2.textAlignment = NSTextAlignmentLeft;
+        _tipLabel2.textColor = kColorGray;
+    }
+    
+    return _tipLabel2;
+}
+
+- (UILabel *)leftTimeLabel2{
+    if (!_leftTimeLabel2) {
+        _leftTimeLabel2 = [[UILabel alloc]init];
+        _leftTimeLabel2.backgroundColor = [UIColor clearColor];
+        _leftTimeLabel2.font = kFontSize24;
+        _leftTimeLabel2.textAlignment = NSTextAlignmentLeft;
+        _leftTimeLabel2.textColor = kColorGray;
+    }
+    
+    return _leftTimeLabel2;
+}
+
+- (UILabel *)rightTimeLabel2{
+    if (!_rightTimeLabel2) {
+        _rightTimeLabel2 = [[UILabel alloc]init];
+        _rightTimeLabel2.backgroundColor = [UIColor clearColor];
+        _rightTimeLabel2.font = kFontSize24;
+        _rightTimeLabel2.textAlignment = NSTextAlignmentRight;
+        _rightTimeLabel2.textColor = kColorGray;
+    }
+    
+    return _rightTimeLabel2;
+}
+
+- (UIImageView *)logoImageView{
+    if (!_logoImageView) {
+        _logoImageView = [[UIImageView alloc]init];
+        _logoImageView.backgroundColor = [UIColor clearColor];
+        _logoImageView.image = [UIImage imageNamed:@"fangxiang"];
+    }
+    
+    return _logoImageView;
+}
+
 - (UIButton *)chartButton2{
     if (!_chartButton2) {
         _chartButton2 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -106,43 +239,6 @@
     }
     
     return _chartButton2;
-}
-
-- (LineChartView *)lineChartView1{
-    if (!_lineChartView1) {
-        _lineChartView1 = [[LineChartView alloc] init];
-        _lineChartView1.doubleTapToZoomEnabled = NO;//禁止双击缩放 有需要可以设置为YES
-        _lineChartView1.gridBackgroundColor = [UIColor clearColor];//表框以及表内线条的颜色以及隐藏设置 根据自己需要调整
-        _lineChartView1.borderColor = [UIColor clearColor];
-        _lineChartView1.drawGridBackgroundEnabled = NO;
-        _lineChartView1.drawBordersEnabled = NO;
-        _lineChartView1.noDataText = @"暂无数据";
-        _lineChartView1.noDataFont = kFontSize34;
-        _lineChartView1.legend.enabled = YES;//是否显示折线的名称以及对应颜色 多条折线时必须开启 否则无法分辨
-        _lineChartView1.legend.textColor = [UIColor whiteColor];//折线名称字体颜色
-        
-        //设置动画时间
-        [_lineChartView1 animateWithXAxisDuration:1];
-        
-        //设置纵轴坐标显示在左边而非右边
-        _lineChartView1.rightAxis.drawAxisLineEnabled = NO;
-        _lineChartView1.rightAxis.drawLabelsEnabled = NO;
-        _lineChartView1.rightAxis.axisMaximum = 10;
-        _lineChartView1.rightAxis.axisMinimum = -10;
-        
-        //设置横轴坐标显示在下方 默认显示是在顶部
-        _lineChartView1.xAxis.drawGridLinesEnabled = NO;
-        _lineChartView1.xAxis.labelPosition = XAxisLabelPositionBottom;
-        _lineChartView1.xAxis.labelCount = 10;
-        _lineChartView1.delegate = self;
-        _lineChartView1.dragEnabled = YES;
-        [_lineChartView1 setScaleEnabled:YES];
-        _lineChartView1.pinchZoomEnabled = YES;
-        _lineChartView1.xAxis.axisMaximum = 24;
-        _lineChartView1.xAxis.axisMinimum = 0;
-    }
-    
-    return _lineChartView1;
 }
 
 - (LineChartView *)lineChartView2{
@@ -155,8 +251,6 @@
         _lineChartView2.drawBordersEnabled = NO;
         _lineChartView2.noDataText = @"暂无数据";
         _lineChartView2.noDataFont = kFontSize34;
-//        _lineChartView2.chartDescription.text = @"来源:来自xxx提供数据";//该表格的描述名称
-//        _lineChartView2.chartDescription.textColor = kColorGray;//描述字体颜色
         _lineChartView2.legend.enabled = YES;//是否显示折线的名称以及对应颜色 多条折线时必须开启 否则无法分辨
         _lineChartView2.legend.textColor = [UIColor whiteColor];//折线名称字体颜色
         
@@ -218,12 +312,33 @@
         make.size.mas_equalTo(CGSizeMake(20, 20));
     }];
     
+    [self.dipView1 addSubview:self.tipLabel1];
+    [self.tipLabel1 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(weakSelf.titleLabel1.mas_bottom);
+        make.left.mas_equalTo(weakSelf.dipView1).mas_offset(25);
+        make.size.mas_equalTo(CGSizeMake(180, 15));
+    }];
+    
     [self.dipView1 addSubview:self.lineChartView1];
     [self.lineChartView1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf.dipView1).mas_offset(30);
+        make.top.mas_equalTo(weakSelf.tipLabel1.mas_bottom);
         make.left.mas_equalTo(weakSelf.dipView1).mas_offset(10);
         make.right.mas_equalTo(weakSelf.dipView1).mas_offset(-10);
-        make.bottom.mas_equalTo(weakSelf.dipView1).mas_offset(-5);
+        make.bottom.mas_equalTo(weakSelf.dipView1).mas_offset(-20);
+    }];
+    
+    [self.dipView1 addSubview:self.leftTimeLabel1];
+    [self.leftTimeLabel1 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(weakSelf.lineChartView1.mas_bottom);
+        make.left.mas_equalTo(weakSelf.dipView1).mas_offset(25);
+        make.size.mas_equalTo(CGSizeMake(120, 20));
+    }];
+
+    [self.dipView1 addSubview:self.rightTimeLabel1];
+    [self.rightTimeLabel1 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(weakSelf.lineChartView1.mas_bottom);
+        make.right.mas_equalTo(weakSelf.dipView1).mas_offset(-25);
+        make.size.mas_equalTo(CGSizeMake(120, 20));
     }];
     
     [self.view addSubview:self.dipView2];
@@ -248,21 +363,74 @@
         make.top.mas_equalTo(weakSelf.dipView2).mas_offset(5);
         make.size.mas_equalTo(CGSizeMake(20, 20));
     }];
+    
+    [self.dipView2 addSubview:self.tipLabel2];
+    [self.tipLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(weakSelf.titleLabel2.mas_bottom);
+        make.left.mas_equalTo(weakSelf.dipView2).mas_offset(25);
+        make.size.mas_equalTo(CGSizeMake(180, 15));
+    }];
 
     [self.dipView2 addSubview:self.lineChartView2];
     [self.lineChartView2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf.dipView2).mas_offset(30);
+        make.top.mas_equalTo(weakSelf.tipLabel2.mas_bottom);
         make.left.mas_equalTo(weakSelf.dipView2).mas_offset(10);
         make.right.mas_equalTo(weakSelf.dipView2).mas_offset(-10);
-        make.bottom.mas_equalTo(weakSelf.dipView2).mas_offset(-5);
+        make.bottom.mas_equalTo(weakSelf.dipView2).mas_offset(-20);
     }];
+    
+    if (self.type == 2) {
+        [self.dipView2 addSubview:self.logoImageView];
+        [self.logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(weakSelf.dipView2);
+            make.right.mas_equalTo(weakSelf.chartButton2.mas_left).mas_offset(-15);
+            make.size.mas_equalTo(CGSizeMake(40, 40));
+        }];
+
+        [self.dipView2 addSubview:self.leftTimeLabel2];
+        [self.leftTimeLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(weakSelf.lineChartView2.mas_bottom);
+            make.left.mas_equalTo(weakSelf.dipView2).mas_offset(25);
+            make.size.mas_equalTo(CGSizeMake(120, 20));
+        }];
+        
+        [self.dipView2 addSubview:self.rightTimeLabel2];
+        [self.rightTimeLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(weakSelf.lineChartView2.mas_bottom);
+            make.right.mas_equalTo(weakSelf.dipView2).mas_offset(-25);
+            make.size.mas_equalTo(CGSizeMake(120, 20));
+        }];
+    }
+    else{
+        [self.dipView2 addSubview:self.leftTimeLabel2];
+        [self.leftTimeLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(weakSelf.lineChartView2.mas_bottom);
+            make.left.mas_equalTo(weakSelf.dipView2).mas_offset(15);
+            make.right.mas_equalTo(weakSelf.dipView2).mas_offset(-15);
+            make.height.mas_offset(20);
+        }];
+        self.leftTimeLabel2.textAlignment = NSTextAlignmentCenter;
+    }
+    
 
     dataArray = [NSMutableArray array];
+    self.tipLabel1.text = @"来源:由红沿河海域实测数据预报得到";
+    self.tipLabel2.text = @"来源:由红沿河海域实测数据预报得到";
+    self.leftTimeLabel1.text = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"];
+    self.rightTimeLabel1.text = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"];
+    
     if (self.type == 1) {
+        self.titleLabel1.text = @"水位走势图";
+        self.titleLabel2.text = @"30天海温走势图";
+        self.leftTimeLabel2.text = [NSString stringWithFormat:@"%@至%@",[CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"],[CommonUtils formatTime:[NSDate dateWithTimeInterval:30*24*60*60 sinceDate:self.date] FormatStyle:@"yyyy-MM-dd"]];
         self.chartButton2.hidden = YES;
         [self getWaterLevelData];
     }
     else{
+        self.titleLabel1.text = @"流速走势图";
+        self.titleLabel2.text = @"流向走势图";
+        self.leftTimeLabel2.text = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"];
+        self.rightTimeLabel2.text = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"];
         [self getSeaStremSpeedData];
     }
     
@@ -278,12 +446,12 @@
         NSString * minStr = [CommonUtils formatTime:date FormatStyle:@"mm"];
         CGFloat t = minStr.doubleValue/60;
         ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:hourStr.doubleValue+t y:model.tideheight.doubleValue data:model];
-//        if (i%2==0) {
-//            data.icon = [UIImage imageNamed:@"ico_shuiwei_shang"];
-//        }
-//        else if (i%3 == 0){
-//            data.icon = [UIImage imageNamed:@"ico_shuiwei_xia"];
-//        }
+        if ([model.tag isEqualToString:@"高潮"]) {
+            data.icon = [UIImage imageNamed:@"ico_shuiwei_shang"];
+        }
+        else if ([model.tag isEqualToString:@"低潮"]){
+            data.icon = [UIImage imageNamed:@"ico_shuiwei_xia"];
+        }
         [dataValues addObject:data];
     }
     
@@ -307,11 +475,11 @@
         set1.drawIconsEnabled = YES;
         set1.formLineWidth = 1.1;//折线宽度
         set1.formSize = 15.0;
-        set1.drawValuesEnabled=YES;//是否在拐点处显示数据
-        set1.valueColors=@[[UIColor whiteColor]];//折线拐点处显示数据的颜色
+        set1.drawValuesEnabled = YES;//是否在拐点处显示数据
+        set1.valueColors= @[[UIColor whiteColor]];//折线拐点处显示数据的颜色
         [set1 setColor:[UIColor lightGrayColor]];//折线颜色
         set1.drawCirclesEnabled = YES;//是否绘制拐点
-        set1.circleRadius = 4;
+        set1.circleRadius = 3;
         set1.highlightEnabled = NO;//选中拐点,是否开启高亮效果(显示十字线)
         NSMutableArray * dataSets = [NSMutableArray array];
         [dataSets addObject:set1];
@@ -366,8 +534,8 @@
                                 for (NSDictionary * data in contentArr) {
                                     SeaWaterLevelInfoModel * model = [[SeaWaterLevelInfoModel alloc] initWithDictionary:data error:nil];
                                     [self->dataArray addObject:model];
-                                    [self test];
                                 }
+                                [self test];
                             }
                         } FailBlock:^(NSError *error) {
                             
