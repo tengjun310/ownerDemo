@@ -11,11 +11,13 @@
 #import "ListInfoViewController.h"
 #import "SeaWaterLevelInfoModel.h"
 #import "SeaStreamInfoModel.h"
+#import "SeaDataInfoModel.h"
 
 
 @interface ChartsViewController ()<ChartViewDelegate,IChartAxisValueFormatter>
 {
     NSMutableArray * dataArray;
+    NSMutableArray * dataArray2;
 }
 
 @property (nonatomic,strong) UIView * dipView1;
@@ -244,30 +246,34 @@
 - (LineChartView *)lineChartView2{
     if (!_lineChartView2) {
         _lineChartView2 = [[LineChartView alloc] init];
-        _lineChartView2.doubleTapToZoomEnabled = YES;//禁止双击缩放 有需要可以设置为YES
-        _lineChartView2.gridBackgroundColor = [UIColor clearColor];//表框以及表内线条的颜色以及隐藏设置 根据自己需要调整
-        _lineChartView2.borderColor = [UIColor clearColor];
-        _lineChartView2.drawGridBackgroundEnabled = NO;
-        _lineChartView2.drawBordersEnabled = NO;
+        _lineChartView2.dragDecelerationEnabled = YES;
+        _lineChartView2.dragDecelerationFrictionCoef = 0.9;
+        ChartXAxis *xAxis =_lineChartView2.xAxis;
+        xAxis.labelPosition = XAxisLabelPositionBottom;
+        xAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
+        xAxis.axisLineColor = [UIColor whiteColor];
+        xAxis.drawAxisLineEnabled = NO;
+        xAxis.granularityEnabled = NO;
+        xAxis.labelTextColor = kColorBlack;
+        xAxis.drawGridLinesEnabled = NO;
+        
+        _lineChartView2.rightAxis.enabled = NO;
+        ChartYAxis *leftAxis =_lineChartView2.leftAxis;
+        leftAxis.inverted = NO;
+        leftAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
+        leftAxis.axisLineColor = [UIColor whiteColor];
+        leftAxis.labelPosition = YAxisLabelPositionOutsideChart;
+        leftAxis.labelTextColor = kColorBlack;
+        leftAxis.labelFont = [UIFont systemFontOfSize:10.0f];
+        leftAxis.forceLabelsEnabled = NO;
+        _lineChartView2.chartDescription.enabled = NO;
+        _lineChartView2.legend.enabled = NO;
+        [_lineChartView2 animateWithXAxisDuration:1.0f];
+        
+        _lineChartView2.doubleTapToZoomEnabled = NO;
         _lineChartView2.noDataText = @"暂无数据";
         _lineChartView2.noDataFont = kFontSize34;
-        _lineChartView2.legend.enabled = YES;//是否显示折线的名称以及对应颜色 多条折线时必须开启 否则无法分辨
         _lineChartView2.legend.textColor = [UIColor whiteColor];//折线名称字体颜色
-        
-        //设置动画时间
-        [_lineChartView2 animateWithXAxisDuration:1];
-        
-        //设置纵轴坐标显示在左边而非右边
-        _lineChartView2.rightAxis.drawAxisLineEnabled = NO;
-        _lineChartView2.rightAxis.drawLabelsEnabled = NO;
-        //    self.chartView.rightAxis.labelTextColor = [UIColor redColor];
-        
-        //设置横轴坐标显示在下方 默认显示是在顶部
-        _lineChartView2.xAxis.drawGridLinesEnabled = NO;
-        _lineChartView2.xAxis.labelPosition = XAxisLabelPositionBottom;
-        _lineChartView2.xAxis.labelCount = 10;
-        _lineChartView2.delegate = self;
-        _lineChartView2.dragEnabled = YES;
         [_lineChartView2 setScaleEnabled:YES];
         _lineChartView2.pinchZoomEnabled = YES;
     }
@@ -414,6 +420,8 @@
     
 
     dataArray = [NSMutableArray array];
+    dataArray2 = [NSMutableArray array];
+
     self.tipLabel1.text = @"来源:由红沿河海域实测数据预报得到";
     self.tipLabel2.text = @"来源:由红沿河海域实测数据预报得到";
     self.leftTimeLabel1.text = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"];
@@ -425,6 +433,7 @@
         self.leftTimeLabel2.text = [NSString stringWithFormat:@"%@至%@",[CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"],[CommonUtils formatTime:[NSDate dateWithTimeInterval:30*24*60*60 sinceDate:self.date] FormatStyle:@"yyyy-MM-dd"]];
         self.chartButton2.hidden = YES;
         [self getWaterLevelData];
+        [self getSeaTemData];
     }
     else{
         self.titleLabel1.text = @"流速走势图";
@@ -433,26 +442,29 @@
         self.rightTimeLabel2.text = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"];
         [self getSeaStremSpeedData];
     }
-    
-    [self test];
 }
 
-- (void)test{
+- (void)updateFirstLineChartViewData{
     NSMutableArray* dataValues = [[NSMutableArray alloc] init];
     for (int i=0; i<dataArray.count; i++) {
-        SeaWaterLevelInfoModel * model = [dataArray objectAtIndex:i];
-        NSDate * date = [CommonUtils getFormatTime:model.tidetime FormatStyle:@"HH-mm"];
-        NSString * hourStr = [CommonUtils formatTime:date FormatStyle:@"HH"];
-        NSString * minStr = [CommonUtils formatTime:date FormatStyle:@"mm"];
-        CGFloat t = minStr.doubleValue/60;
-        ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:hourStr.doubleValue+t y:model.tideheight.doubleValue data:model];
-        if ([model.tag isEqualToString:@"高潮"]) {
-            data.icon = [UIImage imageNamed:@"ico_shuiwei_shang"];
+        if (self.type == 1) {
+            SeaWaterLevelInfoModel * model = [dataArray objectAtIndex:i];
+            NSDate * date = [CommonUtils getFormatTime:model.tidetime FormatStyle:@"HH:mm"];
+            NSString * hourStr = [CommonUtils formatTime:date FormatStyle:@"HH"];
+            NSString * minStr = [CommonUtils formatTime:date FormatStyle:@"mm"];
+            CGFloat t = minStr.doubleValue/60;
+            ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:hourStr.doubleValue+t y:model.tideheight.doubleValue data:model];
+            if ([model.tag isEqualToString:@"高潮"]) {
+                data.icon = [UIImage imageNamed:@"ico_shuiwei_shang"];
+            }
+            else if ([model.tag isEqualToString:@"低潮"]){
+                data.icon = [UIImage imageNamed:@"ico_shuiwei_xia"];
+            }
+            [dataValues addObject:data];
         }
-        else if ([model.tag isEqualToString:@"低潮"]){
-            data.icon = [UIImage imageNamed:@"ico_shuiwei_xia"];
+        else{
+            
         }
-        [dataValues addObject:data];
     }
     
     LineChartDataSet *set1 = nil;
@@ -477,7 +489,7 @@
         set1.formSize = 15.0;
         set1.drawValuesEnabled = YES;//是否在拐点处显示数据
         set1.valueColors= @[[UIColor whiteColor]];//折线拐点处显示数据的颜色
-        [set1 setColor:[UIColor lightGrayColor]];//折线颜色
+        [set1 setColor:kColorAppMain];//折线颜色
         set1.drawCirclesEnabled = YES;//是否绘制拐点
         set1.circleRadius = 3;
         set1.highlightEnabled = NO;//选中拐点,是否开启高亮效果(显示十字线)
@@ -492,6 +504,57 @@
     }
 }
 
+- (void)updateSecondLineChartViewData{
+    NSMutableArray* dataValues = [[NSMutableArray alloc] init];
+    for (int i=0; i<dataArray2.count; i++) {
+        if (self.type == 1) {
+            SeaDataInfoModel * model = [dataArray2 objectAtIndex:i];
+            NSDate * date = [CommonUtils getFormatTime:model.forecasttime FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
+            NSString * hourStr = [CommonUtils formatTime:date FormatStyle:@"HH"];
+            NSString * minStr = [CommonUtils formatTime:date FormatStyle:@"mm"];
+            CGFloat t = minStr.doubleValue/60;
+            ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:hourStr.doubleValue+t y:model.sstdata.doubleValue data:model];
+            [dataValues addObject:data];
+        }
+        else{
+            
+        }
+    }
+
+    LineChartDataSet *set1 = nil;
+    //请注意这里，如果你的图表以前绘制过，那么这里直接重新给data赋值就行了。
+    //如果没有，那么要先定义set的属性。
+    if (self.lineChartView2.data.dataSetCount > 0) {
+        LineChartData *data = (LineChartData *)self.lineChartView2.data;
+        set1 = (LineChartDataSet *)data.dataSets[0];
+        set1=(LineChartDataSet*)self.lineChartView2.data.dataSets[0];
+        set1.values = dataValues;
+        //通知data去更新
+        [self.lineChartView2.data notifyDataChanged];
+        //通知图表去更新
+        [self.lineChartView2 notifyDataSetChanged];
+    }else{
+        //创建LineChartDataSet对象
+        set1 = [[LineChartDataSet alloc] initWithValues:dataValues];
+        //自定义set的各种属性
+        //设置折线的样式
+        set1.drawIconsEnabled = NO;
+        set1.formLineWidth = 1.1;//折线宽度
+        set1.formSize = 15.0;
+        set1.drawValuesEnabled = NO;//是否在拐点处显示数据
+        [set1 setColor:kColorAppMain];//折线颜色
+        set1.drawCirclesEnabled = NO;//是否绘制拐点
+        set1.highlightEnabled = NO;//选中拐点,是否开启高亮效果(显示十字线)
+        NSMutableArray * dataSets = [NSMutableArray array];
+        [dataSets addObject:set1];
+        
+        //创建 LineChartData 对象, 此对象就是lineChartView需要最终数据对象
+        LineChartData * data= [[LineChartData alloc] initWithDataSets:dataSets];
+        [data setValueFont:[UIFont systemFontOfSize:6.f]];//文字字体
+        [data setValueTextColor:[UIColor blackColor]];//文字颜色
+        self.lineChartView2.data = data;
+    }
+}
 - (void)chartButtonClick:(UIButton *)sender{
     ListInfoViewController * vc = [[ListInfoViewController alloc] init];
     if (self.type == 1) {
@@ -535,7 +598,7 @@
                                     SeaWaterLevelInfoModel * model = [[SeaWaterLevelInfoModel alloc] initWithDictionary:data error:nil];
                                     [self->dataArray addObject:model];
                                 }
-                                [self test];
+                                [self updateFirstLineChartViewData];
                             }
                         } FailBlock:^(NSError *error) {
                             
@@ -564,6 +627,29 @@
                 SeaStreamInfoModel * infoModel = [[SeaStreamInfoModel alloc] initWithDictionary:data error:nil];
                 [self->dataArray addObject:infoModel];
             }
+        }
+    } FailBlock:^(NSError *error) {
+        
+    }];
+}
+
+- (void)getSeaTemData{
+    NSString * str = @"";
+    NSString * dateStr = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd 00:00:00"];
+    NSString * endDateStr = [CommonUtils formatTime:[NSDate dateWithTimeInterval:30*24*60*60 sinceDate:self.date] FormatStyle:@"yyyy-MM-dd 00:00:00"];
+    str = [NSString stringWithFormat:@"marine/getMarineData?fstarttime=%@&fendtime=%@",dateStr,endDateStr];
+    
+    [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+        if (succ) {
+            NSDictionary * dic = (NSDictionary *)rspData;
+            
+            NSArray * contentArr = [dic objectForKey:@"content"];
+            [self->dataArray2 removeAllObjects];
+            for (NSDictionary * data in contentArr) {
+                SeaDataInfoModel * infoModel = [[SeaDataInfoModel alloc] initWithDictionary:data error:nil];
+                [self->dataArray2 addObject:infoModel];
+            }
+            [self updateSecondLineChartViewData];
         }
     } FailBlock:^(NSError *error) {
         
