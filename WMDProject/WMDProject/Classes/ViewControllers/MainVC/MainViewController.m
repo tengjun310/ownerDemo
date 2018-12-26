@@ -154,11 +154,33 @@
 }
 
 - (void)tableviewDidSelectRow:(NSInteger)row Date:(nonnull NSDate *)date{
-    if (row == 0) {
+    if (row == 0 || row == 2) {
         ChartsViewController * vc = [[ChartsViewController alloc] init];
         vc.today = NO;
         vc.date = date;
         vc.type = 1;
+        if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
+            vc.today = YES;
+        }
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else if (row == 1){
+        //波高
+        ChartsViewController * vc = [[ChartsViewController alloc] init];
+        vc.today = NO;
+        vc.date = date;
+        vc.type = 3;
+        if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
+            vc.today = YES;
+        }
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else if (row == 3){
+        //海风
+        ChartsViewController * vc = [[ChartsViewController alloc] init];
+        vc.today = NO;
+        vc.date = date;
+        vc.type = 4;
         if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
             vc.today = YES;
         }

@@ -410,14 +410,14 @@
 //波高、海温、海风数据
 - (void)getSeaData:(NSDate *)date{
     NSString * str = @"";
-//    if (date == nowDate) {
-//        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
-//        str = [NSString stringWithFormat:@"marine/getMarineData?fstarttime=%@&fendtime=%@",dateStr,dateStr];
-//    }
-//    else{
-        NSString * dateStr = [CommonUtils formatTime:nextDate3 FormatStyle:@"yyyy-MM-dd 00:00:00"];
+    if (date == nowDate) {
+        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
         str = [NSString stringWithFormat:@"marine/getMarineData?fstarttime=%@&fendtime=%@",dateStr,dateStr];
-//    }
+    }
+    else{
+        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd 00:00:00"];
+        str = [NSString stringWithFormat:@"marine/getMarineData?fstarttime=%@&fendtime=%@",dateStr,dateStr];
+    }
     
     [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
         if (succ) {

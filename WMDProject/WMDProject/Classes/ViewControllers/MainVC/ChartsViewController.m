@@ -14,7 +14,7 @@
 #import "SeaDataInfoModel.h"
 
 
-@interface ChartsViewController ()<ChartViewDelegate,IChartAxisValueFormatter>
+@interface ChartsViewController ()<ChartViewDelegate>
 {
     NSMutableArray * dataArray;
     NSMutableArray * dataArray2;
@@ -252,12 +252,6 @@
         xAxis.labelPosition = XAxisLabelPositionBottom;
         xAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
         xAxis.axisLineColor = [UIColor whiteColor];
-        if (self.type == 1) {
-            xAxis.drawLabelsEnabled = NO;
-        }
-        else{
-            xAxis.drawLabelsEnabled = YES;
-        }
         xAxis.granularityEnabled = NO;
         xAxis.labelTextColor = kColorBlack;
         xAxis.drawGridLinesEnabled = NO;
@@ -265,11 +259,13 @@
         _lineChartView2.rightAxis.enabled = NO;
         ChartYAxis *leftAxis =_lineChartView2.leftAxis;
         leftAxis.inverted = NO;
-        if (self.type == 1) {
-            leftAxis.drawGridLinesEnabled = NO;
+        if (self.type == 2) {
+            xAxis.drawLabelsEnabled = YES;
+            leftAxis.drawGridLinesEnabled = YES;
         }
         else{
-            leftAxis.drawGridLinesEnabled = YES;
+            xAxis.drawLabelsEnabled = NO;
+            leftAxis.drawGridLinesEnabled = NO;
         }
         leftAxis.axisLineWidth = 1.0 / [UIScreen mainScreen].scale;
         leftAxis.axisLineColor = [UIColor whiteColor];
@@ -435,8 +431,8 @@
 
     self.tipLabel1.text = @"来源:由红沿河海域实测数据预报得到";
     self.tipLabel2.text = @"来源:由红沿河海域实测数据预报得到";
-    self.leftTimeLabel1.text = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"];
-    self.rightTimeLabel1.text = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"];
+    self.leftTimeLabel1.text = [CommonUtils formatTime:[NSDate dateWithTimeInterval:-2*24*60*60 sinceDate:self.date] FormatStyle:@"yyyy-MM-dd"];
+    self.rightTimeLabel1.text = [CommonUtils formatTime:[NSDate dateWithTimeInterval:2*24*60*60 sinceDate:self.date] FormatStyle:@"yyyy-MM-dd"];
     
     if (self.type == 1) {
         self.titleLabel1.text = @"水位走势图";
@@ -446,25 +442,30 @@
         [self getWaterLevelData];
         [self getSeaTemData];
     }
-    else{
+    
+    else if (self.type == 2) {
         self.titleLabel1.text = @"流速走势图";
         self.titleLabel2.text = @"流向走势图";
-        self.leftTimeLabel2.text = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"];
-        self.rightTimeLabel2.text = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd"];
+        self.leftTimeLabel2.text = [CommonUtils formatTime:[NSDate dateWithTimeInterval:-2*24*60*60 sinceDate:self.date] FormatStyle:@"yyyy-MM-dd"];
+        self.rightTimeLabel2.text = [CommonUtils formatTime:[NSDate dateWithTimeInterval:2*24*60*60 sinceDate:self.date] FormatStyle:@"yyyy-MM-dd"];
         [self getSeaStremSpeedData];
+    }
+    else if (self.type == 3){
+        
+    }
+    else{
+        
     }
 }
 
 - (void)updateFirstLineChartViewData{
     NSMutableArray* dataValues = [[NSMutableArray alloc] init];
+    NSMutableArray* xValues = [[NSMutableArray alloc] init];
     for (int i=0; i<dataArray.count; i++) {
+        ChartDataEntry * data;
         if (self.type == 1) {
             SeaWaterLevelInfoModel * model = [dataArray objectAtIndex:i];
-            NSDate * date = [CommonUtils getFormatTime:model.tidetime FormatStyle:@"HH:mm"];
-            NSString * hourStr = [CommonUtils formatTime:date FormatStyle:@"HH"];
-            NSString * minStr = [CommonUtils formatTime:date FormatStyle:@"mm"];
-            CGFloat t = minStr.doubleValue/60;
-            ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:hourStr.doubleValue+t y:model.tideheight.doubleValue data:model];
+            data = [[ChartDataEntry alloc] initWithX:i y:model.tideheight.doubleValue data:model];
             if ([model.tag isEqualToString:@"高潮"]) {
                 data.icon = [UIImage imageNamed:@"hlogo"];
             }
@@ -474,18 +475,17 @@
             else{
                 data.icon = [UIImage imageNamed:@"point"];
             }
-            [dataValues addObject:data];
+            [xValues addObject:model.tidetime];
         }
         else{
             SeaStreamInfoModel * model = [dataArray objectAtIndex:i];
-            NSDate * date = [CommonUtils getFormatTime:model.time FormatStyle:@"HH:mm"];
-            NSString * hourStr = [CommonUtils formatTime:date FormatStyle:@"HH"];
-            NSString * minStr = [CommonUtils formatTime:date FormatStyle:@"mm"];
-            CGFloat t = minStr.doubleValue/60;
-            ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:hourStr.doubleValue+t y:model.wavespeed.doubleValue data:model];
-            [dataValues addObject:data];
+            data = [[ChartDataEntry alloc] initWithX:i y:model.wavespeed.doubleValue data:model];
+            [xValues addObject:model.time];
         }
+        [dataValues addObject:data];
     }
+    
+    self.lineChartView1.xAxis.valueFormatter = [[ChartIndexAxisValueFormatter alloc] initWithValues:xValues];
     
     LineChartDataSet *set1 = nil;
     //请注意这里，如果你的图表以前绘制过，那么这里直接重新给data赋值就行了。
@@ -532,22 +532,22 @@
 
 - (void)updateSecondLineChartViewData{
     NSMutableArray* dataValues = [[NSMutableArray alloc] init];
+    NSMutableArray* xValues = [[NSMutableArray alloc] init];
     for (int i=0; i<dataArray2.count; i++) {
+        ChartDataEntry * data;
         if (self.type == 1) {
             SeaDataInfoModel * model = [dataArray2 objectAtIndex:i];
-            ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:i y:model.sstdata.doubleValue data:model];
-            [dataValues addObject:data];
+            data = [[ChartDataEntry alloc] initWithX:i y:model.sstdata.doubleValue data:model];
         }
         else{
             SeaStreamInfoModel * model = [dataArray objectAtIndex:i];
-            NSDate * date = [CommonUtils getFormatTime:model.time FormatStyle:@"HH:mm"];
-            NSString * hourStr = [CommonUtils formatTime:date FormatStyle:@"HH"];
-            NSString * minStr = [CommonUtils formatTime:date FormatStyle:@"mm"];
-            CGFloat t = minStr.doubleValue/60;
-            ChartDataEntry * data = [[ChartDataEntry alloc] initWithX:hourStr.doubleValue+t y:model.wavedfrom.doubleValue data:model];
-            [dataValues addObject:data];
+            data = [[ChartDataEntry alloc] initWithX:i y:model.wavedfrom.doubleValue data:model];
+            [xValues addObject:model.time];
         }
+        [dataValues addObject:data];
     }
+    
+    self.lineChartView2.xAxis.valueFormatter = [[ChartIndexAxisValueFormatter alloc] initWithValues:xValues];
 
     LineChartDataSet *set1 = nil;
     //请注意这里，如果你的图表以前绘制过，那么这里直接重新给data赋值就行了。
@@ -603,16 +603,9 @@
 
 - (void)getWaterLevelData{
     NSString * str = @"";
-    if (self.today) {
-        NSString * startDateStr = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd 00:00:00"];
-        NSString * endDateStr = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
-        str = [NSString stringWithFormat:@"marine/getWaterLevel?fstarttime=%@&fendtime=%@",startDateStr,endDateStr];
-    }
-    else{
-        NSString * startDateStr = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd 00:00:00"];
-        NSString * endDateStr = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd 23:59:59"];
-        str = [NSString stringWithFormat:@"marine/getWaterLevel?fstarttime=%@&fendtime=%@",startDateStr,endDateStr];
-    }
+    NSString * startDateStr = [CommonUtils formatTime:[NSDate dateWithTimeInterval:-2*24*60*60 sinceDate:self.date] FormatStyle:@"yyyy-MM-dd 00:00:00"];
+    NSString * endDateStr = [CommonUtils formatTime:[NSDate dateWithTimeInterval:2*24*60*60 sinceDate:self.date] FormatStyle:@"yyyy-MM-dd 00:00:00"];
+    str = [NSString stringWithFormat:@"marine/getWaterLevel?fstarttime=%@&fendtime=%@",startDateStr,endDateStr];
     
     [HttpClient asyncSendPostRequest:str Parmas:nil
                         SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
@@ -633,16 +626,9 @@
 
 - (void)getSeaStremSpeedData{
     NSString * str = @"";
-    if (self.today) {
-        NSString * startDateStr = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd 00:00:00"];
-        NSString * endDateStr = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
-        str = [NSString stringWithFormat:@"marine/getSeaStream?fstarttime=%@&fendtime=%@",startDateStr,endDateStr];
-    }
-    else{
-        NSString * startDateStr = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd 00:00:00"];
-        NSString * endDateStr = [CommonUtils formatTime:self.date FormatStyle:@"yyyy-MM-dd 23:59:59"];
-        str = [NSString stringWithFormat:@"marine/getSeaStream?fstarttime=%@&fendtime=%@",startDateStr,endDateStr];
-    }
+    NSString * startDateStr = [CommonUtils formatTime:[NSDate dateWithTimeInterval:-2*24*60*60 sinceDate:self.date] FormatStyle:@"yyyy-MM-dd 00:00:00"];
+    NSString * endDateStr = [CommonUtils formatTime:[NSDate dateWithTimeInterval:2*24*60*60 sinceDate:self.date] FormatStyle:@"yyyy-MM-dd 00:00:00"];
+    str = [NSString stringWithFormat:@"marine/getSeaStream?fstarttime=%@&fendtime=%@",startDateStr,endDateStr];
     
     [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
         if (succ) {
