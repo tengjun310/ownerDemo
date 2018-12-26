@@ -9,7 +9,7 @@
 #import "ThirdInfoView.h"
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
 
-@interface ThirdInfoView ()
+@interface ThirdInfoView ()<BMKMapViewDelegate>
 
 @property (nonatomic,strong) UILabel * titleLabel;
 
@@ -81,6 +81,7 @@
         _mapView = [[BMKMapView alloc] init];
         _mapView.centerCoordinate = CLLocationCoordinate2DMake(39.483075, 121.282658);
         _mapView.zoomLevel = 15;
+        _mapView.delegate = self;
     }
     
     return _mapView;
@@ -130,6 +131,29 @@
     
     self.leftButton.selected = YES;
     self.mapView.mapType = BMKMapTypeStandard;
+    
+    BMKPointAnnotation* annotation = [[BMKPointAnnotation alloc]init];
+    annotation.coordinate = CLLocationCoordinate2DMake(39.483075, 121.282658);
+    annotation.title = @"二期取水口";
+    annotation.subtitle = @"39.483075,121.282658";
+    [self.mapView addAnnotation:annotation];
+}
+
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
+{
+    if ([annotation isKindOfClass:[BMKPointAnnotation class]])
+    {
+        static NSString *reuseIndetifier = @"annotationReuseIndetifier";
+        BMKAnnotationView *annotationView = (BMKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:reuseIndetifier];
+        if (annotationView == nil)
+        {
+            annotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation
+                                                           reuseIdentifier:reuseIndetifier];
+        }
+        annotationView.image = [UIImage imageNamed:@"icon_gcoding"];
+        return annotationView;
+    }
+    return nil;
 }
 
 - (void)buttonClickEvents:(UIButton *)sender{

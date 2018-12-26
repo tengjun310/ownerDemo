@@ -145,7 +145,7 @@
 }
 
 - (void)rightItemClick{
-    if ([self.title isEqualToString:[CommonUtils formatTime:currentDate FormatStyle:@"yyyy年MM月"]]) {
+    if ([self.title isEqualToString:[CommonUtils formatTime:[NSDate date] FormatStyle:@"yyyy年MM月"]]) {
         return;
     }
     
@@ -155,15 +155,34 @@
 }
 
 - (void)leftButtonClick{
+    NSString * currentDateStr = [CommonUtils formatTime:currentDate FormatStyle:@"yyyy-MM"];
+    NSString * todayDateStr = [CommonUtils formatTime:[NSDate date] FormatStyle:@"yyyy-MM"];
+    if ([currentDateStr isEqualToString:todayDateStr]) {
+        return;
+    }
     
-    
+    NSArray * list = [currentDateStr componentsSeparatedByString:@"-"];
+    int month = [[list lastObject] intValue];
+    month = month-1;
+    currentDate = [CommonUtils getFormatTime:[NSString stringWithFormat:@"%@-%02d",[list firstObject],month] FormatStyle:@"yyyy-MM"];
+    self.title = [CommonUtils formatTime:currentDate FormatStyle:@"yyyy年MM月"];
+    [self getDataWithDate];
 }
 
 - (void)rightButtonClick{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSCalendarUnit unit = NSCalendarUnitMonth;
+    NSDateComponents * delta = [calendar components:unit fromDate:[NSDate date] toDate:currentDate options:0];
+    if (delta.month == 11) {
+        return;
+    }
     
-    
+    NSDateComponents *lastMonthComps = [[NSDateComponents alloc] init];
+    [lastMonthComps setMonth:1];
+    currentDate = [calendar dateByAddingComponents:lastMonthComps toDate:currentDate options:0];
+    self.title = [CommonUtils formatTime:currentDate FormatStyle:@"yyyy年MM月"];
+    [self getDataWithDate];
 }
-
 
 #pragma mark -- request
 - (void)getDataWithDate{
@@ -233,7 +252,7 @@
     NSString * dayDateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd"];
     NSString * currentDayDateStr = [CommonUtils formatTime:currentDate FormatStyle:@"yyyy-MM-dd"];
 
-    if ([dayDateStr isEqualToString:currentDayDateStr]) {
+    if ([dayDateStr isEqualToString:currentDayDateStr] && [[CommonUtils formatTime:[NSDate date] FormatStyle:@"yyyy-MM"] isEqualToString:[CommonUtils formatTime:currentDate FormatStyle:@"yyyy-MM"]]) {
         cell.dipImageView.hidden = NO;
         cell.horImageView.hidden = YES;
         cell.verImageView.hidden = YES;
