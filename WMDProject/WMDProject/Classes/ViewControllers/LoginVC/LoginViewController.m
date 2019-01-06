@@ -319,7 +319,7 @@
             }
         }
         else{
-            hud.labelText = @"登录失败";
+            hud.labelText = msg;
         }
         [hud hide:YES afterDelay:HudShowTime];
     } FailBlock:^(NSError *error) {

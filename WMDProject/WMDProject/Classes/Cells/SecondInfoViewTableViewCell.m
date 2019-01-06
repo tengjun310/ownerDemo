@@ -74,31 +74,33 @@
     
     __weak typeof(self) weakSelf = self;
     
+    BOOL isIPhone5 = SCREEN_WIDTH>320?NO:YES;
+    
     [self.contentView addSubview:self.leftLabel];
     [self.leftLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.contentView).mas_offset(20);
-        make.left.mas_equalTo(weakSelf.contentView).mas_offset(15);
+        make.left.mas_equalTo(weakSelf.contentView).mas_offset(isIPhone5?8:15);
         make.bottom.mas_equalTo(weakSelf.contentView).mas_offset(-20);
         make.width.mas_offset(75);
     }];
     
     [self.contentView addSubview:self.warnLabel];
     [self.warnLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.leftLabel.mas_right).mas_offset(20);
+        make.left.mas_equalTo(weakSelf.leftLabel.mas_right).mas_offset(isIPhone5?10:20);
         make.centerY.mas_equalTo(weakSelf.contentView.mas_centerY);
         make.size.mas_equalTo(CGSizeMake(60, 30));
     }];
     
     [self.contentView addSubview:self.dateLabel];
     [self.dateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(weakSelf.warnLabel.mas_right).mas_offset(13);
+        make.left.mas_equalTo(weakSelf.warnLabel.mas_right).mas_offset(isIPhone5?6:13);
         make.centerY.mas_equalTo(weakSelf.contentView.mas_centerY);
         make.size.mas_equalTo(CGSizeMake(75, 35));
     }];
     
     [self.contentView addSubview:self.timeLabel];
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(weakSelf.contentView).mas_offset(-15);
+        make.right.mas_equalTo(weakSelf.contentView).mas_offset(isIPhone5?-8:-15);
         make.centerY.mas_equalTo(weakSelf.contentView.mas_centerY);
         make.size.mas_equalTo(CGSizeMake(75, 30));
     }];

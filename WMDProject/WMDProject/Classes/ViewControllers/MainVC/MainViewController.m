@@ -90,7 +90,7 @@
 
 #pragma mark -- main UI
 - (void)configuireMainUI{
-    self.dipImageView.image = [UIImage imageNamed:@"haishengwu"];
+    self.dipImageView.image = [UIImage imageNamed:@"qinglang.jpg"];
 
     __weak typeof(self) weakSelf = self;
 
@@ -111,7 +111,7 @@
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     }
     else{
-        self.dipImageView.image = [UIImage imageNamed:@"haishengwu"];
+        self.dipImageView.image = [UIImage imageNamed:@"qinglang.jpg"];
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     }
 }
@@ -154,48 +154,14 @@
 }
 
 - (void)tableviewDidSelectRow:(NSInteger)row Date:(nonnull NSDate *)date{
-    if (row == 0 || row == 2) {
-        ChartsViewController * vc = [[ChartsViewController alloc] init];
-        vc.today = NO;
-        vc.date = date;
-        vc.type = 1;
-        if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
-            vc.today = YES;
-        }
-        [self.navigationController pushViewController:vc animated:YES];
+    ChartsViewController * vc = [[ChartsViewController alloc] init];
+    vc.today = NO;
+    vc.date = date;
+    vc.type = (int)row+1;
+    if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
+        vc.today = YES;
     }
-    else if (row == 1){
-        //波高
-        ChartsViewController * vc = [[ChartsViewController alloc] init];
-        vc.today = NO;
-        vc.date = date;
-        vc.type = 3;
-        if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
-            vc.today = YES;
-        }
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-    else if (row == 3){
-        //海风
-        ChartsViewController * vc = [[ChartsViewController alloc] init];
-        vc.today = NO;
-        vc.date = date;
-        vc.type = 4;
-        if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
-            vc.today = YES;
-        }
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-    else if (row == 4){
-        ChartsViewController * vc = [[ChartsViewController alloc] init];
-        vc.today = NO;
-        vc.date = date;
-        vc.type = 2;
-        if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
-            vc.today = YES;
-        }
-        [self.navigationController pushViewController:vc animated:YES];
-    }
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark -- second view
@@ -220,19 +186,19 @@
         vc.titleStr = @"灾害性海浪";
     }
     else if ([infoModel.type isEqualToString:@"hx"]){
-        vc.type = WeatherInfoType_hailang;
+        vc.type = WeatherInfoType_haixiao;
         vc.titleStr = @"海啸";
     }
     else if ([infoModel.type isEqualToString:@"fb"]){
-        vc.type = WeatherInfoType_hailang;
+        vc.type = WeatherInfoType_fengbaochao;
         vc.titleStr = @"风暴物";
     }
     else if ([infoModel.type isEqualToString:@"hxw"]){
-        vc.type = WeatherInfoType_hailang;
+        vc.type = WeatherInfoType_haishengwu;
         vc.titleStr = @"海生物";
     }
     else{
-        vc.type = WeatherInfoType_hailang;
+        vc.type = WeatherInfoType_haibing;
         vc.titleStr = @"海冰";
     }
     [self.navigationController pushViewController:vc animated:YES];

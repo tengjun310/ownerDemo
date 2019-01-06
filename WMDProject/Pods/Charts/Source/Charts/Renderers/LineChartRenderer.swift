@@ -562,19 +562,38 @@ open class LineChartRenderer: LineRadarRenderer
                         continue
                     }
                     
-                    if dataSet.isDrawValuesEnabled {
-                        ChartUtils.drawText(
-                            context: context,
-                            text: formatter.stringForValue(
-                                e.y,
-                                entry: e,
-                                dataSetIndex: i,
-                                viewPortHandler: viewPortHandler),
-                            point: CGPoint(
-                                x: pt.x,
-                                y: pt.y - CGFloat(valOffset) - valueFont.lineHeight),
-                            align: .center,
-                            attributes: [NSAttributedString.Key.font: valueFont, NSAttributedString.Key.foregroundColor: dataSet.valueTextColorAt(j)])
+                    if dataSet.isDrawValuesEnabled {                        
+                        if e.tag == 1 {
+                            ChartUtils.drawText(
+                                context: context,
+                                text: formatter.stringForValue(
+                                    e.y,
+                                    entry: e,
+                                    dataSetIndex: i,
+                                    viewPortHandler: viewPortHandler),
+                                point: CGPoint(
+                                    x: pt.x,
+                                    y: pt.y - CGFloat(valOffset) - valueFont.lineHeight - 8),
+                                align: .center,
+                                attributes: [NSAttributedString.Key.font: valueFont, NSAttributedString.Key.foregroundColor: UIColor.red])
+                        }
+                        else if e.tag == 2 {
+                            ChartUtils.drawText(
+                                context: context,
+                                text: formatter.stringForValue(
+                                    e.y,
+                                    entry: e,
+                                    dataSetIndex: i,
+                                    viewPortHandler: viewPortHandler),
+                                point: CGPoint(
+                                    x: pt.x,
+                                    y: pt.y - CGFloat(valOffset) - valueFont.lineHeight - 8),
+                                align: .center,
+                                attributes: [NSAttributedString.Key.font: valueFont, NSAttributedString.Key.foregroundColor: UIColor.green])
+                        }
+                        else{
+                            
+                        }
                     }
                     
                     if let icon = e.icon, dataSet.isDrawIconsEnabled

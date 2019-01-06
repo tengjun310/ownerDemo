@@ -8,7 +8,7 @@
 
 #import "WebViewViewController.h"
 
-@interface WebViewViewController ()
+@interface WebViewViewController ()<UIWebViewDelegate>
 
 @property (nonatomic,strong) UIWebView * webView;
 
@@ -20,6 +20,7 @@
     if (!_webView) {
         _webView = [[UIWebView alloc] init];
         _webView.backgroundColor = [UIColor clearColor];
+        _webView.delegate = self;
     }
     
     return _webView;
@@ -40,6 +41,20 @@
     }];
 
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlStr]]];
+}
+
+
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    CGSize contentSize = webView.scrollView.contentSize;
+    CGSize viewSize = self.view.bounds.size;
+    
+    float rw = viewSize.width / contentSize.width;
+    
+    webView.scrollView.minimumZoomScale = rw;
+    webView.scrollView.maximumZoomScale = rw;
+    webView.scrollView.zoomScale = rw;
 }
 
 @end

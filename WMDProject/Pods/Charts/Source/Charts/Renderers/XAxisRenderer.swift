@@ -213,8 +213,8 @@ open class XAxisRenderer: AxisRendererBase
             position.y = 0.0
             position = position.applying(valueToPixelMatrix)
             
-            if viewPortHandler.isInBoundsX(position.x)
-            {
+//            if viewPortHandler.isInBoundsX(position.x)
+//            {
                 let label = xAxis.valueFormatter?.stringForValue(xAxis.entries[i], axis: xAxis) ?? ""
 
                 let labelns = label as NSString
@@ -247,7 +247,7 @@ open class XAxisRenderer: AxisRendererBase
                           constrainedToSize: labelMaxSize,
                           anchor: anchor,
                           angleRadians: labelRotationAngleRadians)
-            }
+//            }
         }
     }
     

@@ -22,6 +22,8 @@ open class ChartDataEntryBase: NSObject
     /// optional icon image
     @objc open var icon: NSUIImage?
     
+    @objc open var tag = Double(0.0)
+    
     public override required init()
     {
         super.init()
@@ -71,6 +73,7 @@ open class ChartDataEntryBase: NSObject
         self.data = data
     }
 
+
     // MARK: NSObject
     
     open override var description: String
@@ -90,6 +93,6 @@ extension ChartDataEntryBase/*: Equatable*/ {
         }
 
         return ((data == nil && object.data == nil) || (data?.isEqual(object.data) ?? false))
-            && y == object.y
+            && y == object.y && tag == object.tag
     }
 }

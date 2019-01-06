@@ -32,9 +32,9 @@
 		5F621C1921CE903000E800FF /* SeaWaterLevelInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F621C1821CE903000E800FF /* SeaWaterLevelInfoModel.m */; };
 		5F95792C21C9313D00D74620 /* SecondInfoViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */; };
 		5FE3EDC321CF62FF0032C07E /* SeaDataInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */; };
+		5FE918D621E19F010009DAC2 /* BalloonMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE918D521E19F010009DAC2 /* BalloonMarker.swift */; };
 		5FF8C0B421D1055A000F9840 /* ListInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF8C0B321D1055A000F9840 /* ListInfoViewController.m */; };
 		5FF8C0BA21D10800000F9840 /* ListInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF8C0B921D10800000F9840 /* ListInfoTableViewCell.m */; };
-		6644852A21C785F200A0D83D /* LineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644852721C785F200A0D83D /* LineViewController.m */; };
 		6644852D21C7860A00A0D83D /* WMDUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644852C21C7860A00A0D83D /* WMDUserManager.m */; };
 		664485EB21C7888900A0D83D /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644853021C7888800A0D83D /* AFHTTPSessionManager.m */; };
 		664485EC21C7888900A0D83D /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644853321C7888800A0D83D /* AFNetworkReachabilityManager.m */; };
@@ -136,7 +136,6 @@
 		66AD416A21CCD211002816FE /* SeaWarnDetailInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AD416921CCD211002816FE /* SeaWarnDetailInfoModel.m */; };
 		66B5369721C79C92001C846F /* HttpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5369521C79C92001C846F /* HttpClient.m */; };
 		66B5369C21C79DAA001C846F /* LeftMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5369921C79DAA001C846F /* LeftMenuViewController.m */; };
-		66B5369D21C79DAA001C846F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B5369B21C79DAA001C846F /* ViewController.m */; };
 		66D4807821C77CCA004E840A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 66D4806D21C77CCA004E840A /* AppDelegate.mm */; };
 		66D4807921C77CCA004E840A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66D4806E21C77CCA004E840A /* Assets.xcassets */; };
 		66D4807C21C77CCA004E840A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D4807221C77CCA004E840A /* main.m */; };
@@ -179,12 +178,12 @@
 		5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondInfoViewTableViewCell.m; sourceTree = "<group>"; };
 		5FE3EDC121CF62FF0032C07E /* SeaDataInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SeaDataInfoModel.h; sourceTree = "<group>"; };
 		5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SeaDataInfoModel.m; sourceTree = "<group>"; };
+		5FE918D521E19F010009DAC2 /* BalloonMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonMarker.swift; sourceTree = "<group>"; };
+		5FE918D921E1BF500009DAC2 /* WMDProject-Bridge-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "WMDProject-Bridge-Header.h"; path = "WMDProject/WMDProject-Bridge-Header.h"; sourceTree = SOURCE_ROOT; };
 		5FF8C0B221D1055A000F9840 /* ListInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListInfoViewController.h; sourceTree = "<group>"; };
 		5FF8C0B321D1055A000F9840 /* ListInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListInfoViewController.m; sourceTree = "<group>"; };
 		5FF8C0B821D10800000F9840 /* ListInfoTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListInfoTableViewCell.h; sourceTree = "<group>"; };
 		5FF8C0B921D10800000F9840 /* ListInfoTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListInfoTableViewCell.m; sourceTree = "<group>"; };
-		6644852721C785F200A0D83D /* LineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineViewController.m; sourceTree = "<group>"; };
-		6644852821C785F200A0D83D /* LineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineViewController.h; sourceTree = "<group>"; };
 		6644852B21C7860A00A0D83D /* WMDUserManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMDUserManager.h; sourceTree = "<group>"; };
 		6644852C21C7860A00A0D83D /* WMDUserManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMDUserManager.m; sourceTree = "<group>"; };
 		6644852F21C7888800A0D83D /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
@@ -386,7 +385,6 @@
 		664D6AB321C8F9A10004A544 /* FirstViewInfoTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewInfoTableViewCell.m; sourceTree = "<group>"; };
 		667D105121C7974900898812 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		667D105321C7974900898812 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		667DF71821C78095003C35FF /* WMDProject-Bridge-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WMDProject-Bridge-Header.h"; sourceTree = "<group>"; };
 		66AD416221CC8314002816FE /* WeatherInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeatherInfoModel.h; sourceTree = "<group>"; };
 		66AD416321CC8314002816FE /* WeatherInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeatherInfoModel.m; sourceTree = "<group>"; };
 		66AD416521CCC6A3002816FE /* SeaWranInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SeaWranInfoModel.h; sourceTree = "<group>"; };
@@ -397,8 +395,6 @@
 		66B5369621C79C92001C846F /* HttpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpClient.h; sourceTree = "<group>"; };
 		66B5369821C79DAA001C846F /* LeftMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftMenuViewController.h; sourceTree = "<group>"; };
 		66B5369921C79DAA001C846F /* LeftMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftMenuViewController.m; sourceTree = "<group>"; };
-		66B5369A21C79DAA001C846F /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		66B5369B21C79DAA001C846F /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		66D4806C21C77CCA004E840A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		66D4806D21C77CCA004E840A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		66D4806E21C77CCA004E840A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -543,10 +539,9 @@
 		6644852421C785B100A0D83D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				5FE918D921E1BF500009DAC2 /* WMDProject-Bridge-Header.h */,
 				6644865921C7919F00A0D83D /* LoginVC */,
 				6644865421C7919F00A0D83D /* MainVC */,
-				6644852821C785F200A0D83D /* LineViewController.h */,
-				6644852721C785F200A0D83D /* LineViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -919,8 +914,6 @@
 				664D6AA521C8E6280004A544 /* FuncationView */,
 				66B5369821C79DAA001C846F /* LeftMenuViewController.h */,
 				66B5369921C79DAA001C846F /* LeftMenuViewController.m */,
-				66B5369A21C79DAA001C846F /* ViewController.h */,
-				66B5369B21C79DAA001C846F /* ViewController.m */,
 				664D6A9921C8C1E40004A544 /* BaseViewController.h */,
 				664D6A9A21C8C1E40004A544 /* BaseViewController.m */,
 				664D6A9C21C8C2070004A544 /* MainViewController.h */,
@@ -951,6 +944,7 @@
 		664D6AA521C8E6280004A544 /* FuncationView */ = {
 			isa = PBXGroup;
 			children = (
+				5FE918D521E19F010009DAC2 /* BalloonMarker.swift */,
 				664D6AA621C8E65B0004A544 /* FirstInfoView.h */,
 				664D6AA721C8E65B0004A544 /* FirstInfoView.m */,
 				664D6AA921C8E66A0004A544 /* SecondInfoView.h */,
@@ -972,7 +966,6 @@
 				66D4806E21C77CCA004E840A /* Assets.xcassets */,
 				66D4806F21C77CCA004E840A /* Info.plist */,
 				66D4807221C77CCA004E840A /* main.m */,
-				667DF71821C78095003C35FF /* WMDProject-Bridge-Header.h */,
 				6644864A21C789D100A0D83D /* WMDProjectPrefixHeader.pch */,
 				6644864E21C78BD400A0D83D /* WMDProjectDefine.h */,
 			);
@@ -1191,7 +1184,6 @@
 				6644860721C7888900A0D83D /* NSData+ImageContentType.m in Sources */,
 				6644861C21C7888900A0D83D /* IQUIWindow+Hierarchy.m in Sources */,
 				6644861021C7888900A0D83D /* UIImage+GIF.m in Sources */,
-				66B5369D21C79DAA001C846F /* ViewController.m in Sources */,
 				664485FC21C7888900A0D83D /* MASConstraint.m in Sources */,
 				6644860B21C7888900A0D83D /* SDWebImageDownloader.m in Sources */,
 				6644860921C7888900A0D83D /* SDWebImageCompat.m in Sources */,
@@ -1199,7 +1191,6 @@
 				6644863721C7888900A0D83D /* UIScrollView+MJExtension.m in Sources */,
 				664485F521C7888900A0D83D /* NSArray+JSONModel.m in Sources */,
 				6644860021C7888900A0D83D /* MASViewConstraint.m in Sources */,
-				6644852A21C785F200A0D83D /* LineViewController.m in Sources */,
 				66AD416421CC8314002816FE /* WeatherInfoModel.m in Sources */,
 				6644860A21C7888900A0D83D /* SDWebImageDecoder.m in Sources */,
 				5FF8C0BA21D10800000F9840 /* ListInfoTableViewCell.m in Sources */,
@@ -1211,6 +1202,7 @@
 				6644863621C7888900A0D83D /* NSBundle+MJRefresh.m in Sources */,
 				6644862C21C7888900A0D83D /* MJRefreshAutoNormalFooter.m in Sources */,
 				6644862421C7888900A0D83D /* IQUIView+IQKeyboardToolbar.m in Sources */,
+				5FE918D621E19F010009DAC2 /* BalloonMarker.swift in Sources */,
 				5F621C1321CE7A6B00E800FF /* WebViewViewController.m in Sources */,
 				664485F021C7888900A0D83D /* AFURLSessionManager.m in Sources */,
 				5F0C823E21CA715E004EEB5C /* WeatherInfoTableViewCell.m in Sources */,
@@ -1386,7 +1378,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 2H9YX8GH2S;
+				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = 7VXU9HQ383;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WMDProject/Classes/3rdParts/BMKSDK",
@@ -1402,12 +1396,12 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/WMDProject/Classes/3rdParts/BMKSDK/thirdlibs",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.huaiye.weather;
+				PRODUCT_BUNDLE_IDENTIFIER = com.marine.weather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = HYProductor_dev;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/WMDProject-Bridge-Header.h";
+				PROVISIONING_PROFILE_SPECIFIER = WeatherDevPro;
+				SWIFT_OBJC_BRIDGING_HEADER = "WMDProject/WMDProject-Bridge-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1418,8 +1412,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEFINES_MODULE = NO;
+				DEVELOPMENT_TEAM = 7VXU9HQ383;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/WMDProject/Classes/3rdParts/BMKSDK",
@@ -1435,11 +1432,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/WMDProject/Classes/3rdParts/BMKSDK/thirdlibs",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.huaiye.weather;
+				PRODUCT_BUNDLE_IDENTIFIER = com.marine.weather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/WMDProject-Bridge-Header.h";
-				SWIFT_VERSION = 4.0;
+				PROVISIONING_PROFILE_SPECIFIER = WeatherADHocPro;
+				SWIFT_OBJC_BRIDGING_HEADER = "WMDProject/WMDProject-Bridge-Header.h";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

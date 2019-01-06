@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,copy) NSString <Optional>* wavespeed;
 
+@property (nonatomic,copy) NSString <Optional>* type;
+
 @end
 
 NS_ASSUME_NONNULL_END

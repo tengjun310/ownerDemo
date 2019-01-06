@@ -87,7 +87,6 @@
         _infoTableView = [[UITableView alloc] init];
         _infoTableView.delegate = self;
         _infoTableView.dataSource = self;
-        _infoTableView.rowHeight = 65;
         _infoTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _infoTableView.backgroundColor = [UIColor clearColor];
         _infoTableView.showsVerticalScrollIndicator = NO;
@@ -124,14 +123,14 @@
     [self addSubview:self.weateherInfoLabel];
     [self.weateherInfoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.titleLabel.mas_bottom).mas_offset(20);
-        make.left.mas_equalTo(weakSelf).mas_offset(45);
+        make.left.mas_equalTo(weakSelf).mas_offset(SCREEN_WIDTH>320?40:30);
         make.size.mas_equalTo(CGSizeMake(130, 140));
     }];
     
     [self addSubview:self.symbolLabel];
     [self.symbolLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.weateherInfoLabel.mas_top).mas_offset(15);
-        make.left.mas_equalTo(weakSelf.weateherInfoLabel.mas_centerX).mas_offset(30);
+        make.left.mas_equalTo(weakSelf.weateherInfoLabel.mas_centerX).mas_offset(5);
         make.size.mas_equalTo(CGSizeMake(60, 45));
     }];
     
@@ -145,19 +144,17 @@
     [self addSubview:self.addressInfoLabel];
     [self.addressInfoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.weateherInfoLabel.mas_bottom).mas_offset(60);
-        make.left.mas_equalTo(weakSelf).mas_offset(45);
+        make.left.mas_equalTo(weakSelf).mas_offset(SCREEN_WIDTH>320?45:30);
         make.size.mas_equalTo(CGSizeMake(200, 15));
     }];
     
     [self addSubview:self.infoTableView];
     [self.infoTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.addressInfoLabel.mas_bottom).mas_offset(10);
-        make.left.mas_equalTo(weakSelf).mas_offset(20);
-        make.right.mas_equalTo(weakSelf).mas_offset(-20);
+        make.left.mas_equalTo(weakSelf).mas_offset(SCREEN_WIDTH>320?20:10);
+        make.right.mas_equalTo(weakSelf).mas_offset(SCREEN_WIDTH>320?-20:-10);
         make.bottom.mas_equalTo(weakSelf).mas_offset(-10);
     }];
-    
-    [self configureTableViewHeaderView];
     
     self.infoTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getYujingListInfo)];
     
@@ -165,26 +162,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshShowWeather) name:@"refreshShowWeatherNotify" object:nil];
 }
 
-- (void)configureTableViewHeaderView{
-    UIView * headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH-40, 45)];
-    headerView.backgroundColor = [UIColor whiteColor];
-    
-    UILabel * label1 = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, WIDTH(headerView)-30, HEIGHT(headerView))];
-    label1.backgroundColor = [UIColor clearColor];
-    label1.font = [UIFont systemFontOfSize:11];
-    label1.textColor = kColorBlack;
-    label1.textAlignment = NSTextAlignmentRight;
-    label1.text = @"预警状态        发布时间      预计持续时间";
-    [headerView addSubview:label1];
-    
-    self.infoTableView.tableHeaderView = headerView;
-}
-
 - (void)refreshShowWeather{
-    NSString * str5 = [NSString stringWithFormat:@"%@",[WMDUserManager shareInstance].currentWeaInfoModel.nowtmp];
-    if ([str5 containsString:KTemperatureSymbol]) {
-        str5 = [str5 substringToIndex:str5.length-1];
-    }
+    NSString * str5 = [NSString stringWithFormat:@" %@",[WMDUserManager shareInstance].currentWeaInfoModel.nowtmp];
     NSString * str6 = [NSString stringWithFormat:@"%@ %@ %@ %@",[WMDUserManager shareInstance].currentWeaInfoModel.daytmp,[WMDUserManager shareInstance].currentWeaInfoModel.status,[WMDUserManager shareInstance].currentWeaInfoModel.wind,[WMDUserManager shareInstance].currentWeaInfoModel.windGrade];
     NSString * str7 = [NSString stringWithFormat:@"%@\n%@",str5,str6];
     NSRange range4 = [str7 rangeOfString:str6];
@@ -203,11 +182,17 @@
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     // 行间距
     paragraphStyle.lineSpacing = 10.0f;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
+    paragraphStyle.alignment = NSTextAlignmentLeft;
     [labelAttrStr addAttribute:NSParagraphStyleAttributeName
                          value:paragraphStyle
                          range:NSMakeRange(0, str5.length)];
     self.weateherInfoLabel.attributedText = labelAttrStr;
+    
+    if ([WMDUserManager shareInstance].currentWeaInfoModel.nowtmp.length > 2) {
+        [self.symbolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(self.weateherInfoLabel.mas_centerX).mas_offset(38);
+        }];
+    }
 }
 
 - (void)startSecondInfoViewDataRequest{
@@ -243,7 +228,7 @@
         if (succ) {
             NSDictionary * dic = (NSDictionary *)rspData;
             NSString * statusStr = [[dic objectForKey:@"content"] objectForKey:@"status"];
-            self.tipInfoLabel.text = statusStr;
+            self.tipInfoLabel.text = [statusStr substringToIndex:2];
         }
     } FailBlock:^(NSError *error) {
         self.tipInfoLabel.text = @"";
@@ -252,8 +237,16 @@
 
 #pragma mark -- tableView delegate & datasource
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 0) {
+        return 30;
+    }
+    
+    return 65;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return dataArray.count;
+    return dataArray.count+1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -263,43 +256,65 @@
         cell = [[SecondInfoViewTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     
-    if (indexPath.row%2 == 0) {
-        cell.backgroundColor = [UIColor hexChangeFloat:@"c0c4cb" alpha:.8];
+    cell.leftLabel.hidden = NO;
+    cell.warnLabel.textColor = kColorAppMain;
+    cell.warnLabel.font = kFontSize26;
+    cell.dateLabel.textColor = kColorAppMain;
+    cell.dateLabel.font = kFontSize26;
+    cell.timeLabel.textColor = kColorAppMain;
+    cell.timeLabel.font = kFontSize26;
+
+    if (indexPath.row == 0) {
+        cell.backgroundColor = [UIColor whiteColor];
+        cell.leftLabel.hidden = YES;
+        cell.warnLabel.textColor = kColorBlack;
+        cell.warnLabel.text = @"预警状态";
+        cell.dateLabel.textColor = kColorBlack;
+        cell.dateLabel.text = @"发布时间";
+        cell.timeLabel.textColor = kColorBlack;
+        cell.timeLabel.text = @"预计持续时间";
+        cell.warnLabel.font = kFontSize24;
+        cell.dateLabel.font = kFontSize24;
+        cell.timeLabel.font = [UIFont systemFontOfSize:11];
     }
     else{
-        cell.backgroundColor = [UIColor hexChangeFloat:@"a4abb1" alpha:.8];
+        if ((indexPath.row-1)%2 == 0) {
+            cell.backgroundColor = [UIColor hexChangeFloat:@"c0c4cb" alpha:.8];
+        }
+        else{
+            cell.backgroundColor = [UIColor hexChangeFloat:@"a4abb1" alpha:.8];
+        }
+        
+        cell.warnLabel.textColor = [UIColor whiteColor];
+        
+        SeaWranInfoModel * infoModel = [dataArray objectAtIndex:indexPath.row-1];
+        cell.leftLabel.text = infoModel.title;
+        cell.dateLabel.text = infoModel.publishTime;
+        //    cell.dateLabel.text = [NSString stringWithFormat:@"11月12号\n15:30"];
+        NSString * str = [NSString stringWithFormat:@"%@",infoModel.durTime];
+        str = [str stringByReplacingOccurrencesOfString:@"大于" withString:@">"];
+        str = [str stringByReplacingOccurrencesOfString:@"小于" withString:@"<"];
+        cell.timeLabel.text = str;
+        
+        cell.warnLabel.text = infoModel.status;
+        cell.warnLabel.textColor = [UIColor whiteColor];
+        if ([infoModel.status isEqualToString:@"红色"]) {
+            cell.warnLabel.backgroundColor = kColorRed;
+        }
+        else if ([infoModel.status isEqualToString:@"蓝色"]){
+            cell.warnLabel.backgroundColor = kColorAppMain;
+        }
+        else if ([infoModel.status isEqualToString:@"橙色"]){
+            cell.warnLabel.backgroundColor = kColorOrige;
+        }
+        else if ([infoModel.status isEqualToString:@"黄色"]){
+            cell.warnLabel.backgroundColor = kColorYellow;
+        }
+        else {
+            cell.warnLabel.backgroundColor = [UIColor whiteColor];
+            cell.warnLabel.textColor = kColorBlack;
+        }
     }
-    
-    cell.warnLabel.textColor = [UIColor whiteColor];
-    
-    SeaWranInfoModel * infoModel = [dataArray objectAtIndex:indexPath.row];
-    cell.leftLabel.text = infoModel.title;
-    cell.dateLabel.text = infoModel.publishTime;
-    //    cell.dateLabel.text = [NSString stringWithFormat:@"11月12号\n15:30"];
-    NSString * str = [NSString stringWithFormat:@"%@",infoModel.durTime];
-    str = [str stringByReplacingOccurrencesOfString:@"大于" withString:@">"];
-    str = [str stringByReplacingOccurrencesOfString:@"小于" withString:@"<"];
-    cell.timeLabel.text = str;
-
-    cell.warnLabel.text = infoModel.status;
-    cell.warnLabel.textColor = [UIColor whiteColor];
-    if ([infoModel.status isEqualToString:@"红色"]) {
-        cell.warnLabel.backgroundColor = kColorRed;
-    }
-    else if ([infoModel.status isEqualToString:@"蓝色"]){
-        cell.warnLabel.backgroundColor = kColorAppMain;
-    }
-    else if ([infoModel.status isEqualToString:@"橙色"]){
-        cell.warnLabel.backgroundColor = kColorOrige;
-    }
-    else if ([infoModel.status isEqualToString:@"黄色"]){
-        cell.warnLabel.backgroundColor = kColorYellow;
-    }
-    else {
-        cell.warnLabel.backgroundColor = [UIColor whiteColor];
-        cell.warnLabel.textColor = kColorBlack;
-    }
-    
     
     return cell;
 }

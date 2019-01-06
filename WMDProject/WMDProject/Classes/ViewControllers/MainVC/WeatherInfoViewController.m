@@ -55,7 +55,7 @@
         imageStr = @"haixiao";
     }
     else if (self.type == WeatherInfoType_fengbaochao){
-        imageStr = @"haixiao";
+        imageStr = @"fengbaochao";
     }
     else if (self.type == WeatherInfoType_haishengwu){
         imageStr = @"haishengwu";
@@ -147,10 +147,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     SeaWarnDetailInfoModel * infoModel = [dataArray objectAtIndex:indexPath.row];
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:infoModel.url]];
 
-    WebViewViewController * vc = [[WebViewViewController alloc] init];
-    vc.urlStr = infoModel.url;
-    [self.navigationController pushViewController:vc animated:YES];
+//    WebViewViewController * vc = [[WebViewViewController alloc] init];
+//    vc.urlStr = infoModel.url;
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

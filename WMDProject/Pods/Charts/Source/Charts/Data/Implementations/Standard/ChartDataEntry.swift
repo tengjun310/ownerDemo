@@ -45,6 +45,15 @@ open class ChartDataEntry: ChartDataEntryBase
         self.data = data
     }
     
+    @objc public init(x: Double, y: Double, data: AnyObject?, tag: Double)
+    {
+        super.init(y: y)
+        
+        self.x = x
+        self.tag = tag;
+        self.data = data
+    }
+    
     /// An Entry represents one single entry in the chart.
     /// - parameter x: the x value
     /// - parameter y: the y value (the actual value of the entry)
@@ -86,6 +95,7 @@ open class ChartDataEntry: ChartDataEntryBase
         copy.x = x
         copy.y = y
         copy.data = data
+        copy.tag = tag
         
         return copy
     }
@@ -104,5 +114,6 @@ extension ChartDataEntry/*: Equatable*/ {
         return ((data == nil && object.data == nil) || (data?.isEqual(object.data) ?? false))
             && y == object.y
             && x == object.x
+            && tag == object.tag
     }
 }

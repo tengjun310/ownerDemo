@@ -65,7 +65,7 @@ static AFHTTPSessionManager *manager ;
         NSDictionary * rspDic = (NSDictionary *)responseObject;
         id value = [rspDic objectForKey:@"code"];
         if ([value intValue] != 0) {
-            successblock(NO,[rspDic objectForKey:@"msg"],rspDic);
+            successblock(NO,[rspDic objectForKey:@"message"],rspDic);
             return;
         }
         successblock(YES,@"",rspDic);

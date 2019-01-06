@@ -184,12 +184,18 @@
         make.bottom.mas_equalTo(weakSelf).mas_offset(-20);
         make.left.right.mas_equalTo(weakSelf);
     }];
+    
+    self.infoTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(startWeatherInfoRequest)];
 }
 
 - (void)startWeatherInfoRequest{
+    weatherInfoDic = nil;
     weatherInfoDic = [NSMutableDictionary  dictionary];
+    seaStreamInfoDic = nil;
     seaStreamInfoDic = [NSMutableDictionary  dictionary];
+    seaInfoDic = nil;
     seaInfoDic = [NSMutableDictionary  dictionary];
+    seaWaterLevelInfoDic = nil;
     seaWaterLevelInfoDic = [NSMutableDictionary  dictionary];
 
     nowDate = [NSDate date];
@@ -200,6 +206,7 @@
     nextDate3 = [NSDate dateWithTimeIntervalSinceNow:3*24*60*60];
     NSString * nextDateStr3 = [CommonUtils formatTime:nextDate3 FormatStyle:@"MM月dd日"];
     
+    [self.daysSegmentedControl removeAllSegments];
     [self.daysSegmentedControl insertSegmentWithTitle:@"今天" atIndex:0 animated:NO];
     [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr1 atIndex:1 animated:NO];
     [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr2 atIndex:2 animated:NO];
@@ -273,6 +280,12 @@
                          value:paragraphStyle
                          range:NSMakeRange(0, str7.length)];
     self.weatherInfoLabel.attributedText = labelAttrStr;
+    
+    if (model.nowtmp.length > 2) {
+        [self.symbolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(self.weatherInfoLabel.mas_centerX).mas_offset(38);
+        }];
+    }
 }
 
 #pragma mark -- button events
@@ -348,7 +361,7 @@
     }
     
     //水位数据
-    NSArray * arr = [seaStreamInfoDic objectForKey:date];
+    NSArray * arr = [seaWaterLevelInfoDic objectForKey:date];
     if (IsNilNull(arr) || arr.count == 0) {
         [self getSeaWaterLevel:date];
     }
@@ -375,8 +388,9 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshShowWeatherNotify" object:nil];
             }
         }
+        [self.infoTableView.mj_header endRefreshing];
     } FailBlock:^(NSError *error) {
-        
+        [self.infoTableView.mj_header endRefreshing];
     }];
 }
 
@@ -509,20 +523,20 @@
         
         if (arr.count == 1) {
             SeaWaterLevelInfoModel * model = [arr lastObject];
-            str1 = [NSString stringWithFormat:@"%@ %@米",model.tidetime,model.tideheight];
+            str1 = [NSString stringWithFormat:@"%@ %0.2f米",model.tidetime,[model.tideheight floatValue]];
             NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str1];
             NSTextAttachment *attch = [[NSTextAttachment alloc] init];
             attch.image = [UIImage imageNamed:[model.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
             attch.bounds = CGRectMake(0, 0, 10, 10);
             NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
-            [attrStr insertAttributedString:string atIndex:0];            
+            [attrStr insertAttributedString:string atIndex:0];
             cell.rightLabel.attributedText = attrStr;
         }
         else if (arr.count == 2){
             SeaWaterLevelInfoModel * model1 = [arr lastObject];
             SeaWaterLevelInfoModel * model2 = [arr firstObject];
-            str1 = [NSString stringWithFormat:@"%@ %@米",model1.tidetime,model1.tideheight];
-            str2 = [NSString stringWithFormat:@"%@ %@米",model2.tidetime,model2.tideheight];
+            str1 = [NSString stringWithFormat:@"%@ %0.2f米",model1.tidetime,[model1.tideheight floatValue]];
+            str2 = [NSString stringWithFormat:@"%@ %0.2f米",model2.tidetime,[model2.tideheight floatValue]];
             NSString * str = [NSString stringWithFormat:@"%@\n%@",str1,str2];
 
             NSRange range2 = [str rangeOfString:str2];
@@ -566,9 +580,9 @@
             SeaWaterLevelInfoModel * model2 = [arr objectAtIndex:arr.count-2];
             SeaWaterLevelInfoModel * model3 = [arr firstObject];
 
-            str1 = [NSString stringWithFormat:@"%@ %@米",model1.tidetime,model1.tideheight];
-            str2 = [NSString stringWithFormat:@"%@ %@米",model2.tidetime,model2.tideheight];
-            str3 = [NSString stringWithFormat:@"%@ %@米",model3.tidetime,model3.tideheight];
+            str1 = [NSString stringWithFormat:@"%@ %0.2f米",model1.tidetime,[model1.tideheight floatValue]];
+            str2 = [NSString stringWithFormat:@"%@ %0.2f米",model2.tidetime,[model2.tideheight floatValue]];
+            str3 = [NSString stringWithFormat:@"%@ %0.2f米",model3.tidetime,[model3.tideheight floatValue]];
 
             NSString * str = [NSString stringWithFormat:@"%@\n%@\n%@",str1,str2,str3];
             NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
@@ -617,10 +631,10 @@
             SeaWaterLevelInfoModel * model2 = [arr objectAtIndex:arr.count-2];
             SeaWaterLevelInfoModel * model3 = [arr objectAtIndex:arr.count-3];
             SeaWaterLevelInfoModel * model4 = [arr objectAtIndex:arr.count-4];
-            str1 = [NSString stringWithFormat:@"%@ %@米",model1.tidetime,model1.tideheight];
-            str2 = [NSString stringWithFormat:@"%@ %@米",model2.tidetime,model2.tideheight];
-            str3 = [NSString stringWithFormat:@"%@ %@米",model3.tidetime,model3.tideheight];
-            str4 = [NSString stringWithFormat:@"%@ %@米",model4.tidetime,model4.tideheight];
+            str1 = [NSString stringWithFormat:@"%@ %0.2f米",model1.tidetime,[model1.tideheight floatValue]];
+            str2 = [NSString stringWithFormat:@"%@ %0.2f米",model2.tidetime,[model2.tideheight floatValue]];
+            str3 = [NSString stringWithFormat:@"%@ %0.2f米",model3.tidetime,[model3.tideheight floatValue]];
+            str4 = [NSString stringWithFormat:@"%@ %0.2f米",model4.tidetime,[model3.tideheight floatValue]];
 
             NSString * str = [NSString stringWithFormat:@"%@\n%@\n%@\n%@",str1,str2,str3,str4];
             NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];

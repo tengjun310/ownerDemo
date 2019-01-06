@@ -8,7 +8,6 @@
 
 #import "LeftMenuViewController.h"
 #import "MenuTableViewCell.h"
-#import "ViewController.h"
 
 @interface LeftMenuViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -173,12 +172,13 @@
 }
 
 #pragma mark -- button events
-- (void)logoutButtonClick{    
+- (void)logoutButtonClick{
     MBProgressHUD * hud = [CommonUtils showLoadingViewInWindowWithTitle:@""];
     
     NSString * str = [NSString stringWithFormat:@"user/logout?phNumber=%@",[WMDUserManager shareInstance].userName];
     [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
         if (succ) {
+            [[DYLeftSlipManager sharedManager] dismissLeftView];
             [[NSNotificationCenter defaultCenter] postNotificationName:UserLogoutSuccessNotify object:nil];
         }
         else{
@@ -265,11 +265,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [[DYLeftSlipManager sharedManager] dismissLeftView];
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    if (indexPath.row == 2) {
-        AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        ViewController * vc = [[ViewController alloc] init];
-        [appDelegate.mainViewController pushViewController:vc animated:YES];
-    }
 }
 
 - (void)didReceiveMemoryWarning {

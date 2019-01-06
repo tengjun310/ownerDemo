@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,copy) NSString <Optional>* waveheight;
 
+@property (nonatomic,copy) NSString <Optional>* type;//2 波高  3 海温 4 海风
+
 @end
 
 NS_ASSUME_NONNULL_END
