@@ -63,6 +63,6 @@
 
 #pragma mark - UserDefault Key
 #define KDefaultLoginNameKey        @"KDefaultLoginNameKey"
-#define KDefaultPasswordKey         @"KDefaultPasswordKey"
+#define KDefaultUserTokenKey         @"KDefaultUserTokenKey"
 
 #endif /* WMDProjectDefine_h */

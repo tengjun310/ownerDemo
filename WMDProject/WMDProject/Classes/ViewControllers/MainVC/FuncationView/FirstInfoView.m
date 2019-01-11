@@ -256,7 +256,8 @@
     if ([str5 containsString:KTemperatureSymbol]) {
         str5 = [str5 substringToIndex:str5.length-1];
     }
-    NSString * str6 = [NSString stringWithFormat:@"%@ %@ %@ %@",model.daytmp,model.status,model.wind,model.windGrade];
+    NSString * str6 = [NSString stringWithFormat:@"%@ %@ %@ %@ %@",model.daytmp,model.status,model.wind,model.windGrade,model.seaLevel];
+
     NSString * str7 = [NSString stringWithFormat:@"%@\n%@",str5,str6];
     
     NSRange range4 = [str7 rangeOfString:str6];
@@ -284,6 +285,16 @@
     if (model.nowtmp.length > 2) {
         [self.symbolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(self.weatherInfoLabel.mas_centerX).mas_offset(38);
+        }];
+    }
+    else if (model.nowtmp.length == 1){
+        [self.symbolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(self.weatherInfoLabel.mas_centerX).mas_offset(15);
+        }];
+    }
+    else{
+        [self.symbolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(self.weatherInfoLabel.mas_centerX).mas_offset(30);
         }];
     }
 }
@@ -335,6 +346,7 @@
         [self getWeatherInfo:date];
     }
     else{
+        [WMDUserManager shareInstance].selectWeaInfoModel = model;
         [self refreshWeatherInfoUI:date];
     }
     
@@ -380,6 +392,7 @@
             NSDictionary * dic = (NSDictionary *)rspData;
             NSDictionary * contentDic = [dic objectForKey:@"content"];
             WeatherInfoModel * infoModel = [[WeatherInfoModel alloc] initWithDictionary:contentDic error:nil];
+            [WMDUserManager shareInstance].selectWeaInfoModel = infoModel;
             [self->weatherInfoDic setObject:infoModel forKey:date];
             [self refreshWeatherInfoUI:date];
             if (date == self->nowDate) {
@@ -688,7 +701,7 @@
     else if (indexPath.row == 1){
         SeaDataInfoModel * infoModel = [seaInfoDic objectForKey:date];
         cell.logoImageView.image = [UIImage imageNamed:@"icon_small_bogao"];
-        cell.leftLabel.text = @"波高";
+        cell.leftLabel.text = @"浪高";
         cell.rightLabel.text = [NSString stringWithFormat:@"%@米",infoModel.waveheight];
     }
     else if (indexPath.row == 2){

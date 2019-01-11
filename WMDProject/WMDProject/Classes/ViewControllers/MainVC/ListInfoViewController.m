@@ -10,6 +10,7 @@
 #import "ListInfoTableViewCell.h"
 #import "SeaWaterLevelInfoModel.h"
 #import "SeaStreamInfoModel.h"
+#import "SeaDataInfoModel.h"
 
 
 @interface ListInfoViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -76,7 +77,7 @@
     label1.font = kFontSize28;
     [view addSubview:label1];
     
-    UILabel * label2 = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-105, 0, 60, 25)];
+    UILabel * label2 = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH-145, 0, 100, 25)];
     label2.textColor = kColorBlack;
     label2.textAlignment = NSTextAlignmentRight;
     label2.font = kFontSize28;
@@ -88,11 +89,15 @@
     }
     else if (self.type == 2){
         label1.text = @"时间";
-        label2.text = @"流速";
+        label2.text = @"流速/流向";
+    }
+    else if (self.type == 3){
+        label1.text = @"时间";
+        label2.text = @"流向";
     }
     else{
         label1.text = @"时间";
-        label2.text = @"流向";
+        label2.text = @"浪高";
     }
     
     return view;
@@ -122,16 +127,17 @@
         cell.infoLabel.text = [CommonUtils formatTime:date FormatStyle:@"yyyy年MM月dd日 HH:mm"];
         cell.timeLabel.text = model.tideheight;
     }
+    else if (self.type == 4){
+        SeaDataInfoModel * model = [self.dataArray objectAtIndex:indexPath.row];
+        NSDate * date = [CommonUtils getFormatTime:model.forecasttime FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
+        cell.infoLabel.text = [CommonUtils formatTime:date FormatStyle:@"yyyy年MM月dd日 HH:mm"];
+        cell.timeLabel.text = [NSString stringWithFormat:@"%@m %@",model.waveheight,model.wavedfrom];
+    }
     else{
         SeaStreamInfoModel * model = [self.dataArray objectAtIndex:indexPath.row];
         NSDate * date = [CommonUtils getFormatTime:model.forecastdate FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
         cell.infoLabel.text = [CommonUtils formatTime:date FormatStyle:@"yyyy年MM月dd日 HH:mm"];
-        if (self.type == 2) {
-            cell.timeLabel.text = model.wavespeed;
-        }
-        else{
-            cell.timeLabel.text = model.wavedfrom;
-        }
+        cell.timeLabel.text = [NSString stringWithFormat:@"%@m/s %@°",model.wavespeed,model.wavedfrom];
     }
     
     

@@ -31,8 +31,10 @@
 		5F621C1621CE82C800E800FF /* SeaStreamInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F621C1521CE82C800E800FF /* SeaStreamInfoModel.m */; };
 		5F621C1921CE903000E800FF /* SeaWaterLevelInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F621C1821CE903000E800FF /* SeaWaterLevelInfoModel.m */; };
 		5F95792C21C9313D00D74620 /* SecondInfoViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */; };
+		5FDAE2C721E8A4F8002A07DE /* SpeedInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FDAE2C621E8A4F8002A07DE /* SpeedInfoModel.m */; };
 		5FE3EDC321CF62FF0032C07E /* SeaDataInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */; };
 		5FE918D621E19F010009DAC2 /* BalloonMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE918D521E19F010009DAC2 /* BalloonMarker.swift */; };
+		5FF73CA221E79AF100BF842D /* DirectionInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF73CA121E79AF100BF842D /* DirectionInfoModel.m */; };
 		5FF8C0B421D1055A000F9840 /* ListInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF8C0B321D1055A000F9840 /* ListInfoViewController.m */; };
 		5FF8C0BA21D10800000F9840 /* ListInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF8C0B921D10800000F9840 /* ListInfoTableViewCell.m */; };
 		6644852D21C7860A00A0D83D /* WMDUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6644852C21C7860A00A0D83D /* WMDUserManager.m */; };
@@ -176,10 +178,14 @@
 		5F621C1821CE903000E800FF /* SeaWaterLevelInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SeaWaterLevelInfoModel.m; sourceTree = "<group>"; };
 		5F95792A21C9313D00D74620 /* SecondInfoViewTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondInfoViewTableViewCell.h; sourceTree = "<group>"; };
 		5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondInfoViewTableViewCell.m; sourceTree = "<group>"; };
+		5FDAE2C521E8A4F8002A07DE /* SpeedInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpeedInfoModel.h; sourceTree = "<group>"; };
+		5FDAE2C621E8A4F8002A07DE /* SpeedInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpeedInfoModel.m; sourceTree = "<group>"; };
 		5FE3EDC121CF62FF0032C07E /* SeaDataInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SeaDataInfoModel.h; sourceTree = "<group>"; };
 		5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SeaDataInfoModel.m; sourceTree = "<group>"; };
 		5FE918D521E19F010009DAC2 /* BalloonMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonMarker.swift; sourceTree = "<group>"; };
 		5FE918D921E1BF500009DAC2 /* WMDProject-Bridge-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "WMDProject-Bridge-Header.h"; path = "WMDProject/WMDProject-Bridge-Header.h"; sourceTree = SOURCE_ROOT; };
+		5FF73CA021E79AF100BF842D /* DirectionInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DirectionInfoModel.h; sourceTree = "<group>"; };
+		5FF73CA121E79AF100BF842D /* DirectionInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DirectionInfoModel.m; sourceTree = "<group>"; };
 		5FF8C0B221D1055A000F9840 /* ListInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListInfoViewController.h; sourceTree = "<group>"; };
 		5FF8C0B321D1055A000F9840 /* ListInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListInfoViewController.m; sourceTree = "<group>"; };
 		5FF8C0B821D10800000F9840 /* ListInfoTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListInfoTableViewCell.h; sourceTree = "<group>"; };
@@ -532,6 +538,10 @@
 				5F621C1821CE903000E800FF /* SeaWaterLevelInfoModel.m */,
 				5FE3EDC121CF62FF0032C07E /* SeaDataInfoModel.h */,
 				5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */,
+				5FF73CA021E79AF100BF842D /* DirectionInfoModel.h */,
+				5FF73CA121E79AF100BF842D /* DirectionInfoModel.m */,
+				5FDAE2C521E8A4F8002A07DE /* SpeedInfoModel.h */,
+				5FDAE2C621E8A4F8002A07DE /* SpeedInfoModel.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1179,6 +1189,7 @@
 				6644861E21C7888900A0D83D /* IQKeyboardReturnKeyHandler.m in Sources */,
 				664D6AA121C8DCBC0004A544 /* ChartsViewController.m in Sources */,
 				6644860321C7888900A0D83D /* View+MASAdditions.m in Sources */,
+				5FDAE2C721E8A4F8002A07DE /* SpeedInfoModel.m in Sources */,
 				664485F421C7888900A0D83D /* JSONModelError.m in Sources */,
 				5F621C1921CE903000E800FF /* SeaWaterLevelInfoModel.m in Sources */,
 				6644860721C7888900A0D83D /* NSData+ImageContentType.m in Sources */,
@@ -1223,6 +1234,7 @@
 				664D6A9521C88C2F0004A544 /* MenuTableViewCell.m in Sources */,
 				6644864821C788EA00A0D83D /* CommonUtils.m in Sources */,
 				6644861321C7888900A0D83D /* UIImageView+WebCache.m in Sources */,
+				5FF73CA221E79AF100BF842D /* DirectionInfoModel.m in Sources */,
 				6644864221C7889200A0D83D /* UIColor+extend.m in Sources */,
 				6644862021C7888900A0D83D /* IQTextView.m in Sources */,
 				6644862D21C7888900A0D83D /* MJRefreshAutoStateFooter.m in Sources */,

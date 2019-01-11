@@ -74,7 +74,7 @@
     [self.infoTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.view).mas_offset(180);
         make.left.right.mas_equalTo(weakSelf.view);
-        make.bottom.mas_equalTo(weakSelf.view).mas_offset(-15);
+        make.bottom.mas_equalTo(weakSelf.view);
     }];
     
     self.infoTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getWeatherDetailInfo)];

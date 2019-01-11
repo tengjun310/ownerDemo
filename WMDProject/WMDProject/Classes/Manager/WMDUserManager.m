@@ -28,9 +28,15 @@
 
 #pragma mark --
 
+- (void)setTokenId:(NSString *)tokenId{
+    _tokenId = tokenId;
+    [[NSUserDefaults standardUserDefaults] setObject:tokenId forKey:KDefaultUserTokenKey];
+}
 
-
-
+- (void)setUserName:(NSString *)userName{
+    _userName = userName;
+    [[NSUserDefaults standardUserDefaults] setObject:userName forKey:KDefaultLoginNameKey];
+}
 
 
 @end

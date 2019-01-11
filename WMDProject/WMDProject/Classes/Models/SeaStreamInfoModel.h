@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,copy) NSString <Optional>* wavespeed;
 
+@property (nonatomic,copy) NSString <Optional>* imageName;
+
 @property (nonatomic,copy) NSString <Optional>* type;
 
 @end

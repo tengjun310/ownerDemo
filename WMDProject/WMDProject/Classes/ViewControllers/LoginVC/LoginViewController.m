@@ -136,8 +136,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [self configUI];
+    
+//    NSString * token = [[NSUserDefaults standardUserDefaults] objectForKey:KDefaultUserTokenKey];
+//    if (token.length != 0) {
+//        [self autoLogin:token];
+//    }
+}
+
+- (void)autoLogin:(NSString *)token{
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

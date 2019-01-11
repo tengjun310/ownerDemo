@@ -22,6 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,copy) NSString <Optional>* windGrade;
 
+@property (nonatomic,copy) NSString <Optional>* imageName;
+
+@property (nonatomic,copy) NSString <Optional>* seaLevel;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

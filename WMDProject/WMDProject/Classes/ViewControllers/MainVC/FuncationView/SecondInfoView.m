@@ -63,7 +63,7 @@
         _tipInfoLabel.backgroundColor = [UIColor clearColor];
         _tipInfoLabel.textAlignment = NSTextAlignmentRight;
         _tipInfoLabel.textColor = [UIColor whiteColor];
-        _tipInfoLabel.font = [UIFont systemFontOfSize:30];
+        _tipInfoLabel.font = [UIFont systemFontOfSize:20];
     }
     
     return _tipInfoLabel;
@@ -138,7 +138,7 @@
     [self.tipInfoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(weakSelf.weateherInfoLabel.mas_bottom).mas_offset(-15);
         make.right.mas_equalTo(weakSelf).mas_offset(-25);
-        make.size.mas_equalTo(CGSizeMake(65, 30));
+        make.size.mas_equalTo(CGSizeMake(150, 30));
     }];
 
     [self addSubview:self.addressInfoLabel];
@@ -164,7 +164,7 @@
 
 - (void)refreshShowWeather{
     NSString * str5 = [NSString stringWithFormat:@" %@",[WMDUserManager shareInstance].currentWeaInfoModel.nowtmp];
-    NSString * str6 = [NSString stringWithFormat:@"%@ %@ %@ %@",[WMDUserManager shareInstance].currentWeaInfoModel.daytmp,[WMDUserManager shareInstance].currentWeaInfoModel.status,[WMDUserManager shareInstance].currentWeaInfoModel.wind,[WMDUserManager shareInstance].currentWeaInfoModel.windGrade];
+    NSString * str6 = [NSString stringWithFormat:@"%@ %@ %@ %@ %@",[WMDUserManager shareInstance].currentWeaInfoModel.daytmp,[WMDUserManager shareInstance].currentWeaInfoModel.status,[WMDUserManager shareInstance].currentWeaInfoModel.wind,[WMDUserManager shareInstance].currentWeaInfoModel.windGrade,[WMDUserManager shareInstance].currentWeaInfoModel.seaLevel];
     NSString * str7 = [NSString stringWithFormat:@"%@\n%@",str5,str6];
     NSRange range4 = [str7 rangeOfString:str6];
     
@@ -191,6 +191,16 @@
     if ([WMDUserManager shareInstance].currentWeaInfoModel.nowtmp.length > 2) {
         [self.symbolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(self.weateherInfoLabel.mas_centerX).mas_offset(38);
+        }];
+    }
+    else if ([WMDUserManager shareInstance].currentWeaInfoModel.nowtmp.length == 1){
+        [self.symbolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(self.weateherInfoLabel.mas_centerX).mas_offset(-15);
+        }];
+    }
+    else{
+        [self.symbolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(self.weateherInfoLabel.mas_centerX).mas_offset(5);
         }];
     }
 }
@@ -228,7 +238,7 @@
         if (succ) {
             NSDictionary * dic = (NSDictionary *)rspData;
             NSString * statusStr = [[dic objectForKey:@"content"] objectForKey:@"status"];
-            self.tipInfoLabel.text = [statusStr substringToIndex:2];
+            self.tipInfoLabel.text = statusStr;
         }
     } FailBlock:^(NSError *error) {
         self.tipInfoLabel.text = @"";
@@ -321,7 +331,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([self.delegate respondsToSelector:@selector(secondInfoViewTableviewDidSelect:)]) {
-        SeaWranInfoModel * model = [dataArray objectAtIndex:indexPath.row];
+        SeaWranInfoModel * model = [dataArray objectAtIndex:indexPath.row-1];
         [self.delegate secondInfoViewTableviewDidSelect:model];
     }
 }

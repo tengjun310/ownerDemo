@@ -73,8 +73,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [self configuireMainUI];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshShowWeather) name:@"refreshShowWeatherNotify" object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -88,9 +91,18 @@
     self.navigationController.navigationBar.hidden = NO;
 }
 
+- (void)refreshShowWeather{
+    self.dipImageView.image = [UIImage imageNamed:[WMDUserManager shareInstance].selectWeaInfoModel.imageName];
+}
+
 #pragma mark -- main UI
 - (void)configuireMainUI{
-    self.dipImageView.image = [UIImage imageNamed:@"qinglang.jpg"];
+    if ([[CommonUtils formatTime:[NSDate date] FormatStyle:@"HH"] intValue] >= 18 || [[CommonUtils formatTime:[NSDate date] FormatStyle:@"HH"] intValue] <= 6) {
+        self.dipImageView.image = [UIImage imageNamed:@"defaultNight"];
+    }
+    else{
+        self.dipImageView.image = [UIImage imageNamed:@"defaultDay"];
+    }
 
     __weak typeof(self) weakSelf = self;
 
@@ -107,11 +119,11 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (scrollView.contentOffset.x >= SCREEN_WIDTH && scrollView.contentOffset.x < SCREEN_WIDTH*2) {
-        self.dipImageView.image = [UIImage imageNamed:@"bg_xingkong"];
+        self.dipImageView.image = [UIImage imageNamed:[WMDUserManager shareInstance].currentWeaInfoModel.imageName];
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     }
     else{
-        self.dipImageView.image = [UIImage imageNamed:@"qinglang.jpg"];
+        self.dipImageView.image = [UIImage imageNamed:[WMDUserManager shareInstance].selectWeaInfoModel.imageName];
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
     }
 }
@@ -150,7 +162,7 @@
 }
 
 - (void)firstViewSegmentedControlClick:(UISegmentedControl *)sender{
-    
+    [self refreshShowWeather];
 }
 
 - (void)tableviewDidSelectRow:(NSInteger)row Date:(nonnull NSDate *)date{

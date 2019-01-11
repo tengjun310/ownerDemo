@@ -10,6 +10,9 @@
 #import "MenuTableViewCell.h"
 
 @interface LeftMenuViewController ()<UITableViewDelegate,UITableViewDataSource>
+{
+    int status;
+}
 
 @property (nonatomic,strong) UITableView * infoTableView;
 
@@ -104,6 +107,7 @@
     [super viewDidLoad];
 
     [self configureUI];
+    [self getMsgButtonStatus];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshShowWeather) name:@"refreshShowWeatherNotify" object:nil];
@@ -169,6 +173,34 @@
 - (void)refreshShowWeather{
     NSIndexPath * path = [NSIndexPath indexPathForRow:0 inSection:0];
     [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)getMsgButtonStatus{
+    NSString * str = [NSString stringWithFormat:@"user/msgSwitch?phNumber=%@",[WMDUserManager shareInstance].userName];
+    [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+        if (succ) {
+            NSDictionary * dic = (NSDictionary *)rspData;
+            NSDictionary * contentDic = [dic objectForKey:@"content"];
+            self->status = [[contentDic objectForKey:@"status"] intValue];
+            NSIndexPath * path = [NSIndexPath indexPathForRow:1 inSection:0];
+            [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    } FailBlock:^(NSError *error) {
+    }];
+}
+
+- (void)setMsgButtonStatus{
+    NSString * str = [NSString stringWithFormat:@"user/msgSwitch?phNumber=%@&status=%d",[WMDUserManager shareInstance].userName,status];
+    [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
+        if (succ) {
+            NSDictionary * dic = (NSDictionary *)rspData;
+            NSDictionary * contentDic = [dic objectForKey:@"content"];
+            self->status = [[contentDic objectForKey:@"status"] intValue];
+            NSIndexPath * path = [NSIndexPath indexPathForRow:1 inSection:0];
+            [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    } FailBlock:^(NSError *error) {
+    }];
 }
 
 #pragma mark -- button events
@@ -245,6 +277,12 @@
     else if (indexPath.row == 1){
         cell.msgButton.hidden = NO;
         cell.infoLabel.hidden = YES;
+        if (status == 0) {
+            cell.msgButton.selected = YES;
+        }
+        else{
+            cell.msgButton.selected = NO;
+        }
 
         cell.nameLabel.text = @"消息设置";
     }
@@ -255,8 +293,10 @@
         cell.nameLabel.text = @"清除缓存";
     }
     
+    __weak typeof(self) weakSelf = self;
     [cell setMessageButtonClick:^(BOOL selected) {
-        
+        self->status = selected?0:1;
+        [weakSelf setMsgButtonStatus];
     }];
     
     return cell;

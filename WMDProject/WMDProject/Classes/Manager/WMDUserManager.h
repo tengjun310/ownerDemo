@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) WeatherInfoModel * currentWeaInfoModel;
 
+@property (nonatomic,strong) WeatherInfoModel * selectWeaInfoModel;
+
 @end
 
 NS_ASSUME_NONNULL_END

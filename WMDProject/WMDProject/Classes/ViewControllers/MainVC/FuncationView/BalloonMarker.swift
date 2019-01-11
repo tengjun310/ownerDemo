@@ -206,7 +206,7 @@ open class BalloonMarker: MarkerImage
             let model:SeaStreamInfoModel = entry.data as! SeaStreamInfoModel;
             if model.type.isEqual("1") {
                 let str:NSString = CommonUtils.formatTime(CommonUtils.getFormatTime(model.forecastdate, formatStyle: "yyyy-MM-dd HH:mm:ss"), formatStyle: "MM/dd HH:mm")! as NSString
-                setLabel(String(format: "%@ %@m/s", str,model.wavespeed))
+                setLabel(String(format: "%@ %@m/s %@°", str,model.wavespeed,model.wavedfrom))
             }
             else if model.type.isEqual("2") {
                 let str:NSString = CommonUtils.formatTime(CommonUtils.getFormatTime(model.forecastdate, formatStyle: "yyyy-MM-dd HH:mm:ss"), formatStyle: "MM/dd HH:mm")! as NSString
