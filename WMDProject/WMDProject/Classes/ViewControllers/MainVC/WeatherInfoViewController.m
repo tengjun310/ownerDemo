@@ -101,6 +101,23 @@
 }
 
 #pragma mark -- tableView delegate & datasource
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 20;
+}
+
+- (UIView * )tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 20)];
+    view.backgroundColor = [UIColor clearColor];
+    
+    UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 200, 20)];
+    label.textColor = [UIColor whiteColor];
+    label.textAlignment = NSTextAlignmentLeft;
+    label.font = kFontSize26;
+    label.text = @"中国海洋预报网发布";
+    [view addSubview:label];
+    
+    return view;
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return dataArray.count;

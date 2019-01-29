@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <BaiduMapAPI_Map/BMKMapComponent.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ThirdInfoView : UIView
+
+@property (nonatomic,strong) BMKMapView * mapView;
 
 @end
 

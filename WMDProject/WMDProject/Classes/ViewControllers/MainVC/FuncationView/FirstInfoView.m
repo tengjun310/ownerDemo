@@ -18,11 +18,13 @@
     NSDate * nowDate;
     NSDate * nextDate1;
     NSDate * nextDate2;
-    NSDate * nextDate3;
+//    NSDate * nextDate3;
     NSMutableDictionary * weatherInfoDic;
     NSMutableDictionary * seaStreamInfoDic;
     NSMutableDictionary * seaInfoDic;
     NSMutableDictionary * seaWaterLevelInfoDic;
+    
+    NSInteger lastIndex;
 }
 @end
 
@@ -44,7 +46,7 @@
         _weatherInfoButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _weatherInfoButton.backgroundColor = [UIColor clearColor];
         [_weatherInfoButton addTarget:self action:@selector(buttonClickEvents:) forControlEvents:UIControlEventTouchUpInside];
-        _weatherInfoButton.titleLabel.numberOfLines = 3;
+        _weatherInfoButton.titleLabel.numberOfLines = 2;
         _weatherInfoButton.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         _weatherInfoButton.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
         _weatherInfoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -57,13 +59,12 @@
     if (!_chartButton) {
         _chartButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _chartButton.backgroundColor = [UIColor clearColor];
-        [_chartButton setTitle:@"图表展示" forState:UIControlStateNormal];
-        [_chartButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _chartButton.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_chartButton setImage:[UIImage imageNamed:@"icon_small_tubiao"] forState:UIControlStateNormal];
+        [_chartButton setTitle:@"瓦房店市潮汐" forState:UIControlStateNormal];
+        [_chartButton setTitleColor:kColorGray forState:UIControlStateNormal];
         [_chartButton addTarget:self action:@selector(buttonClickEvents:) forControlEvents:UIControlEventTouchUpInside];
     }
-    
+
     return _chartButton;
 }
 
@@ -71,11 +72,24 @@
     if (!_weatherInfoLabel) {
         _weatherInfoLabel = [[UILabel alloc] init];
         _weatherInfoLabel.backgroundColor = [UIColor clearColor];
-        _weatherInfoLabel.numberOfLines = 2;
-        _weatherInfoLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        _weatherInfoLabel.textColor = kColorBackground;
+        _weatherInfoLabel.font = kFontSize28;
+        _weatherInfoLabel.textAlignment = NSTextAlignmentCenter;
     }
     
     return _weatherInfoLabel;
+}
+
+- (UILabel *)temInfoLabel{
+    if (!_temInfoLabel) {
+        _temInfoLabel = [[UILabel alloc] init];
+        _temInfoLabel.backgroundColor = [UIColor clearColor];
+        _temInfoLabel.textColor = kColorBackground;
+        _temInfoLabel.font = [UIFont systemFontOfSize:60];
+        _temInfoLabel.textAlignment = NSTextAlignmentRight;
+    }
+    
+    return _temInfoLabel;
 }
 
 - (UILabel *)symbolLabel{
@@ -143,7 +157,7 @@
     [self addSubview:self.weatherInfoButton];
     [self.weatherInfoButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf).mas_offset(30);
-        make.left.mas_equalTo(weakSelf.userButton.mas_right).mas_offset(10);
+        make.left.mas_equalTo(weakSelf.userButton.mas_right).mas_offset(3);
         make.size.mas_equalTo(CGSizeMake(80, 45));
     }];
     
@@ -154,20 +168,24 @@
         make.size.mas_equalTo(CGSizeMake(80, 30));
     }];
     
-    self.chartButton.imageEdgeInsets = UIEdgeInsetsMake(5, 55, 5, 5);
-    self.chartButton.titleEdgeInsets = UIEdgeInsetsMake(8, -70, 5, 0);
+    [self addSubview:self.temInfoLabel];
+    [self.temInfoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(weakSelf.weatherInfoButton.mas_bottom).mas_offset(25);
+        make.centerX.mas_equalTo(weakSelf.mas_centerX).mas_offset(-40);
+        make.size.mas_equalTo(CGSizeMake(100, 60));
+    }];
     
     [self addSubview:self.weatherInfoLabel];
     [self.weatherInfoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf.weatherInfoButton.mas_bottom).mas_offset(25);
+        make.top.mas_equalTo(weakSelf.temInfoLabel.mas_bottom).mas_offset(25);
         make.left.right.mas_equalTo(weakSelf);
-        make.height.mas_offset(100);
+        make.height.mas_offset(15);
     }];
     
     [self addSubview:self.symbolLabel];
     [self.symbolLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf.weatherInfoLabel.mas_top);
-        make.left.mas_equalTo(weakSelf.weatherInfoLabel.mas_centerX).mas_offset(30);
+        make.top.mas_equalTo(weakSelf.temInfoLabel.mas_top);
+        make.left.mas_equalTo(weakSelf.temInfoLabel.mas_right);
         make.size.mas_equalTo(CGSizeMake(60, 45));
     }];
     
@@ -175,7 +193,9 @@
     [self.daysSegmentedControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.weatherInfoLabel.mas_bottom).mas_offset(10);
         make.centerX.mas_equalTo(weakSelf.mas_centerX);
-        make.size.mas_equalTo(CGSizeMake(260, 30));
+        make.left.mas_equalTo(weakSelf).mas_offset(25);
+        make.right.mas_equalTo(weakSelf).mas_offset(-25);
+        make.height.mas_offset(30);
     }];
     
     [self addSubview:self.infoTableView];
@@ -186,6 +206,9 @@
     }];
     
     self.infoTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(startWeatherInfoRequest)];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWeatherInfoRequest) name:@"refreshNowTempleture" object:nil];
 }
 
 - (void)startWeatherInfoRequest{
@@ -203,14 +226,15 @@
     NSString * nextDateStr1 = [CommonUtils formatTime:nextDate1 FormatStyle:@"MM月dd日"];
     nextDate2 = [NSDate dateWithTimeIntervalSinceNow:2*24*60*60];
     NSString * nextDateStr2 = [CommonUtils formatTime:nextDate2 FormatStyle:@"MM月dd日"];
-    nextDate3 = [NSDate dateWithTimeIntervalSinceNow:3*24*60*60];
-    NSString * nextDateStr3 = [CommonUtils formatTime:nextDate3 FormatStyle:@"MM月dd日"];
+    
+//    nextDate3 = [NSDate dateWithTimeIntervalSinceNow:3*24*60*60];
+//    NSString * nextDateStr3 = [CommonUtils formatTime:nextDate3 FormatStyle:@"MM月dd日"];
     
     [self.daysSegmentedControl removeAllSegments];
     [self.daysSegmentedControl insertSegmentWithTitle:@"今天" atIndex:0 animated:NO];
     [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr1 atIndex:1 animated:NO];
     [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr2 atIndex:2 animated:NO];
-    [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr3 atIndex:3 animated:NO];
+    [self.daysSegmentedControl insertSegmentWithTitle:@"更多天气" atIndex:3 animated:NO];
     self.daysSegmentedControl.selectedSegmentIndex = 0;
 
     [self getWeatherInfo:nowDate];
@@ -223,14 +247,12 @@
 - (void)refreshWeatherButtonInfoUI{
     NSString * str1 = @"大连瓦房店市";
     
-    NSString * dateStr = [CommonUtils formatTime:[NSDate date] FormatStyle:@"MM月dd号"];
+    NSString * dateStr = [CommonUtils formatTime:[NSDate date] FormatStyle:@"MM月dd日"];
     NSString * weekStr = [CommonUtils weekdayCompletedStringFromDate:[NSDate date]];
     NSString * str2 = [NSString stringWithFormat:@"%@ %@",dateStr,weekStr];
-    NSString * str3 = @"瓦房店市潮汐";
-    NSString * str4 = [NSString stringWithFormat:@"%@\n%@\n%@",str1,str2,str3];
+    NSString * str4 = [NSString stringWithFormat:@"%@\n%@\n",str1,str2];
     
     NSRange range2 = [str4 rangeOfString:str2];
-    NSRange range3 = [str4 rangeOfString:str3];
     
     NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str4];
     
@@ -242,61 +264,14 @@
                              NSForegroundColorAttributeName:kColorGray
                              }
                      range:range2];
-    [attrStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:10],
-                             NSForegroundColorAttributeName:kColorGray
-                             }
-                     range:range3];
     [self.weatherInfoButton setAttributedTitle:attrStr forState:UIControlStateNormal];
 }
 
 - (void)refreshWeatherInfoUI:(NSDate *)date{
     WeatherInfoModel * model = [weatherInfoDic objectForKey:date];
     
-    NSString * str5 = [NSString stringWithFormat:@"%@",model.nowtmp];
-    if ([str5 containsString:KTemperatureSymbol]) {
-        str5 = [str5 substringToIndex:str5.length-1];
-    }
-    NSString * str6 = [NSString stringWithFormat:@"%@ %@ %@ %@ %@",model.daytmp,model.status,model.wind,model.windGrade,model.seaLevel];
-
-    NSString * str7 = [NSString stringWithFormat:@"%@\n%@",str5,str6];
-    
-    NSRange range4 = [str7 rangeOfString:str6];
-    
-    NSMutableAttributedString * labelAttrStr = [[NSMutableAttributedString alloc] initWithString:str7];
-    
-    [labelAttrStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:60],
-                                  NSForegroundColorAttributeName:kColorBackground
-                                  }
-                          range:NSMakeRange(0, str5.length)];
-    [labelAttrStr setAttributes:@{NSFontAttributeName:kFontSize28,
-                                  NSForegroundColorAttributeName:kColorBackground
-                                  }
-                          range:range4];
-    
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    // 行间距
-    paragraphStyle.lineSpacing = 10.0f;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    [labelAttrStr addAttribute:NSParagraphStyleAttributeName
-                         value:paragraphStyle
-                         range:NSMakeRange(0, str7.length)];
-    self.weatherInfoLabel.attributedText = labelAttrStr;
-    
-    if (model.nowtmp.length > 2) {
-        [self.symbolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(self.weatherInfoLabel.mas_centerX).mas_offset(38);
-        }];
-    }
-    else if (model.nowtmp.length == 1){
-        [self.symbolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(self.weatherInfoLabel.mas_centerX).mas_offset(15);
-        }];
-    }
-    else{
-        [self.symbolLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(self.weatherInfoLabel.mas_centerX).mas_offset(30);
-        }];
-    }
+    self.temInfoLabel.text = model.nowtmp;
+    self.weatherInfoLabel.text = [NSString stringWithFormat:@"%@ %@ %@ %@",model.daytmp,model.status,model.wind,model.windGrade];
 }
 
 #pragma mark -- button events
@@ -314,7 +289,8 @@
             date = nextDate2;
         }
         else{
-            date = nextDate3;
+            
+            date = nil;
         }
         [self.delegate firstViewButtonClick:sender Date:date];
     }
@@ -329,57 +305,63 @@
     NSDate * date;
     if (sender.selectedSegmentIndex == 0) {
         date = nowDate;
+        lastIndex = 0;
     }
     else if (sender.selectedSegmentIndex == 1){
         date = nextDate1;
+        lastIndex = 1;
     }
     else if (sender.selectedSegmentIndex == 2){
         date = nextDate2;
+        lastIndex = 2;
     }
     else{
-        date = nextDate3;
+        sender.selectedSegmentIndex = lastIndex;
+        date = nil;
     }
     
-    //天气数据
-    WeatherInfoModel * model = [weatherInfoDic objectForKey:date];
-    if (!model) {
-        [self getWeatherInfo:date];
-    }
-    else{
-        [WMDUserManager shareInstance].selectWeaInfoModel = model;
-        [self refreshWeatherInfoUI:date];
-    }
-    
-    //海流数据
-    SeaStreamInfoModel * streamModel = [seaStreamInfoDic objectForKey:date];
-    if (!streamModel) {
-        [self getSeaStremSpeedData:date];
-    }
-    else{
-        NSIndexPath * path = [NSIndexPath indexPathForRow:4 inSection:0];
-        [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
-    }
-
-    //海波、海温、海风数据
-    SeaDataInfoModel * seaModel = [seaInfoDic objectForKey:date];
-    if (!seaModel) {
-        [self getSeaData:date];
-    }
-    else{
-        NSIndexPath * path1 = [NSIndexPath indexPathForRow:1 inSection:0];
-        NSIndexPath * path2 = [NSIndexPath indexPathForRow:2 inSection:0];
-        NSIndexPath * path3 = [NSIndexPath indexPathForRow:3 inSection:0];
-        [self.infoTableView reloadRowsAtIndexPaths:@[path1,path2,path3] withRowAnimation:UITableViewRowAnimationNone];
-    }
-    
-    //水位数据
-    NSArray * arr = [seaWaterLevelInfoDic objectForKey:date];
-    if (IsNilNull(arr) || arr.count == 0) {
-        [self getSeaWaterLevel:date];
-    }
-    else{
-        NSIndexPath * path = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+    if (!IsNilNull(date)) {
+        //天气数据
+        WeatherInfoModel * model = [weatherInfoDic objectForKey:date];
+        if (!model) {
+            [self getWeatherInfo:date];
+        }
+        else{
+            [WMDUserManager shareInstance].selectWeaInfoModel = model;
+            [self refreshWeatherInfoUI:date];
+        }
+        
+        //海流数据
+        SeaStreamInfoModel * streamModel = [seaStreamInfoDic objectForKey:date];
+        if (!streamModel) {
+            [self getSeaStremSpeedData:date];
+        }
+        else{
+            NSIndexPath * path = [NSIndexPath indexPathForRow:4 inSection:0];
+            [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+        }
+        
+        //海波、海温、海风数据
+        SeaDataInfoModel * seaModel = [seaInfoDic objectForKey:date];
+        if (!seaModel) {
+            [self getSeaData:date];
+        }
+        else{
+            NSIndexPath * path1 = [NSIndexPath indexPathForRow:1 inSection:0];
+            NSIndexPath * path2 = [NSIndexPath indexPathForRow:2 inSection:0];
+            NSIndexPath * path3 = [NSIndexPath indexPathForRow:3 inSection:0];
+            [self.infoTableView reloadRowsAtIndexPaths:@[path1,path2,path3] withRowAnimation:UITableViewRowAnimationNone];
+        }
+        
+        //水位数据
+        NSArray * arr = [seaWaterLevelInfoDic objectForKey:date];
+        if (IsNilNull(arr) || arr.count == 0) {
+            [self getSeaWaterLevel:date];
+        }
+        else{
+            NSIndexPath * path = [NSIndexPath indexPathForRow:0 inSection:0];
+            [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+        }
     }
 }
 
@@ -392,7 +374,13 @@
             NSDictionary * dic = (NSDictionary *)rspData;
             NSDictionary * contentDic = [dic objectForKey:@"content"];
             WeatherInfoModel * infoModel = [[WeatherInfoModel alloc] initWithDictionary:contentDic error:nil];
+            if (IsNilNull(infoModel)) {
+                infoModel = [[WeatherInfoModel alloc] init];
+            }
+            
             [WMDUserManager shareInstance].selectWeaInfoModel = infoModel;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshShowWeatherImageNotify" object:nil];
+            
             [self->weatherInfoDic setObject:infoModel forKey:date];
             [self refreshWeatherInfoUI:date];
             if (date == self->nowDate) {
@@ -410,14 +398,14 @@
 //海流数据
 - (void)getSeaStremSpeedData:(NSDate *)date{
     NSString * str = @"";
-    if (date == nowDate) {
+//    if (date == nowDate) {
         NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
         str = [NSString stringWithFormat:@"marine/getSeaStream?fstarttime=%@&fendtime=%@",dateStr,dateStr];
-    }
-    else{
-        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd 00:00:00"];
-        str = [NSString stringWithFormat:@"marine/getSeaStream?fstarttime=%@&fendtime=%@",dateStr,dateStr];
-    }
+//    }
+//    else{
+//        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd 00:00:00"];
+//        str = [NSString stringWithFormat:@"marine/getSeaStream?fstarttime=%@&fendtime=%@",dateStr,dateStr];
+//    }
     
     [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
         if (succ) {
@@ -425,6 +413,9 @@
             NSArray * contentArr = [dic objectForKey:@"content"];
             NSDictionary * info = [contentArr lastObject];
             SeaStreamInfoModel * infoModel = [[SeaStreamInfoModel alloc] initWithDictionary:info error:nil];
+            if (IsNilNull(infoModel)) {
+                infoModel = [[SeaStreamInfoModel alloc] init];
+            }
             [self->seaStreamInfoDic setObject:infoModel forKey:date];
             NSIndexPath * path = [NSIndexPath indexPathForRow:4 inSection:0];
             [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
@@ -437,14 +428,14 @@
 //波高、海温、海风数据
 - (void)getSeaData:(NSDate *)date{
     NSString * str = @"";
-    if (date == nowDate) {
+//    if (date == nowDate) {
         NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
         str = [NSString stringWithFormat:@"marine/getMarineData?fstarttime=%@&fendtime=%@",dateStr,dateStr];
-    }
-    else{
-        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd 00:00:00"];
-        str = [NSString stringWithFormat:@"marine/getMarineData?fstarttime=%@&fendtime=%@",dateStr,dateStr];
-    }
+//    }
+//    else{
+//        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd 00:00:00"];
+//        str = [NSString stringWithFormat:@"marine/getMarineData?fstarttime=%@&fendtime=%@",dateStr,dateStr];
+//    }
     
     [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
         if (succ) {
@@ -452,6 +443,10 @@
             NSArray * contentArr = [dic objectForKey:@"content"];
             NSDictionary * info = [contentArr lastObject];
             SeaDataInfoModel * infoModel = [[SeaDataInfoModel alloc] initWithDictionary:info error:nil];
+            if (IsNilNull(infoModel)) {
+                infoModel = [[SeaDataInfoModel alloc] init];
+            }
+            
             [self->seaInfoDic setObject:infoModel forKey:date];
             NSIndexPath * path1 = [NSIndexPath indexPathForRow:1 inSection:0];
             NSIndexPath * path2 = [NSIndexPath indexPathForRow:2 inSection:0];
@@ -466,14 +461,14 @@
 //水位
 - (void)getSeaWaterLevel:(NSDate *)date{
     NSString * str = @"";
-    if (date == nowDate) {
+//    if (date == nowDate) {
         NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd HH:mm:ss"];
         str = [NSString stringWithFormat:@"marine/getTide?fstarttime=%@&fendtime=%@",dateStr,dateStr];
-    }
-    else{
-        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd 00:00:00"];
-        str = [NSString stringWithFormat:@"marine/getTide?fstarttime=%@&fendtime=%@",dateStr,dateStr];
-    }
+//    }
+//    else{
+//        NSString * dateStr = [CommonUtils formatTime:date FormatStyle:@"yyyy-MM-dd 00:00:00"];
+//        str = [NSString stringWithFormat:@"marine/getTide?fstarttime=%@&fendtime=%@",dateStr,dateStr];
+//    }
     
     [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
         if (succ) {
@@ -483,6 +478,9 @@
             for (NSDictionary * data in contentArr) {
                 SeaWaterLevelInfoModel * model = [[SeaWaterLevelInfoModel alloc] initWithDictionary:data error:nil];
                 [arr addObject:model];
+            }
+            if (arr.count == 0) {
+                return;
             }
             [self->seaWaterLevelInfoDic setObject:arr forKey:date];
             NSIndexPath * path = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -516,13 +514,13 @@
     else if (self.daysSegmentedControl.selectedSegmentIndex == 2){
         date = nextDate2;
     }
-    else {
-        date = nextDate3;
-    }
+//    else {
+//        date = nil;
+//    }
     
     if (indexPath.row == 0) {
         cell.logoImageView.image = [UIImage imageNamed:@"icon_small_shuiwei"];
-        cell.leftLabel.text = @"水位";
+        cell.leftLabel.text = @"潮高";
         
         NSArray * arr = [seaWaterLevelInfoDic objectForKey:date];
         if (arr.count == 0) {
@@ -536,7 +534,7 @@
         
         if (arr.count == 1) {
             SeaWaterLevelInfoModel * model = [arr lastObject];
-            str1 = [NSString stringWithFormat:@"%@ %0.2f米",model.tidetime,[model.tideheight floatValue]];
+            str1 = [NSString stringWithFormat:@"%@ %0.2fm",model.tidetime,[model.tideheight floatValue]];
             NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str1];
             NSTextAttachment *attch = [[NSTextAttachment alloc] init];
             attch.image = [UIImage imageNamed:[model.tag isEqualToString:@"高潮"]?@"ico_shuiwei_shang":@"ico_shuiwei_xia"];
@@ -546,10 +544,10 @@
             cell.rightLabel.attributedText = attrStr;
         }
         else if (arr.count == 2){
-            SeaWaterLevelInfoModel * model1 = [arr lastObject];
-            SeaWaterLevelInfoModel * model2 = [arr firstObject];
-            str1 = [NSString stringWithFormat:@"%@ %0.2f米",model1.tidetime,[model1.tideheight floatValue]];
-            str2 = [NSString stringWithFormat:@"%@ %0.2f米",model2.tidetime,[model2.tideheight floatValue]];
+            SeaWaterLevelInfoModel * model1 = [arr firstObject];
+            SeaWaterLevelInfoModel * model2 = [arr lastObject];
+            str1 = [NSString stringWithFormat:@"%@ %0.2fm",model1.tidetime,[model1.tideheight floatValue]];
+            str2 = [NSString stringWithFormat:@"%@ %0.2fm",model2.tidetime,[model2.tideheight floatValue]];
             NSString * str = [NSString stringWithFormat:@"%@\n%@",str1,str2];
 
             NSRange range2 = [str rangeOfString:str2];
@@ -589,13 +587,13 @@
             cell.rightLabel.attributedText = attrStr;
         }
         else if (arr.count == 3){
-            SeaWaterLevelInfoModel * model1 = [arr lastObject];
-            SeaWaterLevelInfoModel * model2 = [arr objectAtIndex:arr.count-2];
-            SeaWaterLevelInfoModel * model3 = [arr firstObject];
+            SeaWaterLevelInfoModel * model1 = [arr firstObject];
+            SeaWaterLevelInfoModel * model2 = [arr objectAtIndex:1];
+            SeaWaterLevelInfoModel * model3 = [arr lastObject];
 
-            str1 = [NSString stringWithFormat:@"%@ %0.2f米",model1.tidetime,[model1.tideheight floatValue]];
-            str2 = [NSString stringWithFormat:@"%@ %0.2f米",model2.tidetime,[model2.tideheight floatValue]];
-            str3 = [NSString stringWithFormat:@"%@ %0.2f米",model3.tidetime,[model3.tideheight floatValue]];
+            str1 = [NSString stringWithFormat:@"%@ %0.2fm",model1.tidetime,[model1.tideheight floatValue]];
+            str2 = [NSString stringWithFormat:@"%@ %0.2fm",model2.tidetime,[model2.tideheight floatValue]];
+            str3 = [NSString stringWithFormat:@"%@ %0.2fm",model3.tidetime,[model3.tideheight floatValue]];
 
             NSString * str = [NSString stringWithFormat:@"%@\n%@\n%@",str1,str2,str3];
             NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
@@ -640,14 +638,14 @@
             cell.rightLabel.attributedText = attrStr;
         }
         else{
-            SeaWaterLevelInfoModel * model1 = [arr lastObject];
-            SeaWaterLevelInfoModel * model2 = [arr objectAtIndex:arr.count-2];
-            SeaWaterLevelInfoModel * model3 = [arr objectAtIndex:arr.count-3];
-            SeaWaterLevelInfoModel * model4 = [arr objectAtIndex:arr.count-4];
-            str1 = [NSString stringWithFormat:@"%@ %0.2f米",model1.tidetime,[model1.tideheight floatValue]];
-            str2 = [NSString stringWithFormat:@"%@ %0.2f米",model2.tidetime,[model2.tideheight floatValue]];
-            str3 = [NSString stringWithFormat:@"%@ %0.2f米",model3.tidetime,[model3.tideheight floatValue]];
-            str4 = [NSString stringWithFormat:@"%@ %0.2f米",model4.tidetime,[model3.tideheight floatValue]];
+            SeaWaterLevelInfoModel * model1 = [arr firstObject];
+            SeaWaterLevelInfoModel * model2 = [arr objectAtIndex:1];
+            SeaWaterLevelInfoModel * model3 = [arr objectAtIndex:2];
+            SeaWaterLevelInfoModel * model4 = [arr objectAtIndex:3];
+            str1 = [NSString stringWithFormat:@"%@ %0.2fm",model1.tidetime,[model1.tideheight floatValue]];
+            str2 = [NSString stringWithFormat:@"%@ %0.2fm",model2.tidetime,[model2.tideheight floatValue]];
+            str3 = [NSString stringWithFormat:@"%@ %0.2fm",model3.tidetime,[model3.tideheight floatValue]];
+            str4 = [NSString stringWithFormat:@"%@ %0.2fm",model4.tidetime,[model4.tideheight floatValue]];
 
             NSString * str = [NSString stringWithFormat:@"%@\n%@\n%@\n%@",str1,str2,str3,str4];
             NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
@@ -698,30 +696,30 @@
             cell.rightLabel.attributedText = attrStr;
         }
     }
-    else if (indexPath.row == 1){
+    else if (indexPath.row == 2){
         SeaDataInfoModel * infoModel = [seaInfoDic objectForKey:date];
         cell.logoImageView.image = [UIImage imageNamed:@"icon_small_bogao"];
         cell.leftLabel.text = @"浪高";
-        cell.rightLabel.text = [NSString stringWithFormat:@"%@米",infoModel.waveheight];
+        cell.rightLabel.text = infoModel.waveheight.length == 0?@"":[NSString stringWithFormat:@"%@m %@",infoModel.waveheight,infoModel.wavedfrom];
     }
-    else if (indexPath.row == 2){
+    else if (indexPath.row == 1){
         SeaDataInfoModel * infoModel = [seaInfoDic objectForKey:date];
         cell.logoImageView.image = [UIImage imageNamed:@"icon_small_haiwen"];
         cell.leftLabel.text = @"海温";
-        cell.rightLabel.text = [NSString stringWithFormat:@"%@%@",infoModel.sstdata,KTemperatureSymbol];
+        cell.rightLabel.text = infoModel.sstdata.length == 0?@"":[NSString stringWithFormat:@"%@%@",infoModel.sstdata,KTemperatureSymbol];
     }
     else if (indexPath.row == 3){
         SeaDataInfoModel * infoModel = [seaInfoDic objectForKey:date];
         cell.logoImageView.image = [UIImage imageNamed:@"icon_small_haifeng"];
         cell.leftLabel.text = @"海风";
-        cell.rightLabel.text = [NSString stringWithFormat:@"%@m/s %@",infoModel.swspeed,infoModel.wavedfrom];
+        cell.rightLabel.text = infoModel.swspeed.length == 0?@"":[NSString stringWithFormat:@"%@m/s %@",infoModel.swspeed,infoModel.swdirection];
     }
     else{
         cell.logoImageView.image = [UIImage imageNamed:@"icon_small_liusuliuxiang"];
         cell.leftLabel.text = [NSString stringWithFormat:@"海流"];
         
         SeaStreamInfoModel * infoModel = [seaStreamInfoDic objectForKey:date];
-        NSString * str = [NSString stringWithFormat:@"%@m/s %@%@",infoModel.wavespeed,infoModel.wavedfrom,KTemperatureSymbolSimple];
+        NSString * str = infoModel.wavespeed.length == 0?@"":[NSString stringWithFormat:@"%@m/s %@%@",infoModel.wavespeed,infoModel.wavedfrom,KTemperatureSymbolSimple];
         cell.rightLabel.text = str;
     }
     
@@ -740,9 +738,10 @@
         else if (self.daysSegmentedControl.selectedSegmentIndex == 2){
             date = nextDate2;
         }
-        else{
-            date = nextDate3;
-        }
+//        else{
+//            date = nil;
+//        }
+        
         [self.delegate tableviewDidSelectRow:indexPath.row Date:date];
     }
 }

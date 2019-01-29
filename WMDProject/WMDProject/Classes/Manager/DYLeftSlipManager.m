@@ -107,7 +107,7 @@ CGFloat const DYLeftSlipLeftSlipPanTriggerWidth = 50;
     // 转场代理
     self.leftVC.transitioningDelegate = self;
     // 侧滑手势
-    [self.coverVC.view addGestureRecognizer:self.panGesture];
+//    [self.coverVC.view addGestureRecognizer:self.panGesture];
     
     [UINavigationController swizzlingPushAndPop];
 }

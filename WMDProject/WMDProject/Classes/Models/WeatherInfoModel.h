@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,copy) NSString <Optional>* seaLevel;
 
+@property (nonatomic,copy) NSString <Optional>* url;
+
 
 @end
 

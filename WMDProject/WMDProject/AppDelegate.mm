@@ -61,7 +61,15 @@ NSString * const UserLogoutSuccessNotify = @"UserLogoutSuccessNotify";
     }
     
     [self registNotification];
-    [self configLoginRootVC];
+    
+    NSString * token = [[NSUserDefaults standardUserDefaults] objectForKey:KDefaultUserTokenKey];
+    if (token.length == 0) {
+        [self configLoginRootVC];
+    }
+    else{
+        [self configureMainViewController];
+    }
+    
     
     return YES;
 }

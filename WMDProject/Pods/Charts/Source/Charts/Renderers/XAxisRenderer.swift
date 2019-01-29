@@ -229,14 +229,15 @@ open class XAxisRenderer: AxisRendererBase
                         if width > viewPortHandler.offsetRight * 2.0
                             && position.x + width > viewPortHandler.chartWidth
                         {
-                            position.x -= width / 2.0
+//                            position.x -= width / 2.0
+                            position.x -= 4
                         }
                     }
-                    else if i == 0
-                    { // avoid clipping of the first
-                        let width = labelns.boundingRect(with: labelMaxSize, options: .usesLineFragmentOrigin, attributes: labelAttrs, context: nil).size.width
-                        position.x += width / 2.0
-                    }
+//                    else if i == 0
+//                    { // avoid clipping of the first
+//                        let width = labelns.boundingRect(with: labelMaxSize, options: .usesLineFragmentOrigin, attributes: labelAttrs, context: nil).size.width
+//                        position.x += width / 2.0
+//                    }
                 }
                 
                 drawLabel(context: context,

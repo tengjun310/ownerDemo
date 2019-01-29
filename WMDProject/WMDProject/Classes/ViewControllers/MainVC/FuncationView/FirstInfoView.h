@@ -36,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) UILabel * weatherInfoLabel;
 
+@property (nonatomic,strong) UILabel * temInfoLabel;
+
 @property (nonatomic,strong) UISegmentedControl * daysSegmentedControl;
 
 @property (nonatomic,strong) UITableView * infoTableView;

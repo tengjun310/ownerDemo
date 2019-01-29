@@ -7,7 +7,6 @@
 //
 
 #import "ThirdInfoView.h"
-#import <BaiduMapAPI_Map/BMKMapComponent.h>
 
 @interface ThirdInfoView ()<BMKMapViewDelegate>
 
@@ -16,8 +15,6 @@
 @property (nonatomic,strong) UIButton * leftButton;
 
 @property (nonatomic,strong) UIButton * rightButton;
-
-@property (nonatomic,strong) BMKMapView * mapView;
 
 @end
 
@@ -79,9 +76,13 @@
 - (BMKMapView *)mapView{
     if (!_mapView) {
         _mapView = [[BMKMapView alloc] init];
-        _mapView.centerCoordinate = CLLocationCoordinate2DMake(39.483075, 121.282658);
-        _mapView.zoomLevel = 11;
+        _mapView.centerCoordinate = CLLocationCoordinate2DMake(39.817077, 121.485732);
+        _mapView.zoomLevel = 16;
         _mapView.delegate = self;
+        _mapView.zoomEnabled = YES;
+        _mapView.scrollEnabled = YES;
+        _mapView.gesturesEnabled = YES;
+        _mapView.zoomEnabledWithTap = NO;
     }
     
     return _mapView;
@@ -91,14 +92,26 @@
     self = [super init];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
-        [self configureThirdViewUI];
     }
     
     return self;
 }
 
+- (void)drawRect:(CGRect)rect{
+    [self configureThirdViewUI];
+}
+
 - (void)configureThirdViewUI{
     __weak typeof(self) weakSelf = self;
+    
+    UIView * view = [[UIView alloc] init];
+    view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 40+kStatusBarAndNavigationBarHeight);
+    view.backgroundColor = [UIColor whiteColor];
+    [self addSubview:view];
+    
+    UISwipeGestureRecognizer * swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeAction)];
+    swipe.direction = UISwipeGestureRecognizerDirectionRight;
+    [view addGestureRecognizer:swipe];
     
     [self addSubview:self.titleLabel];
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -125,18 +138,51 @@
     
     [self addSubview:self.mapView];
     [self.mapView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf.leftButton.mas_bottom).mas_offset(15);
-        make.left.right.bottom.mas_equalTo(weakSelf);
+        make.top.mas_equalTo(weakSelf).mas_offset(0);
+        make.bottom.mas_equalTo(weakSelf);
+        make.left.mas_equalTo(weakSelf);
+        make.width.mas_offset(SCREEN_WIDTH);
     }];
+    
+    [self sendSubviewToBack:self.mapView];
     
     self.leftButton.selected = YES;
     self.mapView.mapType = BMKMapTypeStandard;
     
-    BMKPointAnnotation* annotation = [[BMKPointAnnotation alloc]init];
-    annotation.coordinate = CLLocationCoordinate2DMake(39.483075, 121.282658);
-    annotation.title = @"二期取水口";
-    annotation.subtitle = @"39.483075,121.282658";
-    [self.mapView addAnnotation:annotation];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.mapView.showMapScaleBar = YES;
+        self.mapView.mapScaleBarPosition = CGPointMake(10,SCREEN_HEIGHT-40);
+    });
+
+    BMKPointAnnotation* annotation1 = [[BMKPointAnnotation alloc]init];
+    annotation1.coordinate = CLLocationCoordinate2DMake(39.819405,121.488965);
+    annotation1.title = @"一期取水口";
+    annotation1.subtitle = @"39.819405,121.488965";
+    [self.mapView addAnnotation:annotation1];
+    
+    BMKPointAnnotation* annotation2 = [[BMKPointAnnotation alloc]init];
+    annotation2.coordinate = CLLocationCoordinate2DMake(39.817077, 121.485732);
+    annotation2.title = @"二期取水口";
+    annotation2.subtitle = @"39.817077, 121.485732";
+    [self.mapView addAnnotation:annotation2];
+    
+    BMKPointAnnotation* annotation3 = [[BMKPointAnnotation alloc]init];
+    annotation3.coordinate = CLLocationCoordinate2DMake(39.814861,121.484582);
+    annotation3.title = @"气象站";
+    annotation3.subtitle = @"39.814861,121.484582";
+    [self.mapView addAnnotation:annotation3];
+    
+    BMKPointAnnotation* annotation4 = [[BMKPointAnnotation alloc]init];
+    annotation4.coordinate = CLLocationCoordinate2DMake(39.815747,121.481995);
+    annotation4.title = @"海流观测点";
+    annotation4.subtitle = @"39.815747,121.481995";
+    [self.mapView addAnnotation:annotation4];
+    
+    NSLog(@"rect %f %f",self.mapView.mapScaleBarSize.width,self.mapView.mapScaleBarSize.height);
+}
+
+- (void)swipeAction{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ScrollerViewShouldMove" object:nil];
 }
 
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
@@ -150,7 +196,19 @@
             annotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation
                                                            reuseIdentifier:reuseIndetifier];
         }
-        annotationView.image = [UIImage imageNamed:@"icon_gcoding"];
+        
+        annotationView.hidePaopaoWhenSelectOthers = YES;
+        annotationView.hidePaopaoWhenSingleTapOnMap = YES;
+
+        if ([annotation.title isEqualToString:@"气象站"]) {
+            annotationView.image = [UIImage imageNamed:@"xh"];
+        }
+        else if ([annotation.title isEqualToString:@"海流观测点"]){
+            annotationView.image = [UIImage imageNamed:@"dt"];
+        }
+        else{
+            annotationView.image = [UIImage imageNamed:@"icon_gcoding"];
+        }
         return annotationView;
     }
     return nil;
@@ -161,7 +219,6 @@
         self.leftButton.selected = YES;
         self.rightButton.selected = NO;
         self.mapView.mapType = BMKMapTypeStandard;
-//        [self.mapView mapForceRefresh];
     }
     else{
         self.leftButton.selected = NO;

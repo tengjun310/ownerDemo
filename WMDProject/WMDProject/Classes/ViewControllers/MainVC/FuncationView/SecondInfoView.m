@@ -37,7 +37,7 @@
         _weateherInfoLabel.backgroundColor = [UIColor clearColor];
         _weateherInfoLabel.textAlignment = NSTextAlignmentLeft;
         _weateherInfoLabel.textColor = [UIColor whiteColor];
-        _weateherInfoLabel.numberOfLines = 3;
+        _weateherInfoLabel.numberOfLines = 0;
         _weateherInfoLabel.lineBreakMode = NSLineBreakByWordWrapping;
     }
     
@@ -144,7 +144,7 @@
     [self addSubview:self.addressInfoLabel];
     [self.addressInfoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.weateherInfoLabel.mas_bottom).mas_offset(60);
-        make.left.mas_equalTo(weakSelf).mas_offset(SCREEN_WIDTH>320?45:30);
+        make.left.mas_equalTo(weakSelf).mas_offset(SCREEN_WIDTH>320?20:10);
         make.size.mas_equalTo(CGSizeMake(200, 15));
     }];
     
@@ -164,11 +164,13 @@
 
 - (void)refreshShowWeather{
     NSString * str5 = [NSString stringWithFormat:@" %@",[WMDUserManager shareInstance].currentWeaInfoModel.nowtmp];
-    NSString * str6 = [NSString stringWithFormat:@"%@ %@ %@ %@ %@",[WMDUserManager shareInstance].currentWeaInfoModel.daytmp,[WMDUserManager shareInstance].currentWeaInfoModel.status,[WMDUserManager shareInstance].currentWeaInfoModel.wind,[WMDUserManager shareInstance].currentWeaInfoModel.windGrade,[WMDUserManager shareInstance].currentWeaInfoModel.seaLevel];
-    NSString * str7 = [NSString stringWithFormat:@"%@\n%@",str5,str6];
-    NSRange range4 = [str7 rangeOfString:str6];
-    
-    NSMutableAttributedString * labelAttrStr = [[NSMutableAttributedString alloc] initWithString:str7];
+    NSString * str6 = [NSString stringWithFormat:@"%@ %@",[WMDUserManager shareInstance].currentWeaInfoModel.daytmp,[WMDUserManager shareInstance].currentWeaInfoModel.status];
+    NSString * str7 = [NSString stringWithFormat:@"%@ %@",[WMDUserManager shareInstance].currentWeaInfoModel.wind,[WMDUserManager shareInstance].currentWeaInfoModel.windGrade];
+    NSString * str8 = [NSString stringWithFormat:@"%@\n%@\n%@",str5,str6,str7];
+    NSRange range4 = [str8 rangeOfString:str6];
+    NSRange range5 = [str8 rangeOfString:str7];
+
+    NSMutableAttributedString * labelAttrStr = [[NSMutableAttributedString alloc] initWithString:str8];
     
     [labelAttrStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:60],
                                   NSForegroundColorAttributeName:kColorBackground
@@ -178,7 +180,11 @@
                                   NSForegroundColorAttributeName:kColorBackground
                                   }
                           range:range4];
-    
+    [labelAttrStr setAttributes:@{NSFontAttributeName:kFontSize28,
+                                  NSForegroundColorAttributeName:kColorBackground
+                                  }
+                          range:range5];
+
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     // 行间距
     paragraphStyle.lineSpacing = 10.0f;
@@ -212,6 +218,9 @@
 }
 
 - (void)getYujingListInfo{
+    //刷新当前天气数据
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshNowTempleture" object:nil];
+    
     NSString * str = [NSString stringWithFormat:@"marine/getWarnInfo?type=%@",@""];
     [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
         if (succ) {
@@ -267,16 +276,18 @@
     }
     
     cell.leftLabel.hidden = NO;
-    cell.warnLabel.textColor = kColorAppMain;
+    cell.leftLabel.textColor = [UIColor colorWithRed:0 green:32/255.0 blue:96/255.0 alpha:1];
+    cell.warnLabel.textColor = [UIColor colorWithRed:0 green:32/255.0 blue:96/255.0 alpha:1];
     cell.warnLabel.font = kFontSize26;
-    cell.dateLabel.textColor = kColorAppMain;
+    cell.dateLabel.textColor = [UIColor colorWithRed:0 green:32/255.0 blue:96/255.0 alpha:1];
     cell.dateLabel.font = kFontSize26;
-    cell.timeLabel.textColor = kColorAppMain;
-    cell.timeLabel.font = kFontSize26;
+    cell.timeLabel.textColor = [UIColor colorWithRed:0 green:32/255.0 blue:96/255.0 alpha:1];
+    cell.timeLabel.font = SCREEN_WIDTH>320?kFontSize26:[UIFont systemFontOfSize:11];
 
     if (indexPath.row == 0) {
         cell.backgroundColor = [UIColor whiteColor];
         cell.leftLabel.hidden = YES;
+        cell.warnLabel.backgroundColor = [UIColor clearColor];
         cell.warnLabel.textColor = kColorBlack;
         cell.warnLabel.text = @"预警状态";
         cell.dateLabel.textColor = kColorBlack;
@@ -302,8 +313,8 @@
         cell.dateLabel.text = infoModel.publishTime;
         //    cell.dateLabel.text = [NSString stringWithFormat:@"11月12号\n15:30"];
         NSString * str = [NSString stringWithFormat:@"%@",infoModel.durTime];
-        str = [str stringByReplacingOccurrencesOfString:@"大于" withString:@">"];
-        str = [str stringByReplacingOccurrencesOfString:@"小于" withString:@"<"];
+//        str = [str stringByReplacingOccurrencesOfString:@"大于" withString:@">"];
+//        str = [str stringByReplacingOccurrencesOfString:@"小于" withString:@"<"];
         cell.timeLabel.text = str;
         
         cell.warnLabel.text = infoModel.status;
@@ -312,7 +323,7 @@
             cell.warnLabel.backgroundColor = kColorRed;
         }
         else if ([infoModel.status isEqualToString:@"蓝色"]){
-            cell.warnLabel.backgroundColor = kColorAppMain;
+            cell.warnLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:255/255 alpha:1];
         }
         else if ([infoModel.status isEqualToString:@"橙色"]){
             cell.warnLabel.backgroundColor = kColorOrige;

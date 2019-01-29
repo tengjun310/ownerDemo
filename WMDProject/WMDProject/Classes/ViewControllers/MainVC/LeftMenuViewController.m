@@ -8,6 +8,7 @@
 
 #import "LeftMenuViewController.h"
 #import "MenuTableViewCell.h"
+#import "WebViewViewController.h"
 
 @interface LeftMenuViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -105,7 +106,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [self configureUI];
     [self getMsgButtonStatus];
     
@@ -144,7 +145,13 @@
         make.top.mas_equalTo(self.headImageView.mas_bottom).mas_offset(18);
         make.height.mas_offset(20);
     }];
-    self.nameLabel.text = [WMDUserManager shareInstance].userName;
+    
+    if ([WMDUserManager shareInstance].userName.length == 0) {
+        self.nameLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:KDefaultLoginNameKey];
+    }
+    else{
+        self.nameLabel.text = [WMDUserManager shareInstance].userName;
+    }
     
     [self.view addSubview:self.infoTableView];
     [self.infoTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -225,7 +232,7 @@
 
 #pragma mark -- tableview delegate & datasource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    return 5;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -286,11 +293,23 @@
 
         cell.nameLabel.text = @"消息设置";
     }
-    else{
+    else if (indexPath.row == 2){
         cell.msgButton.hidden = YES;
         cell.infoLabel.hidden = YES;
 
         cell.nameLabel.text = @"清除缓存";
+    }
+    else if (indexPath.row == 3){
+        cell.msgButton.hidden = YES;
+        cell.infoLabel.hidden = YES;
+        
+        cell.nameLabel.text = @"帮助中心";
+    }
+    else{
+        cell.msgButton.hidden = YES;
+        cell.infoLabel.hidden = YES;
+        
+        cell.nameLabel.text = @"关于系统";
     }
     
     __weak typeof(self) weakSelf = self;
@@ -303,8 +322,48 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [[DYLeftSlipManager sharedManager] dismissLeftView];
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if (indexPath.row == 2) {
+        [self clearMembory];
+    }
+    else if (indexPath.row == 3 || indexPath.row == 4){
+        [[DYLeftSlipManager sharedManager] dismissLeftView];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            WebViewViewController * vc = [[WebViewViewController alloc] init];
+            vc.urlStr = indexPath.row == 3?@"http://47.104.94.101:16888/haiyang/h5/help":@"http://47.104.94.101:16888/haiyang/h5/about";
+            [appDelegate.mainViewController pushViewController:vc animated:YES];
+        });
+    }
+    else{
+        [[DYLeftSlipManager sharedManager] dismissLeftView];
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
+}
+
+- (void)clearMembory{
+    MBProgressHUD * hud = [CommonUtils showLoadingViewInWindowWithTitle:@"正在清除..."];
+    NSString *path = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+    NSError *error = nil;//错误信息
+    //拿到path路径的下一级目录的子文件夹
+    NSArray *subPathArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+    
+    for (NSString *subPath in subPathArray)
+    {
+        //如果是数据库文件，不做操作
+        if ([subPath isEqualToString:@"mySql.sqlite"])
+        {
+            continue;
+        }
+        
+        NSString *filePath = [path stringByAppendingPathComponent:subPath];
+        //删除子文件夹
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        hud.labelText = @"清除成功";
+        [hud hide:YES afterDelay:HudShowTime];
+        [[DYLeftSlipManager sharedManager] dismissLeftView];
+    });
 }
 
 - (void)didReceiveMemoryWarning {

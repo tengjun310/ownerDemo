@@ -10,3 +10,6 @@
 #import "SeaWaterLevelInfoModel.h"
 #import "SeaStreamInfoModel.h"
 #import "SeaDataInfoModel.h"
+#import "SpeedInfoModel.h"
+#import "DirectionInfoModel.h"
+#import "UIColor+extend.h"

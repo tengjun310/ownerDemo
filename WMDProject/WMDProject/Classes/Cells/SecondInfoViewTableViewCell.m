@@ -16,7 +16,7 @@
         _leftLabel.backgroundColor = [UIColor clearColor];
         _leftLabel.font = kFontSize28;
         _leftLabel.textAlignment = NSTextAlignmentLeft;
-        _leftLabel.textColor = kColorAppMain;
+        _leftLabel.textColor = [UIColor colorWithRed:0 green:32/255.0 blue:96/255.0 alpha:1];
     }
     
     return _leftLabel;
@@ -38,7 +38,7 @@
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.font = kFontSize26;
-        _dateLabel.textColor = kColorAppMain;
+        _dateLabel.textColor = [UIColor colorWithRed:0 green:32/255.0 blue:96/255.0 alpha:1];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
         _dateLabel.numberOfLines = 2;
         _dateLabel.lineBreakMode = NSLineBreakByWordWrapping;
@@ -51,8 +51,8 @@
 - (UILabel *)timeLabel{
     if (!_timeLabel) {
         _timeLabel = [[UILabel alloc]init];
-        _timeLabel.font = kFontSize26;
-        _timeLabel.textColor = kColorAppMain;
+        _timeLabel.font = [UIFont systemFontOfSize:11];
+        _timeLabel.textColor = [UIColor colorWithRed:0 green:32/255.0 blue:96/255.0 alpha:1];
         _timeLabel.textAlignment = NSTextAlignmentRight;
         _timeLabel.backgroundColor = [UIColor clearColor];
     }
@@ -79,7 +79,7 @@
     [self.contentView addSubview:self.leftLabel];
     [self.leftLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(weakSelf.contentView).mas_offset(20);
-        make.left.mas_equalTo(weakSelf.contentView).mas_offset(isIPhone5?8:15);
+        make.left.mas_equalTo(weakSelf.contentView).mas_offset(isIPhone5?5:10);
         make.bottom.mas_equalTo(weakSelf.contentView).mas_offset(-20);
         make.width.mas_offset(75);
     }];
@@ -100,7 +100,7 @@
     
     [self.contentView addSubview:self.timeLabel];
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(weakSelf.contentView).mas_offset(isIPhone5?-8:-15);
+        make.right.mas_equalTo(weakSelf.contentView).mas_offset(isIPhone5?-5:-10);
         make.centerY.mas_equalTo(weakSelf.contentView.mas_centerY);
         make.size.mas_equalTo(CGSizeMake(75, 30));
     }];

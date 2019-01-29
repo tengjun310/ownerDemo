@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) NSArray * dataArray;
 
-@property (nonatomic,assign) int type;//1 水位  2 流速  3 流向 4波高 5海风
+@property (nonatomic,assign) int type;//1 水位  2 流速  3 海温 4 波高  5 海风
 
 @end
 

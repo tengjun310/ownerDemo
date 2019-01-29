@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,copy) NSString <Optional>* swdirection;
 
+@property (nonatomic,copy) NSString <Optional>* swImageName;
+
 @property (nonatomic,copy) NSString <Optional>* swspeed;
 
 @property (nonatomic,copy) NSString <Optional>* wavedfrom;

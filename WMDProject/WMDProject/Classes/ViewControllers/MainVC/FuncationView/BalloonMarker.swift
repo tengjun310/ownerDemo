@@ -34,7 +34,7 @@ open class BalloonMarker: MarkerImage
         self.insets = insets
         
         _paragraphStyle = NSParagraphStyle.default.mutableCopy() as? NSMutableParagraphStyle
-        _paragraphStyle?.alignment = .center
+        _paragraphStyle?.alignment = .left
         super.init()
     }
     
@@ -185,35 +185,42 @@ open class BalloonMarker: MarkerImage
         if (entry.data?.isKind(of: SeaWaterLevelInfoModel.self))! {
             let model:SeaWaterLevelInfoModel = entry.data as! SeaWaterLevelInfoModel;
             let str:NSString = CommonUtils.formatTime(CommonUtils.getFormatTime(model.forecastdate, formatStyle: "yyyy-MM-dd HH:mm:ss"), formatStyle: "MM/dd HH:mm")! as NSString
-            setLabel(String(format: "%@ %@米", str,model.tideheight))
+            setLabel(String(format: " %@\n %@m", str,model.tideheight))
         }
         else if (entry.data?.isKind(of: SeaDataInfoModel.self))! {
             let model:SeaDataInfoModel = entry.data as! SeaDataInfoModel;
             if model.type.isEqual("2") {
                 let str:NSString = CommonUtils.formatTime(CommonUtils.getFormatTime(model.forecasttime, formatStyle: "yyyy-MM-dd HH:mm:ss"), formatStyle: "MM/dd HH:mm")! as NSString
-                setLabel(String(format: "%@ %@米", str,model.waveheight))
+                setLabel(String(format: " %@\n %@m %@", str,model.waveheight,model.wavedfrom))
             }
             else if model.type.isEqual("3") {
                 let str:NSString = CommonUtils.formatTime(CommonUtils.getFormatTime(model.forecasttime, formatStyle: "yyyy-MM-dd HH:mm:ss"), formatStyle: "MM/dd HH:mm")! as NSString
-                setLabel(String(format: "%@ %@℃", str,model.sstdata))
+                setLabel(String(format: " %@\n %@℃", str,model.sstdata))
             }
             else if model.type.isEqual("4") {
                 let str:NSString = CommonUtils.formatTime(CommonUtils.getFormatTime(model.forecasttime, formatStyle: "yyyy-MM-dd HH:mm:ss"), formatStyle: "MM/dd HH:mm")! as NSString
-                setLabel(String(format: "%@ %@", str,model.swdirection))
+                setLabel(String(format: " %@\n %@m/s %@", str,model.swspeed,model.swdirection))
             }
         }
         else if (entry.data?.isKind(of: SeaStreamInfoModel.self))! {
             let model:SeaStreamInfoModel = entry.data as! SeaStreamInfoModel;
             if model.type.isEqual("1") {
                 let str:NSString = CommonUtils.formatTime(CommonUtils.getFormatTime(model.forecastdate, formatStyle: "yyyy-MM-dd HH:mm:ss"), formatStyle: "MM/dd HH:mm")! as NSString
-                setLabel(String(format: "%@ %@m/s %@°", str,model.wavespeed,model.wavedfrom))
+                setLabel(String(format: " %@ \n %@m/s %@°", str,model.wavespeed,model.wavedfrom))
             }
             else if model.type.isEqual("2") {
                 let str:NSString = CommonUtils.formatTime(CommonUtils.getFormatTime(model.forecastdate, formatStyle: "yyyy-MM-dd HH:mm:ss"), formatStyle: "MM/dd HH:mm")! as NSString
-                setLabel(String(format: "%@ %@", str,model.wavedfrom))
+                setLabel(String(format: " %@\n %@", str,model.wavedfrom))
             }
         }
-
+        else if (entry.data?.isKind(of: SpeedInfoModel.self))! {
+            let model:SpeedInfoModel = entry.data as! SpeedInfoModel;
+            setLabel(String(format: " %@m %.f%%", model.speed,Float(model.rate)!))
+        }
+        else if (entry.data?.isKind(of: DirectionInfoModel.self))! {
+            let model:DirectionInfoModel = entry.data as! DirectionInfoModel;
+            setLabel(String(format: " %@ %.f%%", model.direction,Float(model.rate)!*100))
+        }
     }
     
     @objc open func setLabel(_ newLabel: String)

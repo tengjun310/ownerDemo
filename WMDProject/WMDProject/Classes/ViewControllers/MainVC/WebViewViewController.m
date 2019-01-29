@@ -43,7 +43,19 @@
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlStr]]];
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    UIImage * clearImage = [UIImage createImageWithColor:kColorAppMain];
+    [self.navigationController.navigationBar setBackgroundImage:clearImage forBarMetrics:UIBarMetricsDefault];
+}
 
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    UIImage * clearImage = [[UIImage alloc]init];
+    [self.navigationController.navigationBar setBackgroundImage:clearImage forBarMetrics:UIBarMetricsDefault];
+}
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {

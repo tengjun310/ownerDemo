@@ -143,9 +143,47 @@
 + (NSString *)getChineseDate:(NSDate *)date{
     NSCalendar * calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierChinese];
     long day = [calendar component:NSCalendarUnitDay fromDate:date];
+    long month = [calendar component:NSCalendarUnitMonth fromDate:date];
     switch (day) {
         case 1:
-            return @"初一";
+        {
+            if (month == 1) {
+                return @"一月";
+            }
+            else if (month == 2){
+                return @"二月";
+            }
+            else if (month == 3){
+                return @"三月";
+            }
+            else if (month == 4){
+                return @"四月";
+            }
+            else if (month == 5){
+                return @"五月";
+            }
+            else if (month == 6){
+                return @"六月";
+            }
+            else if (month == 7){
+                return @"七月";
+            }
+            else if (month == 8){
+                return @"八月";
+            }
+            else if (month == 9){
+                return @"九月";
+            }
+            else if (month == 10){
+                return @"十月";
+            }
+            else if (month == 11){
+                return @"十一月";
+            }
+            else{
+                return @"十二月";
+            }
+        }
             break;
         case 2:
             return @"初二";

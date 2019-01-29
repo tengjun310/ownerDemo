@@ -220,8 +220,11 @@
         make.height.mas_offset(40);
     }];
 
+#ifdef DEBUG
     self.phoneTextFiled.text = @"13115025605";
     self.codeTextFiled.text = @"111111";
+#endif
+    
 }
 
 - (void)configureCodeButtolNormalUI{
@@ -292,7 +295,11 @@
 
 #pragma mark -- request
 - (void)getCodeRequest{
+#if DEBUG
     NSString * str = [NSString stringWithFormat:@"sms/phoneCodeTest?phoneNumber=%@",self.phoneTextFiled.text];
+#else
+    NSString * str = [NSString stringWithFormat:@"sms/phoneCode?phoneNumber=%@",self.phoneTextFiled.text];
+#endif
     
     [HttpClient asyncSendPostRequest:str
                               Parmas:nil

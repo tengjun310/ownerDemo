@@ -579,8 +579,10 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
                 continue
             }
 
-            let pos = getMarkerPosition(highlight: highlight)
+//            let pos = getMarkerPosition(highlight: highlight)
 
+            let pos = CGPoint.init(x: highlight.xPx, y: highlight.yPx)
+            
             // check bounds
             if !_viewPortHandler.isInBounds(x: pos.x, y: pos.y)
             {

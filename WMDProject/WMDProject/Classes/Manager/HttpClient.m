@@ -64,6 +64,12 @@ static AFHTTPSessionManager *manager ;
         
         NSDictionary * rspDic = (NSDictionary *)responseObject;
         id value = [rspDic objectForKey:@"code"];
+        if ([value intValue] == 3) {
+            //token失效
+            successblock(NO,[rspDic objectForKey:@"message"],rspDic);
+            [[NSNotificationCenter defaultCenter] postNotificationName:UserLogoutSuccessNotify object:nil];
+            return;
+        }
         if ([value intValue] != 0) {
             successblock(NO,[rspDic objectForKey:@"message"],rspDic);
             return;

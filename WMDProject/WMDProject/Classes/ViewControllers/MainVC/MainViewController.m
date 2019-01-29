@@ -78,6 +78,8 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshShowWeather) name:@"refreshShowWeatherNotify" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshShowWeather) name:@"refreshShowWeatherImageNotify" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollViewShouldMove) name:@"ScrollerViewShouldMove" object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -92,7 +94,17 @@
 }
 
 - (void)refreshShowWeather{
-    self.dipImageView.image = [UIImage imageNamed:[WMDUserManager shareInstance].selectWeaInfoModel.imageName];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.infoScrollView.contentOffset.x == 0) {
+            self.dipImageView.image = [UIImage imageNamed:[WMDUserManager shareInstance].selectWeaInfoModel.imageName];
+        }
+    });
+}
+
+- (void)scrollViewShouldMove{
+    [UIView animateWithDuration:.25 animations:^{
+        self.infoScrollView.contentOffset = CGPointMake(SCREEN_WIDTH, 0);
+    }];
 }
 
 #pragma mark -- main UI
@@ -118,9 +130,17 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    self.infoScrollView.scrollEnabled = YES;
+    self.thirdInfoView.mapView.hidden = YES;
     if (scrollView.contentOffset.x >= SCREEN_WIDTH && scrollView.contentOffset.x < SCREEN_WIDTH*2) {
-        self.dipImageView.image = [UIImage imageNamed:[WMDUserManager shareInstance].currentWeaInfoModel.imageName];
+        self.dipImageView.image = [UIImage imageNamed:@"bg_xingkong"];
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    }
+    else if (scrollView.contentOffset.x >= SCREEN_WIDTH*2){
+        self.dipImageView.image = [UIImage imageNamed:[WMDUserManager shareInstance].selectWeaInfoModel.imageName];
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+        self.infoScrollView.scrollEnabled = NO;
+        self.thirdInfoView.mapView.hidden = NO;
     }
     else{
         self.dipImageView.image = [UIImage imageNamed:[WMDUserManager shareInstance].selectWeaInfoModel.imageName];
@@ -142,27 +162,22 @@
 }
 
 - (void)firstViewButtonClick:(UIButton *)sender Date:(nonnull NSDate *)date{
-    if (sender == self.firstInfoView.userButton) {
+    if (sender == self.firstInfoView.userButton || sender == self.firstInfoView.weatherInfoButton) {
         [[DYLeftSlipManager sharedManager] showLeftView];
     }
-    else if (sender == self.firstInfoView.weatherInfoButton){
-        CalendarDataViewController * vc = [[CalendarDataViewController alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
     else if (sender == self.firstInfoView.chartButton){
-        ChartsViewController * vc = [[ChartsViewController alloc] init];
-        vc.today = NO;
-        vc.date = date;
-        vc.type = 1;
-        if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
-            vc.today = YES;
-        }
+        CalendarDataViewController * vc = [[CalendarDataViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
 - (void)firstViewSegmentedControlClick:(UISegmentedControl *)sender{
-    [self refreshShowWeather];
+    if (sender.selectedSegmentIndex == 3) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[WMDUserManager shareInstance].currentWeaInfoModel.url]];
+    }
+    else{
+        [self refreshShowWeather];
+    }
 }
 
 - (void)tableviewDidSelectRow:(NSInteger)row Date:(nonnull NSDate *)date{
