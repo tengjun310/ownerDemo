@@ -22,6 +22,7 @@
     dispatch_once(&onceToken, ^{
         userManager = [[self alloc] init];
         userManager.tokenId = [[NSUserDefaults standardUserDefaults] objectForKey:KDefaultUserTokenKey];
+        userManager.userName = [[NSUserDefaults standardUserDefaults] objectForKey:KDefaultLoginNameKey];
     });
     
     return userManager;

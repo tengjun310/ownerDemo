@@ -183,7 +183,7 @@
     }
     
     UICollectionViewFlowLayout * viewLayout = [[UICollectionViewFlowLayout alloc] init];
-    self.infoCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 70, SCREEN_WIDTH, SCREEN_HEIGHT-100-kStatusBarAndNavigationBarHeight) collectionViewLayout:viewLayout];
+    self.infoCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 60, SCREEN_WIDTH, SCREEN_HEIGHT-110-kStatusBarAndNavigationBarHeight) collectionViewLayout:viewLayout];
     self.infoCollectionView.backgroundColor = [UIColor clearColor];
     self.infoCollectionView.delegate = self;
     self.infoCollectionView.dataSource = self;
@@ -249,8 +249,20 @@
     
     NSArray * list = [currentDateStr componentsSeparatedByString:@"-"];
     int month = [[list lastObject] intValue];
-    month = month-1;
-    currentDate = [CommonUtils getFormatTime:[NSString stringWithFormat:@"%@-%02d",[list firstObject],month] FormatStyle:@"yyyy-MM"];
+    int year = [[list firstObject] intValue];
+    if (month == 1) {
+        month = 12;
+        year = year-1;
+    }
+    else{
+        month = month-1;
+    }
+    if ([[NSString stringWithFormat:@"%d-%02d",year,month] isEqualToString:[CommonUtils formatTime:[NSDate date] FormatStyle:@"yyyy-MM"]]) {
+        currentDate = [NSDate date];
+    }
+    else {
+        currentDate = [CommonUtils getFormatTime:[NSString stringWithFormat:@"%d-%02d",year,month] FormatStyle:@"yyyy-MM"];
+    }
     self.title = [CommonUtils formatTime:currentDate FormatStyle:@"yyyy年MM月"];
     [self getDataWithDate];
 }
@@ -259,7 +271,7 @@
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSCalendarUnit unit = NSCalendarUnitMonth;
     NSDateComponents * delta = [calendar components:unit fromDate:[NSDate date] toDate:currentDate options:0];
-    if (delta.month == 11) {
+    if (delta.month == 10) {
         return;
     }
     

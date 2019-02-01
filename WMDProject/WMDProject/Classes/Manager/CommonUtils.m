@@ -135,6 +135,7 @@
 + (NSDate *)getFormatTime:(NSString *)dateStr FormatStyle:(NSString *)style{
     NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:style];
+    formatter.timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];//东八区时间
     NSDate * time = [formatter dateFromString:dateStr];
     
     return time;

@@ -46,7 +46,11 @@ static AFHTTPSessionManager *manager ;
     
     AFHTTPSessionManager * manager = [HYHTTPSessionManager sharedHTTPSession];
     
+#if DEBUG
     if (![url containsString:@"sms/phoneCodeTest"] && ![url containsString:@"user/phLogin"]) {
+#else
+    if (![url containsString:@"sms/phoneCode"] && ![url containsString:@"user/phLogin"]) {
+#endif
         //header里设置token
         NSString * str = [NSString stringWithFormat:@"Bearer%@",[WMDUserManager shareInstance].tokenId];
         [manager.requestSerializer setValue:str forHTTPHeaderField:@"Authorization"];
