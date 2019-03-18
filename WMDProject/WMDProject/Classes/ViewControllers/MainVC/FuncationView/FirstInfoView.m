@@ -18,7 +18,7 @@
     NSDate * nowDate;
     NSDate * nextDate1;
     NSDate * nextDate2;
-//    NSDate * nextDate3;
+    NSDate * currentDate;
     NSMutableDictionary * weatherInfoDic;
     NSMutableDictionary * seaStreamInfoDic;
     NSMutableDictionary * seaInfoDic;
@@ -135,6 +135,7 @@
     self = [super init];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
+        self.userInteractionEnabled = YES;
     }
     
     return self;
@@ -174,6 +175,10 @@
         make.centerX.mas_equalTo(weakSelf.mas_centerX).mas_offset(-40);
         make.size.mas_equalTo(CGSizeMake(100, 60));
     }];
+    
+    self.temInfoLabel.userInteractionEnabled = YES;
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapTempLabelAction)];
+    [self.temInfoLabel addGestureRecognizer:tap];
     
     [self addSubview:self.weatherInfoLabel];
     [self.weatherInfoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -231,11 +236,11 @@
 //    NSString * nextDateStr3 = [CommonUtils formatTime:nextDate3 FormatStyle:@"MM月dd日"];
     
     [self.daysSegmentedControl removeAllSegments];
-    [self.daysSegmentedControl insertSegmentWithTitle:@"今天" atIndex:0 animated:NO];
-    [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr1 atIndex:1 animated:NO];
-    [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr2 atIndex:2 animated:NO];
-    [self.daysSegmentedControl insertSegmentWithTitle:@"更多天气" atIndex:3 animated:NO];
-    self.daysSegmentedControl.selectedSegmentIndex = 0;
+    [self.daysSegmentedControl insertSegmentWithTitle:@"实时测量" atIndex:0 animated:NO];
+    [self.daysSegmentedControl insertSegmentWithTitle:@"今天" atIndex:1 animated:NO];
+    [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr1 atIndex:2 animated:NO];
+    [self.daysSegmentedControl insertSegmentWithTitle:nextDateStr2 atIndex:3 animated:NO];
+    self.daysSegmentedControl.selectedSegmentIndex = 1;
 
     [self getWeatherInfo:nowDate];
     [self getSeaStremSpeedData:nowDate];
@@ -279,17 +284,16 @@
 - (void)buttonClickEvents:(UIButton *)sender{
     if ([self.delegate respondsToSelector:@selector(firstViewButtonClick:Date:)]) {
         NSDate * date;
-        if (self.daysSegmentedControl.selectedSegmentIndex == 0) {
+        if (self.daysSegmentedControl.selectedSegmentIndex == 1) {
             date = nowDate;
         }
-        else if (self.daysSegmentedControl.selectedSegmentIndex == 1){
+        else if (self.daysSegmentedControl.selectedSegmentIndex == 2){
             date = nextDate1;
         }
-        else if (self.daysSegmentedControl.selectedSegmentIndex == 2){
+        else if (self.daysSegmentedControl.selectedSegmentIndex == 3){
             date = nextDate2;
         }
         else{
-            
             date = nil;
         }
         [self.delegate firstViewButtonClick:sender Date:date];
@@ -301,19 +305,30 @@
         [self.delegate firstViewSegmentedControlClick:sender];
     }
     
+    //显示实时数据
+    if (sender.selectedSegmentIndex == 0) {
+        currentDate = [NSDate date];
+        [self getWeatherInfo:currentDate];
+        [self getSeaStremSpeedData:currentDate];
+        [self getSeaData:currentDate];
+        [self getSeaWaterLevel:currentDate];
+        
+        return;
+    }
+    
     //判断天气数据是否已经请求到
     NSDate * date;
-    if (sender.selectedSegmentIndex == 0) {
+    if (sender.selectedSegmentIndex == 1) {
         date = nowDate;
-        lastIndex = 0;
-    }
-    else if (sender.selectedSegmentIndex == 1){
-        date = nextDate1;
         lastIndex = 1;
     }
     else if (sender.selectedSegmentIndex == 2){
-        date = nextDate2;
+        date = nextDate1;
         lastIndex = 2;
+    }
+    else if (sender.selectedSegmentIndex == 3){
+        date = nextDate2;
+        lastIndex = 3;
     }
     else{
         sender.selectedSegmentIndex = lastIndex;
@@ -362,6 +377,12 @@
             NSIndexPath * path = [NSIndexPath indexPathForRow:0 inSection:0];
             [self.infoTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
         }
+    }
+}
+
+- (void)tapTempLabelAction{
+    if ([self.delegate respondsToSelector:@selector(temptureLabelClickAction)]) {
+        [self.delegate temptureLabelClickAction];
     }
 }
 
@@ -440,18 +461,20 @@
     [HttpClient asyncSendPostRequest:str Parmas:nil SuccessBlock:^(BOOL succ, NSString *msg, id rspData) {
         if (succ) {
             NSDictionary * dic = (NSDictionary *)rspData;
-            NSArray * contentArr = [dic objectForKey:@"content"];
-            NSDictionary * info = [contentArr lastObject];
-            SeaDataInfoModel * infoModel = [[SeaDataInfoModel alloc] initWithDictionary:info error:nil];
-            if (IsNilNull(infoModel)) {
-                infoModel = [[SeaDataInfoModel alloc] init];
+            if ([[dic objectForKey:@"content"] isKindOfClass:[NSArray class]]) {
+                NSArray * contentArr = [dic objectForKey:@"content"];
+                NSDictionary * info = [contentArr lastObject];
+                SeaDataInfoModel * infoModel = [[SeaDataInfoModel alloc] initWithDictionary:info error:nil];
+                if (IsNilNull(infoModel)) {
+                    infoModel = [[SeaDataInfoModel alloc] init];
+                }
+                
+                [self->seaInfoDic setObject:infoModel forKey:date];
+                NSIndexPath * path1 = [NSIndexPath indexPathForRow:1 inSection:0];
+                NSIndexPath * path2 = [NSIndexPath indexPathForRow:2 inSection:0];
+                NSIndexPath * path3 = [NSIndexPath indexPathForRow:3 inSection:0];
+                [self.infoTableView reloadRowsAtIndexPaths:@[path1,path2,path3] withRowAnimation:UITableViewRowAnimationNone];
             }
-            
-            [self->seaInfoDic setObject:infoModel forKey:date];
-            NSIndexPath * path1 = [NSIndexPath indexPathForRow:1 inSection:0];
-            NSIndexPath * path2 = [NSIndexPath indexPathForRow:2 inSection:0];
-            NSIndexPath * path3 = [NSIndexPath indexPathForRow:3 inSection:0];
-            [self.infoTableView reloadRowsAtIndexPaths:@[path1,path2,path3] withRowAnimation:UITableViewRowAnimationNone];
         }
     } FailBlock:^(NSError *error) {
         
@@ -505,18 +528,18 @@
     }
     
     NSDate * date;
-    if (self.daysSegmentedControl.selectedSegmentIndex == 0) {
+    if (self.daysSegmentedControl.selectedSegmentIndex == 1) {
         date = nowDate;
     }
-    else if (self.daysSegmentedControl.selectedSegmentIndex == 1){
+    else if (self.daysSegmentedControl.selectedSegmentIndex == 2){
         date = nextDate1;
     }
-    else if (self.daysSegmentedControl.selectedSegmentIndex == 2){
+    else if (self.daysSegmentedControl.selectedSegmentIndex == 3){
         date = nextDate2;
     }
-//    else {
-//        date = nil;
-//    }
+    else {
+        date = currentDate;
+    }
     
     if (indexPath.row == 0) {
         cell.logoImageView.image = [UIImage imageNamed:@"icon_small_shuiwei"];
@@ -729,18 +752,18 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([self.delegate respondsToSelector:@selector(tableviewDidSelectRow:Date:)]) {
         NSDate * date;
-        if (self.daysSegmentedControl.selectedSegmentIndex == 0) {
+        if (self.daysSegmentedControl.selectedSegmentIndex == 1) {
             date = nowDate;
         }
-        else if (self.daysSegmentedControl.selectedSegmentIndex == 1){
+        else if (self.daysSegmentedControl.selectedSegmentIndex == 2){
             date = nextDate1;
         }
-        else if (self.daysSegmentedControl.selectedSegmentIndex == 2){
+        else if (self.daysSegmentedControl.selectedSegmentIndex == 3){
             date = nextDate2;
         }
-//        else{
-//            date = nil;
-//        }
+        else{
+            date = currentDate;
+        }
         
         [self.delegate tableviewDidSelectRow:indexPath.row Date:date];
     }

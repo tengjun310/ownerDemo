@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)tableviewDidSelectRow:(NSInteger)row Date:(NSDate *)date;
 
+- (void)temptureLabelClickAction;
+
 @end
 
 

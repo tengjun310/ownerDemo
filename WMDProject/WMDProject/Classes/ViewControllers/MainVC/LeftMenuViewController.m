@@ -232,7 +232,7 @@
 
 #pragma mark -- tableview delegate & datasource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return 6;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -305,11 +305,17 @@
         
         cell.nameLabel.text = @"帮助中心";
     }
-    else{
+    else if (indexPath.row == 4){
         cell.msgButton.hidden = YES;
         cell.infoLabel.hidden = YES;
         
         cell.nameLabel.text = @"关于系统";
+    }
+    else{
+        cell.msgButton.hidden = YES;
+        cell.infoLabel.hidden = YES;
+        
+        cell.nameLabel.text = @"检查更新";
     }
     
     __weak typeof(self) weakSelf = self;
@@ -334,9 +340,25 @@
             [appDelegate.mainViewController pushViewController:vc animated:YES];
         });
     }
-    else{
+    else if (indexPath.row == 4) {
         [[DYLeftSlipManager sharedManager] dismissLeftView];
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
+    else{
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        [[DYLeftSlipManager sharedManager] dismissLeftView];
+        MBProgressHUD * hud = [CommonUtils showLoadingViewInWindowWithTitle:@""];
+        [HSUpdateApp hs_updateWithAPPID:nil withBundleId:nil block:^(NSString *currentVersion, NSString *storeVersion, NSString *openUrl, BOOL isUpdate) {
+            if (isUpdate) {
+                [hud hide:YES];
+                NSArray * arr = @[storeVersion,openUrl];
+                [[NSNotificationCenter defaultCenter] postNotificationName:CheckoutAPPVersionNotify object:arr];
+            }
+            else{
+                hud.labelText = @"当前版本是最新版本";
+                [hud hide:YES afterDelay:HudShowTime];
+            }
+        }];
     }
 }
 

@@ -16,6 +16,7 @@
 
 NSString * const UserLoginSuccessNotify = @"UserLoginSuccessNotify";
 NSString * const UserLogoutSuccessNotify = @"UserLogoutSuccessNotify";
+NSString * const CheckoutAPPVersionNotify = @"CheckoutAPPVersionNotify";
 
 //com.marine.weather
 
@@ -70,6 +71,13 @@ NSString * const UserLogoutSuccessNotify = @"UserLogoutSuccessNotify";
         [self configureMainViewController];
     }
     
+    //检查更新
+    [HSUpdateApp hs_updateWithAPPID:nil withBundleId:nil block:^(NSString *currentVersion, NSString *storeVersion, NSString *openUrl, BOOL isUpdate) {
+        //            if (isUpdate) {
+        [self showAlertViewTitle:@"检查更新" subTitle:storeVersion openUrl:openUrl];
+        //            }
+    }];
+    
     
     return YES;
 }
@@ -78,6 +86,7 @@ NSString * const UserLogoutSuccessNotify = @"UserLogoutSuccessNotify";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(configureMainViewController) name:UserLoginSuccessNotify object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(configLoginRootVC) name:UserLogoutSuccessNotify object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showAlertView:) name:CheckoutAPPVersionNotify object:nil];
 }
 
 - (void)configLoginRootVC{
@@ -105,7 +114,44 @@ NSString * const UserLogoutSuccessNotify = @"UserLogoutSuccessNotify";
     [self.window makeKeyAndVisible];
 }
 
+- (void)showAlertView:(NSNotification *)obj{
+    NSArray * arr = (NSArray *)obj.object;
+    NSString * storeVersion = arr[0];
+    NSString * openUrl = arr[1];
+    [self showAlertViewTitle:@"检查更新" subTitle:storeVersion openUrl:openUrl];
+}
 
+- (void)showAlertViewTitle:(NSString *)title subTitle:(NSString *)subTitle openUrl:(NSString *)openUrl{
+    NSString * subStr = [NSString stringWithFormat:@"检测到新版本%@,是否更新？",subTitle];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:subStr preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if([[UIDevice currentDevice].systemVersion floatValue] >= 10.0){
+            if ([[UIApplication sharedApplication] respondsToSelector:@selector(openURL:options:completionHandler:)]) {
+                if (@available(iOS 10.0, *)) {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:openUrl] options:@{} completionHandler:^(BOOL success) {
+                    }];
+                } else {
+                    // Fallback on earlier versions
+                }
+            } else {
+                BOOL success = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:openUrl]];
+                NSLog(@"Open  %d",success);
+            }
+            
+        } else{
+            bool can = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:openUrl]];
+            if(can){
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:openUrl]];
+            }
+        }
+    }];
+    [alertVC addAction:cancel];
+    [alertVC addAction:sure];
+    [self.window.rootViewController presentViewController:alertVC animated:YES completion:nil];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

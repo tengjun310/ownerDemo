@@ -172,12 +172,17 @@
 }
 
 - (void)firstViewSegmentedControlClick:(UISegmentedControl *)sender{
-    if (sender.selectedSegmentIndex == 3) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[WMDUserManager shareInstance].currentWeaInfoModel.url]];
-    }
-    else{
+//    if (sender.selectedSegmentIndex == 0) {
+//        //显示实时数据
+//
+//    }
+//    else{
         [self refreshShowWeather];
-    }
+//    }
+}
+
+- (void)temptureLabelClickAction{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[WMDUserManager shareInstance].currentWeaInfoModel.url]];
 }
 
 - (void)tableviewDidSelectRow:(NSInteger)row Date:(nonnull NSDate *)date{
@@ -218,7 +223,7 @@
     }
     else if ([infoModel.type isEqualToString:@"fb"]){
         vc.type = WeatherInfoType_fengbaochao;
-        vc.titleStr = @"风暴物";
+        vc.titleStr = @"风暴潮";
     }
     else if ([infoModel.type isEqualToString:@"hxw"]){
         vc.type = WeatherInfoType_haishengwu;

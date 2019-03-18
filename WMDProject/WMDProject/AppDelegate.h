@@ -16,6 +16,6 @@
 
 UIKIT_EXTERN NSString * const UserLoginSuccessNotify;
 UIKIT_EXTERN NSString * const UserLogoutSuccessNotify;
-
+UIKIT_EXTERN NSString * const CheckoutAPPVersionNotify;
 @end
 

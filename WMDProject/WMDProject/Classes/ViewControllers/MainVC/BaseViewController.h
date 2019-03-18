@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,assign) BOOL hiddenLeftItem;//默认为yes
 
+- (void)leftItemClick;
+
 @end
 
 NS_ASSUME_NONNULL_END

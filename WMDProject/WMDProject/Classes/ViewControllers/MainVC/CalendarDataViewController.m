@@ -242,7 +242,9 @@
 
 - (void)leftButtonClick{
     NSString * currentDateStr = [CommonUtils formatTime:currentDate FormatStyle:@"yyyy-MM"];
-    NSString * todayDateStr = [CommonUtils formatTime:[NSDate date] FormatStyle:@"yyyy-MM"];
+    NSString * todayDateStr = @"2019-01";//默认左范围写死
+
+//    NSString * todayDateStr = [CommonUtils formatTime:[NSDate date] FormatStyle:@"yyyy-MM"];
     if ([currentDateStr isEqualToString:todayDateStr]) {
         return;
     }

@@ -20,5 +20,6 @@
 #import "UIColor+extend.h"
 #import "UIImage+extend.h"
 #import "HttpClient.h"
+#import "HSUpdateApp.h"
 
 #endif /* WMDProjectPrefixHeader_pch */

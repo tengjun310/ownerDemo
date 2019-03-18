@@ -43,6 +43,15 @@
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlStr]]];
 }
 
+- (void)leftItemClick{
+    if ([self.webView canGoBack]) {
+        [self.webView goBack];
+    }
+    else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     

@@ -33,6 +33,7 @@
 		5F95792C21C9313D00D74620 /* SecondInfoViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F95792B21C9313D00D74620 /* SecondInfoViewTableViewCell.m */; };
 		5FDAE2C721E8A4F8002A07DE /* SpeedInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FDAE2C621E8A4F8002A07DE /* SpeedInfoModel.m */; };
 		5FE3EDC321CF62FF0032C07E /* SeaDataInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */; };
+		5FE5FC17223FBB0F000EF458 /* HSUpdateApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FE5FC15223FBB0F000EF458 /* HSUpdateApp.m */; };
 		5FE918D621E19F010009DAC2 /* BalloonMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE918D521E19F010009DAC2 /* BalloonMarker.swift */; };
 		5FF73CA221E79AF100BF842D /* DirectionInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF73CA121E79AF100BF842D /* DirectionInfoModel.m */; };
 		5FF8C0B421D1055A000F9840 /* ListInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FF8C0B321D1055A000F9840 /* ListInfoViewController.m */; };
@@ -182,6 +183,8 @@
 		5FDAE2C621E8A4F8002A07DE /* SpeedInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpeedInfoModel.m; sourceTree = "<group>"; };
 		5FE3EDC121CF62FF0032C07E /* SeaDataInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SeaDataInfoModel.h; sourceTree = "<group>"; };
 		5FE3EDC221CF62FF0032C07E /* SeaDataInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SeaDataInfoModel.m; sourceTree = "<group>"; };
+		5FE5FC15223FBB0F000EF458 /* HSUpdateApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUpdateApp.m; sourceTree = "<group>"; };
+		5FE5FC16223FBB0F000EF458 /* HSUpdateApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUpdateApp.h; sourceTree = "<group>"; };
 		5FE918D521E19F010009DAC2 /* BalloonMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalloonMarker.swift; sourceTree = "<group>"; };
 		5FE918D921E1BF500009DAC2 /* WMDProject-Bridge-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "WMDProject-Bridge-Header.h"; path = "WMDProject/WMDProject-Bridge-Header.h"; sourceTree = SOURCE_ROOT; };
 		5FF73CA021E79AF100BF842D /* DirectionInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DirectionInfoModel.h; sourceTree = "<group>"; };
@@ -511,6 +514,8 @@
 		6644852221C785B100A0D83D /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				5FE5FC16223FBB0F000EF458 /* HSUpdateApp.h */,
+				5FE5FC15223FBB0F000EF458 /* HSUpdateApp.m */,
 				66B5369621C79C92001C846F /* HttpClient.h */,
 				66B5369521C79C92001C846F /* HttpClient.m */,
 				6644864721C788E900A0D83D /* CommonUtils.h */,
@@ -1257,6 +1262,7 @@
 				6644862A21C7888900A0D83D /* MJRefreshHeader.m in Sources */,
 				6644852D21C7860A00A0D83D /* WMDUserManager.m in Sources */,
 				664D6AB121C8F04E0004A544 /* MyScrollView.m in Sources */,
+				5FE5FC17223FBB0F000EF458 /* HSUpdateApp.m in Sources */,
 				5F621C1621CE82C800E800FF /* SeaStreamInfoModel.m in Sources */,
 				5FE3EDC321CF62FF0032C07E /* SeaDataInfoModel.m in Sources */,
 				664D6AA821C8E65B0004A544 /* FirstInfoView.m in Sources */,

@@ -1557,7 +1557,7 @@
 
 - (void)titleButtonClick{
     WebViewViewController * vc = [[WebViewViewController alloc] init];
-    vc.urlStr = @"http://47.104.94.101:16888/haiyang/h5/help";
+    vc.urlStr = @"http://47.104.94.101:16888/haiyang/h5/helpDetail/14";
     [self.navigationController pushViewController:vc animated:YES];
 }
 

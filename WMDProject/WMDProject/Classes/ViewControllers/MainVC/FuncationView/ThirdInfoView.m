@@ -115,7 +115,7 @@
     
     [self addSubview:self.titleLabel];
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf).mas_offset(20);
+        make.top.mas_equalTo(weakSelf).mas_offset(kIs_iPhoneX?35:20);
         make.left.right.mas_equalTo(weakSelf);
         make.height.mas_offset(20);
     }];
