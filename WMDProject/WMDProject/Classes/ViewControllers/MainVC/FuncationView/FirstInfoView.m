@@ -586,7 +586,17 @@
                 cell.rightLabel.attributedText = attrStr;
             }
             else {
-                cell.rightLabel.text = @" ";
+                NSString * str = [NSString stringWithFormat:@" \n \n \n "];
+                NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
+                NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+                // 行间距
+                paragraphStyle.lineSpacing = 9.0f;
+                paragraphStyle.alignment = NSTextAlignmentRight;
+                [attrStr addAttribute:NSParagraphStyleAttributeName
+                                value:paragraphStyle
+                                range:NSMakeRange(0, str.length)];
+                
+                cell.rightLabel.attributedText = attrStr;
             }
         }
         else if (arr.count == 2){
@@ -594,7 +604,7 @@
             SeaWaterLevelInfoModel * model2 = [arr lastObject];
             str1 = [NSString stringWithFormat:@"%@ %0.2fm",model1.tidetime,[model1.tideheight floatValue]];
             str2 = [NSString stringWithFormat:@"%@ %0.2fm",model2.tidetime,[model2.tideheight floatValue]];
-            NSString * str = [NSString stringWithFormat:@"%@\n%@",str1,str2];
+            NSString * str = [NSString stringWithFormat:@"%@\n%@\n \n ",str1,str2];
 
             NSRange range2 = [str rangeOfString:str2];
 
@@ -641,7 +651,7 @@
             str2 = [NSString stringWithFormat:@"%@ %0.2fm",model2.tidetime,[model2.tideheight floatValue]];
             str3 = [NSString stringWithFormat:@"%@ %0.2fm",model3.tidetime,[model3.tideheight floatValue]];
 
-            NSString * str = [NSString stringWithFormat:@"%@\n%@\n%@",str1,str2,str3];
+            NSString * str = [NSString stringWithFormat:@"%@\n%@\n%@\n ",str1,str2,str3];
             NSMutableAttributedString * attrStr = [[NSMutableAttributedString alloc] initWithString:str];
             
             NSRange range3 = [str rangeOfString:str3];
