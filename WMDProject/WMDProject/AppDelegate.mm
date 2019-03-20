@@ -17,12 +17,16 @@
 NSString * const UserLoginSuccessNotify = @"UserLoginSuccessNotify";
 NSString * const UserLogoutSuccessNotify = @"UserLogoutSuccessNotify";
 NSString * const CheckoutAPPVersionNotify = @"CheckoutAPPVersionNotify";
+NSString * const APPDidBecomeActiveNotify = @"APPDidBecomeActiveNotify";
 
 //com.marine.weather
 
 #define KBMKSDKKEY  @"oYGLpjH1ea3hkKomXaxhAKuiiuT1k3Xa"
 
 @interface AppDelegate ()
+{
+    BOOL enterBackgroud;
+}
 
 @property (nonatomic, strong) BMKMapManager *mapManager; //主引擎类
 
@@ -35,6 +39,8 @@ NSString * const CheckoutAPPVersionNotify = @"CheckoutAPPVersionNotify";
 
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 
+    enterBackgroud = NO;
+    
     IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
     manager.shouldResignOnTouchOutside = YES;
     manager.enable = YES;
@@ -71,13 +77,14 @@ NSString * const CheckoutAPPVersionNotify = @"CheckoutAPPVersionNotify";
         [self configureMainViewController];
     }
     
-    //检查更新
-    [HSUpdateApp hs_updateWithAPPID:nil withBundleId:nil block:^(NSString *currentVersion, NSString *storeVersion, NSString *openUrl, BOOL isUpdate) {
-        //            if (isUpdate) {
-        [self showAlertViewTitle:@"检查更新" subTitle:storeVersion openUrl:openUrl];
-        //            }
-    }];
-    
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //检查更新
+        [HSUpdateApp hs_updateWithAPPID:nil withBundleId:@"com.marine.weather" block:^(NSString *currentVersion, NSString *storeVersion, NSString *openUrl, BOOL isUpdate) {
+            if (isUpdate) {
+                [self showAlertViewTitle:@"检查更新" subTitle:storeVersion openUrl:openUrl];
+            }
+        }];
+//    });
     
     return YES;
 }
@@ -160,8 +167,7 @@ NSString * const CheckoutAPPVersionNotify = @"CheckoutAPPVersionNotify";
 
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    enterBackgroud = YES;
 }
 
 
@@ -171,7 +177,10 @@ NSString * const CheckoutAPPVersionNotify = @"CheckoutAPPVersionNotify";
 
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    if (enterBackgroud) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:APPDidBecomeActiveNotify object:nil];
+        enterBackgroud = NO;
+    }
 }
 
 

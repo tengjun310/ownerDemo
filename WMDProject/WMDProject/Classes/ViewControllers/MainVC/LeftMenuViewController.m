@@ -313,8 +313,11 @@
     }
     else{
         cell.msgButton.hidden = YES;
-        cell.infoLabel.hidden = YES;
+        cell.infoLabel.hidden = NO;
         
+        NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+        NSString *app_Version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+        cell.infoLabel.text = app_Version;
         cell.nameLabel.text = @"检查更新";
     }
     
@@ -348,7 +351,7 @@
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
         [[DYLeftSlipManager sharedManager] dismissLeftView];
         MBProgressHUD * hud = [CommonUtils showLoadingViewInWindowWithTitle:@""];
-        [HSUpdateApp hs_updateWithAPPID:nil withBundleId:nil block:^(NSString *currentVersion, NSString *storeVersion, NSString *openUrl, BOOL isUpdate) {
+        [HSUpdateApp hs_updateWithAPPID:nil withBundleId:@"com.marine.weather" block:^(NSString *currentVersion, NSString *storeVersion, NSString *openUrl, BOOL isUpdate) {
             if (isUpdate) {
                 [hud hide:YES];
                 NSArray * arr = @[storeVersion,openUrl];

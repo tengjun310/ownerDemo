@@ -157,8 +157,6 @@
         make.top.left.mas_equalTo(weakSelf.infoScrollView);
         make.size.mas_equalTo(CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT));
     }];
-    
-    [self.firstInfoView startWeatherInfoRequest];
 }
 
 - (void)firstViewButtonClick:(UIButton *)sender Date:(nonnull NSDate *)date{
@@ -186,6 +184,9 @@
 }
 
 - (void)tableviewDidSelectRow:(NSInteger)row Date:(nonnull NSDate *)date{
+    if (self.firstInfoView.daysSegmentedControl.selectedSegmentIndex == 0) {
+        return;
+    }
     ChartsViewController * vc = [[ChartsViewController alloc] init];
     vc.today = NO;
     vc.date = date;
