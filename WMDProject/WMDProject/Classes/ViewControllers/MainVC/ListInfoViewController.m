@@ -51,12 +51,19 @@
     
     __weak typeof(self) weakSelf = self;
     
+    CGFloat navHeight = 64;
+    CGFloat bottom = 0;
+    if ([[UIScreen mainScreen] currentMode].size.height == 1792 || [[UIScreen mainScreen] currentMode].size.height>=2436) {
+        navHeight = 88;
+        bottom = 44;
+    }
+    
     [self.view addSubview:self.listTableView];
     [self.listTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf.view).mas_offset(kStatusBarAndNavigationBarHeight+20);
+        make.top.mas_equalTo(weakSelf.view).mas_offset(navHeight+20);
         make.left.mas_equalTo(weakSelf.view).mas_offset(15);
         make.right.mas_equalTo(weakSelf.view).mas_offset(-15);
-        make.bottom.mas_equalTo(weakSelf.view);
+        make.bottom.mas_equalTo(weakSelf.view).mas_offset(-bottom);
     }];
 
 }

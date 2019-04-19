@@ -165,9 +165,14 @@
         make.edges.mas_equalTo(weakSelf.view);
     }];
     
+    CGFloat top = 60;
+    if ([[UIScreen mainScreen] currentMode].size.height == 1792 || [[UIScreen mainScreen] currentMode].size.height>=2436) {
+        top = 140;
+    }
+    
     [self.view addSubview:self.logoImageView];
     [self.logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf.view).mas_offset(60);
+        make.top.mas_equalTo(weakSelf.view).mas_offset(top);
         make.centerX.mas_equalTo(weakSelf.view.mas_centerX);
         make.size.mas_equalTo(CGSizeMake(180, 180));
     }];

@@ -182,8 +182,13 @@
         }];
     }
     
+    CGFloat navHeight = 40+64;
+    if ([[UIScreen mainScreen] currentMode].size.height == 1792 || [[UIScreen mainScreen] currentMode].size.height>=2436) {
+        navHeight = 40+88;
+    }
+    
     UICollectionViewFlowLayout * viewLayout = [[UICollectionViewFlowLayout alloc] init];
-    self.infoCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 60, SCREEN_WIDTH, SCREEN_HEIGHT-110-kStatusBarAndNavigationBarHeight) collectionViewLayout:viewLayout];
+    self.infoCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 60, SCREEN_WIDTH, SCREEN_HEIGHT-110-navHeight) collectionViewLayout:viewLayout];
     self.infoCollectionView.backgroundColor = [UIColor clearColor];
     self.infoCollectionView.delegate = self;
     self.infoCollectionView.dataSource = self;

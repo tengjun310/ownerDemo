@@ -113,9 +113,14 @@
 - (void)configureSecondViewUI{
     __weak typeof(self) weakSelf = self;
     
+    CGFloat top = 25;
+    if ([[UIScreen mainScreen] currentMode].size.height == 1792 || [[UIScreen mainScreen] currentMode].size.height>=2436) {
+        top = 35;
+    }
+
     [self addSubview:self.titleLabel];
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf).mas_offset(kIs_iPhoneX?35:25);
+        make.top.mas_equalTo(weakSelf).mas_offset(top);
         make.left.right.mas_equalTo(weakSelf);
         make.height.mas_offset(20);
     }];

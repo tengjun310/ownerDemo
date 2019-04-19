@@ -104,8 +104,13 @@
 - (void)configureThirdViewUI{
     __weak typeof(self) weakSelf = self;
     
+    CGFloat navHeight = 40+64;
+    if ([[UIScreen mainScreen] currentMode].size.height == 1792 || [[UIScreen mainScreen] currentMode].size.height>=2436) {
+        navHeight = 40+88;
+    }
+    
     UIView * view = [[UIView alloc] init];
-    view.frame = CGRectMake(0, 0, SCREEN_WIDTH, 40+kStatusBarAndNavigationBarHeight);
+    view.frame = CGRectMake(0, 0, SCREEN_WIDTH, navHeight);
     view.backgroundColor = [UIColor whiteColor];
     [self addSubview:view];
     
@@ -113,9 +118,13 @@
     swipe.direction = UISwipeGestureRecognizerDirectionRight;
     [view addGestureRecognizer:swipe];
     
+    CGFloat top = 25;
+    if ([[UIScreen mainScreen] currentMode].size.height == 1792 || [[UIScreen mainScreen] currentMode].size.height>=2436) {
+        top = 35;
+    }
     [self addSubview:self.titleLabel];
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(weakSelf).mas_offset(kIs_iPhoneX?35:20);
+        make.top.mas_equalTo(weakSelf).mas_offset(top);
         make.left.right.mas_equalTo(weakSelf);
         make.height.mas_offset(20);
     }];

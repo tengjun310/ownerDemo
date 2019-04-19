@@ -351,7 +351,7 @@
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
         [[DYLeftSlipManager sharedManager] dismissLeftView];
         MBProgressHUD * hud = [CommonUtils showLoadingViewInWindowWithTitle:@""];
-        [HSUpdateApp hs_updateWithAPPID:nil withBundleId:@"com.marine.weather" block:^(NSString *currentVersion, NSString *storeVersion, NSString *openUrl, BOOL isUpdate) {
+        [HSUpdateApp hs_updateWithAPPID:@"1454210790" withBundleId:nil block:^(NSString *currentVersion, NSString *storeVersion, NSString *openUrl, BOOL isUpdate) {
             if (isUpdate) {
                 [hud hide:YES];
                 NSArray * arr = @[storeVersion,openUrl];

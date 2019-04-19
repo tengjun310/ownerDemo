@@ -579,12 +579,17 @@
     __weak typeof(self) weakSelf = self;
     
     CGFloat heght = (SCREEN_HEIGHT-84-25-20)/2;
-    
+    CGFloat navHeight = 64;
+    if ([[UIScreen mainScreen] currentMode].size.height == 1792 || [[UIScreen mainScreen] currentMode].size.height>=2436) {
+        navHeight = 88;
+    }
+
     //潮高 显示曲线图+直方图
     if (self.type == 1) {
+
         [self.view addSubview:self.dipView1];
         [self.dipView1 mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(weakSelf.view).mas_offset(kStatusBarAndNavigationBarHeight);
+            make.top.mas_equalTo(weakSelf.view).mas_offset(navHeight);
             make.left.mas_equalTo(weakSelf.view).mas_offset(15);
             make.right.mas_equalTo(weakSelf.view).mas_offset(-15);
             make.height.mas_offset(heght);
@@ -716,7 +721,7 @@
     else if (self.type == 2){
         [self.view addSubview:self.dipView1];
         [self.dipView1 mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(weakSelf.view).mas_offset(kStatusBarAndNavigationBarHeight);
+            make.top.mas_equalTo(weakSelf.view).mas_offset(navHeight);
             make.left.mas_equalTo(weakSelf.view).mas_offset(15);
             make.right.mas_equalTo(weakSelf.view).mas_offset(-15);
             make.height.mas_offset(heght);
@@ -810,7 +815,7 @@
     else if (self.type == 3){
         [self.view addSubview:self.dipView1];
         [self.dipView1 mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(weakSelf.view).mas_offset(kStatusBarAndNavigationBarHeight);
+            make.top.mas_equalTo(weakSelf.view).mas_offset(navHeight);
             make.left.mas_equalTo(weakSelf.view).mas_offset(15);
             make.right.mas_equalTo(weakSelf.view).mas_offset(-15);
             make.height.mas_offset(heght);
@@ -860,7 +865,7 @@
     else if (self.type == 4){
         [self.view addSubview:self.dipView1];
         [self.dipView1 mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(weakSelf.view).mas_offset(kStatusBarAndNavigationBarHeight);
+            make.top.mas_equalTo(weakSelf.view).mas_offset(navHeight);
             make.left.mas_equalTo(weakSelf.view).mas_offset(15);
             make.right.mas_equalTo(weakSelf.view).mas_offset(-15);
             make.height.mas_offset(heght);
@@ -914,7 +919,7 @@
     else{
         [self.view addSubview:self.dipView1];
         [self.dipView1 mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(weakSelf.view).mas_offset(kStatusBarAndNavigationBarHeight);
+            make.top.mas_equalTo(weakSelf.view).mas_offset(navHeight);
             make.left.mas_equalTo(weakSelf.view).mas_offset(15);
             make.right.mas_equalTo(weakSelf.view).mas_offset(-15);
             make.height.mas_offset(heght);

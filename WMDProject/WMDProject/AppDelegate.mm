@@ -79,7 +79,7 @@ NSString * const APPDidBecomeActiveNotify = @"APPDidBecomeActiveNotify";
     
 //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         //检查更新
-        [HSUpdateApp hs_updateWithAPPID:nil withBundleId:@"com.marine.weather" block:^(NSString *currentVersion, NSString *storeVersion, NSString *openUrl, BOOL isUpdate) {
+        [HSUpdateApp hs_updateWithAPPID:@"1454210790" withBundleId:nil block:^(NSString *currentVersion, NSString *storeVersion, NSString *openUrl, BOOL isUpdate) {
             if (isUpdate) {
                 [self showAlertViewTitle:@"检查更新" subTitle:storeVersion openUrl:openUrl];
             }
